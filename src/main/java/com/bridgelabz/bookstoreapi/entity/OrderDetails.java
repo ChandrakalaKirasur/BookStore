@@ -38,6 +38,38 @@ public class OrderDetails {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
 
+	public long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(long orderId) {
+		this.orderId = orderId;
+	}
+
+	public LocalDateTime getOrderPlaceTime() {
+		return orderPlaceTime;
+	}
+
+	public void setOrderPlaceTime(LocalDateTime orderPlaceTime) {
+		this.orderPlaceTime = orderPlaceTime;
+	}
+
+	public List<QuantityOfBooks> getQuantityOfBooks() {
+		return QuantityOfBooks;
+	}
+
+	public void setQuantityOfBooks(List<QuantityOfBooks> quantityOfBooks) {
+		QuantityOfBooks = quantityOfBooks;
+	}
+
+	public List<Book> getBooksList() {
+		return BooksList;
+	}
+
+	public void setBooksList(List<Book> booksList) {
+		BooksList = booksList;
+	}
+
 	
 	
 }

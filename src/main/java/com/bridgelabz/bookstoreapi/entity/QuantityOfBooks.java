@@ -20,5 +20,13 @@ public class QuantityOfBooks {
 	@Column(name = "quantity_of_books", nullable = false)
 	private long quantityOfBook;
 
+	public long getQuantityOfBook() {
+		return quantityOfBook;
+	}
+
+	public void setQuantityOfBook(long quantityOfBook) {
+		this.quantityOfBook = quantityOfBook;
+	}
+
 	
 }

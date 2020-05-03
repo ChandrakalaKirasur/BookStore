@@ -69,6 +69,110 @@ public class User {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<OrderDetails> orderBookDetails;
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
+
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	public long getMobileNum() {
+		return mobileNum;
+	}
+
+	public void setMobileNum(long mobileNum) {
+		this.mobileNum = mobileNum;
+	}
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
+	public List<Address> getAddress() {
+		return address;
+	}
+
+	public void setAddress(List<Address> address) {
+		this.address = address;
+	}
+
+	public List<ReviewAndRating> getBookRatingAndReview() {
+		return bookRatingAndReview;
+	}
+
+	public void setBookRatingAndReview(List<ReviewAndRating> bookRatingAndReview) {
+		this.bookRatingAndReview = bookRatingAndReview;
+	}
+
+	public List<CartDetails> getCartBooks() {
+		return cartBooks;
+	}
+
+	public void setCartBooks(List<CartDetails> cartBooks) {
+		this.cartBooks = cartBooks;
+	}
+
+	public List<WhishListDetails> getWhilistBooks() {
+		return whilistBooks;
+	}
+
+	public void setWhilistBooks(List<WhishListDetails> whilistBooks) {
+		this.whilistBooks = whilistBooks;
+	}
+
+	public List<OrderDetails> getOrderBookDetails() {
+		return orderBookDetails;
+	}
+
+	public void setOrderBookDetails(List<OrderDetails> orderBookDetails) {
+		this.orderBookDetails = orderBookDetails;
+	}
 	
 	
 }

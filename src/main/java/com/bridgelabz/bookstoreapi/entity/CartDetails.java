@@ -42,6 +42,38 @@ public class CartDetails {
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
+
+	public long getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(long cartId) {
+		this.cartId = cartId;
+	}
+
+	public LocalDateTime getPlaceTime() {
+		return placeTime;
+	}
+
+	public void setPlaceTime(LocalDateTime placeTime) {
+		this.placeTime = placeTime;
+	}
+
+	public List<QuantityOfBooks> getQuantityOfBooks() {
+		return QuantityOfBooks;
+	}
+
+	public void setQuantityOfBooks(List<QuantityOfBooks> quantityOfBooks) {
+		QuantityOfBooks = quantityOfBooks;
+	}
+
+	public List<Book> getBooksList() {
+		return BooksList;
+	}
+
+	public void setBooksList(List<Book> booksList) {
+		BooksList = booksList;
+	}
 	
 	
 }

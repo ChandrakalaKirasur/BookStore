@@ -62,6 +62,78 @@ public class Book {
 		this.bookAddedTime = LocalDateTime.now();
 		this.bookUpdatedTime = LocalDateTime.now();
 	}
+
+	public Long getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(Long bookId) {
+		this.bookId = bookId;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public String getBookAuthor() {
+		return bookAuthor;
+	}
+
+	public void setBookAuthor(String bookAuthor) {
+		this.bookAuthor = bookAuthor;
+	}
+
+	public Double getBookPrice() {
+		return bookPrice;
+	}
+
+	public void setBookPrice(Double bookPrice) {
+		this.bookPrice = bookPrice;
+	}
+
+	public Long getNoOfBooks() {
+		return noOfBooks;
+	}
+
+	public void setNoOfBooks(Long noOfBooks) {
+		this.noOfBooks = noOfBooks;
+	}
+
+	public String getBookImage() {
+		return bookImage;
+	}
+
+	public void setBookImage(String bookImage) {
+		this.bookImage = bookImage;
+	}
+
+	public String getBookDescription() {
+		return bookDescription;
+	}
+
+	public void setBookDescription(String bookDescription) {
+		this.bookDescription = bookDescription;
+	}
+
+	public LocalDateTime getBookAddedTime() {
+		return bookAddedTime;
+	}
+
+	public void setBookAddedTime(LocalDateTime bookAddedTime) {
+		this.bookAddedTime = bookAddedTime;
+	}
+
+	public LocalDateTime getBookUpdatedTime() {
+		return bookUpdatedTime;
+	}
+
+	public void setBookUpdatedTime(LocalDateTime bookUpdatedTime) {
+		this.bookUpdatedTime = bookUpdatedTime;
+	}
 	
 	
 }
