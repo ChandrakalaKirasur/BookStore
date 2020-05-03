@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.bridgelabz.bookstoreapi.configuration.Consumer;
 import com.bridgelabz.bookstoreapi.configuration.Producer;
 import com.bridgelabz.bookstoreapi.constants.Constants;
