@@ -87,11 +87,13 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 		List<Book> books = seller.getSellerBooks();
 		Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
 				.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+//    	Book filteredBook = bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
     	GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucketName, key);
     	URL url=amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
-    	System.out.println(url.toString().length());
-    	filteredBook.setBookImage(url.toString());
+    	String[] img = url.toString().split("\\?");
+
+    	filteredBook.setBookImage(img[0]);
     	bookRepository.save(filteredBook);
     	sellerRepository.save(seller);
     }
