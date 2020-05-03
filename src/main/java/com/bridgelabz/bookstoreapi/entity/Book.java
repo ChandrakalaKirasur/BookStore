@@ -41,7 +41,7 @@ public class Book {
 	@Column(name = "no_of_books", nullable = false)
 	private Long noOfBooks;
 	
-	@Column(name = "book_image", nullable = false)
+	@Column(name = "book_image", length = 400)
 	private String bookImage;
 	
 	@Column(name = "book_description", nullable = false)
