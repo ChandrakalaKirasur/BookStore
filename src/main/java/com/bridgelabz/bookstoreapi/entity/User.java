@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.bridgelabz.bookstoreapi.dto.RegisterDto;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -41,8 +43,11 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@Column(name = "date", nullable = false)
-	private LocalDateTime date;
+	@Column(name = "create_time", nullable = false)
+	private LocalDateTime createTime;
+	
+	@Column(name = "update_time")
+	private LocalDateTime updateTime;
 	
 	@Column(name = "verify_status", nullable = false)
 	private boolean isVerified;
@@ -50,7 +55,7 @@ public class User {
 	@Column(name = "user_number", nullable = false)
 	private long mobileNum;
 	
-	@Column(name = "user_profile", nullable = false)
+	@Column(name = "user_profile")
 	private String profile;
 	
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Address.class, fetch = FetchType.LAZY)
@@ -69,6 +74,20 @@ public class User {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<OrderDetails> orderBookDetails;
+
+	public User(RegisterDto register) {
+		this.name = register.getName();
+		this.email = register.getEmailAddress();
+		this.mobileNum = register.getMobile();
+		this.password = register.getPassword();
+		this.createTime = LocalDateTime.now();
+		this.updateTime = LocalDateTime.now();
+		this.isVerified = false;
+	}
+	
+	public User() {
+		super();
+	}
 
 	public long getUserId() {
 		return userId;
@@ -103,11 +122,11 @@ public class User {
 	}
 
 	public LocalDateTime getDate() {
-		return date;
+		return createTime;
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.createTime = date;
 	}
 
 	public boolean isVerified() {
