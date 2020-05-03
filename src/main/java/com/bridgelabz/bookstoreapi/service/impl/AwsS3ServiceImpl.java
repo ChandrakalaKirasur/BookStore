@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -21,8 +22,11 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.bridgelabz.bookstoreapi.entity.Book;
+import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.exception.BookException;
+import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
+import com.bridgelabz.bookstoreapi.repository.SellerRepository;
 import com.bridgelabz.bookstoreapi.service.AwsS3Service;
 import com.bridgelabz.bookstoreapi.utility.ImageType;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -46,11 +50,12 @@ public class AwsS3ServiceImpl implements AwsS3Service{
     @Autowired
     private BookRepository bookRepository;
     
+    @Autowired
+    private SellerRepository sellerRepository;
+    
     @Async
-    public void uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess, Long token, ImageType type) 
+    public void uploadFileToS3Bucket(MultipartFile multipartFile, String token, Long bookId, ImageType type) 
     {
-//    	Long bId = jwt.decodeToken(token);
-    	Book book = bookRepository.findById(token).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
         String fileName = multipartFile.getOriginalFilename();
         
         try {
@@ -61,29 +66,33 @@ public class AwsS3ServiceImpl implements AwsS3Service{
             fos.close();
             PutObjectRequest putObjectRequest = null;
          
-            	putObjectRequest = new PutObjectRequest(this.bucketName, "book"+'/'+fileName, file);
+            putObjectRequest = new PutObjectRequest(this.bucketName, "book"+'/'+fileName, file);
            
-
-            if (enablePublicReadAccess) {
-                putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
-            }
+            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+            
             this.amazonS3Client.putObject(putObjectRequest);
             //removing the file created in the server
             file.delete();
-            fetchObjectURL(book, "book"+'/'+fileName);
+            fetchObjectURL(token, bookId , "book"+'/'+fileName);
         } catch (IOException | AmazonServiceException ex) {
            // log.error("error [" + ex.getMessage() + "] occurred while uploading [" + fileName + "] ");
         }
     }
     
     @Transactional
-    private void fetchObjectURL(Book book, String key) {
+    private void fetchObjectURL(String token, Long bookId, String key) {
     
+    	Long sId = jwt.decodeToken(token);
+    	Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+		List<Book> books = seller.getSellerBooks();
+		Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
+				.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
     	GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucketName, key);
     	URL url=amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
     	System.out.println(url.toString().length());
-    	book.setBookImage(url.toString());
-    	bookRepository.save(book);
+    	filteredBook.setBookImage(url.toString());
+    	bookRepository.save(filteredBook);
+    	sellerRepository.save(seller);
     }
 }

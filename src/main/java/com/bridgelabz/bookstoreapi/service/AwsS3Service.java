@@ -6,5 +6,5 @@ import com.bridgelabz.bookstoreapi.utility.ImageType;
 
 public interface AwsS3Service {
 
-	public void uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess, Long token, ImageType type);
+	 public void uploadFileToS3Bucket(MultipartFile multipartFile, String token, Long bookId, ImageType type);
 }
