@@ -15,7 +15,7 @@ public class JWTUtil {
 //	@Value("${secret}")
 //	private String SECRET;
 	private static final String SECRET = "2129152050365";
-	
+
 	private final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
 	public String generateToken(Long id, Token expiration) {
