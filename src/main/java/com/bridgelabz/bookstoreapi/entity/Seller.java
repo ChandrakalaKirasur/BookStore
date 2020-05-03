@@ -67,4 +67,78 @@ public class Seller {
 		this.updatedTime = LocalDateTime.now();
 		this.verificationStatus = false;
 	}
+
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public String getSellerName() {
+		return sellerName;
+	}
+
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+
+	public Long getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(Long mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isVerificationStatus() {
+		return verificationStatus;
+	}
+
+	public void setVerificationStatus(boolean verificationStatus) {
+		this.verificationStatus = verificationStatus;
+	}
+
+	public LocalDateTime getCreatedtTime() {
+		return createdtTime;
+	}
+
+	public void setCreatedtTime(LocalDateTime createdtTime) {
+		this.createdtTime = createdtTime;
+	}
+
+	public LocalDateTime getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime(LocalDateTime updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
+	public List<Book> getSellerBooks() {
+		return sellerBooks;
+	}
+
+	public void setSellerBooks(List<Book> sellerBooks) {
+		this.sellerBooks = sellerBooks;
+	}
+	
+	
 }
