@@ -67,7 +67,10 @@ public class Seller {
 		this.updatedTime = LocalDateTime.now();
 		this.verificationStatus = false;
 	}
-
+	public Seller()
+	{
+		
+	}
 	public Long getSellerId() {
 		return sellerId;
 	}

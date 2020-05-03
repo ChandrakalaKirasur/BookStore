@@ -28,6 +28,7 @@ public class RegisterDto {
 
 	@NotNull(message = "Password field can't be empty!!!")
 	private String password;
+	
 
 	public String getName() {
 		return name;

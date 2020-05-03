@@ -6,6 +6,6 @@ import com.bridgelabz.bookstoreapi.response.Response;
 
 public interface SellerService {
 
-	public void sellerRegistration(RegisterDto register);
-	public Response loginByEmailOrMobile(LoginDTO login);
+	public boolean sellerRegistration(RegisterDto register);
+	public String loginByEmailOrMobile(LoginDTO login);
 }
