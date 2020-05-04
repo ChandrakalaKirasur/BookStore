@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,14 +8,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookDTO {
 	
+	@ApiModelProperty(notes = "The name of the book", required = true)
 	private String bookName;
 	
+	@ApiModelProperty(notes = "The authot-name of the book", required = true)
 	private String bookAuthor;
 	
+	@ApiModelProperty(notes = "The price of the book", required = true)
 	private Double bookPrice;
 	
+	@ApiModelProperty(notes = "The number of the book", required = true)
 	private Long noOfBooks;
 	
+	@ApiModelProperty(notes = "The description of the book", required = true)
 	private String bookDescription;
 
 	public String getBookName() {
