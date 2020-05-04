@@ -1,11 +1,26 @@
 package com.bridgelabz.bookstoreapi.repository;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.bridgelabz.bookstoreapi.entity.Book;
 
 @Repository
-public interface BookRepository extends PagingAndSortingRepository<Book, Long>{
+public interface BookRepository extends JpaRepository<Book, Long>{
 
+	@Query(value = "select * from books as b where b.book_verified=false limit :start,10", 
+			nativeQuery = true)
+	public List<Book> findBook(@Param("start") Integer start);
+	
+	@Query(value = "select * from books as b order by b.book_price limit :start,10", 
+			nativeQuery = true)
+	public List<Book> findBookSortedByPrice(@Param("start") Integer start);
+	
+	@Query(value = "select * from books as b order by b.book_added_time limit :start,10", 
+			nativeQuery = true)
+	public List<Book> findBookSortedByArrival(@Param("start") Integer start);
 }

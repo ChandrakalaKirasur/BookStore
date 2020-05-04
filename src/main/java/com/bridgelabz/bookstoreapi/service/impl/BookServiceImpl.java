@@ -8,9 +8,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
@@ -44,9 +41,16 @@ public class BookServiceImpl implements BookService{
 		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
 		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+		List<Book> books =  seller.getSellerBooks();
+		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
+		if(notExist) {
 		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 		sellerRepository.save(seller);
+		}
+		else {
+			throw new BookException(500, env.getProperty("5001"));
+		}
 	}
 	
 	@Transactional
@@ -78,7 +82,18 @@ public class BookServiceImpl implements BookService{
 		sellerRepository.save(seller);
 	}
 	
-//	public List<Book> getBooks(Integer pageNo, String sortBy){
-//		Pageable paging = PageRequest.of(pageNo, 10, Sort.by(sortBy));
-//	}
+	public List<Book> getBooks(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBook(start);
+	}
+	
+	public List<Book> getBooksSortedByPrice(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBookSortedByPrice(start);
+	}
+	
+	public List<Book> getBooksSortedByArrival(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBookSortedByArrival(start);
+	}
 }

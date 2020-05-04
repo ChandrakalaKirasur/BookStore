@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +55,21 @@ public class BookController {
 	public ResponseEntity<Response> deleteBook(@RequestHeader(name="token") String token, @RequestParam Long bookId){
 		bookService.deleteBook(token, bookId);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2003")));
+	}
+	
+	@GetMapping("/getBooks")
+	public ResponseEntity<Response> getBooks(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
+	}
+	
+	@GetMapping("/getBooksSortedByPrice")
+	public ResponseEntity<Response> getBooksSortedByPrice(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPrice(pageNo)));
+	}
+	
+	@GetMapping("/getBooksSortedByArrival")
+	public ResponseEntity<Response> getBooksSortedByArrival(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByArrival(pageNo)));
 	}
 	
 	@PutMapping("/upload")

@@ -1,12 +1,6 @@
 package com.bridgelabz.bookstoreapi.response;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Data
-@NoArgsConstructor
-@ToString
 public class Response {
 
 	private int status;
@@ -22,4 +16,33 @@ public class Response {
 		this(status, msg);
 		this.obj = obj;
 	}
+	
+	public Response() {
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public Object getObj() {
+		return obj;
+	}
+
+	public void setObj(Object obj) {
+		this.obj = obj;
+	}
+	
+	
 }
