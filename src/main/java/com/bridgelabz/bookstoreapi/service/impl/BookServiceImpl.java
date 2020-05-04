@@ -87,9 +87,14 @@ public class BookServiceImpl implements BookService{
 		return bookRepository.findBook(start);
 	}
 	
-	public List<Book> getBooksSortedByPrice(Integer pageNo){
+	public List<Book> getBooksSortedByPriceLow(Integer pageNo){
 		Integer start = (pageNo-1)*10;
-		return bookRepository.findBookSortedByPrice(start);
+		return bookRepository.findBookSortedByPriceLow(start);
+	}
+	
+	public List<Book> getBooksSortedByPriceHigh(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBookSortedByPriceHigh(start);
 	}
 	
 	public List<Book> getBooksSortedByArrival(Integer pageNo){

@@ -24,9 +24,13 @@ import com.bridgelabz.bookstoreapi.service.AwsS3Service;
 import com.bridgelabz.bookstoreapi.service.BookService;
 import com.bridgelabz.bookstoreapi.utility.ImageType;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/book")
 @CrossOrigin
+@Api(value="Book_Details", description="Operations pertaining to store book details")
 @PropertySource("classpath:message.properties")
 public class BookController {
 
@@ -39,39 +43,52 @@ public class BookController {
 	@Autowired
 	private Environment env;
 	
+	@ApiOperation(value = "Add a Book Details")
 	@PostMapping("/add")
 	public ResponseEntity<Response> addBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token){
 		bookService.addBook(bookDTO, token);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2001")));
 	}
 	
+	@ApiOperation(value = "Update a Book Details")
 	@PutMapping("/update")
 	public ResponseEntity<Response> updateBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token, @RequestParam Long bookId){
 		bookService.updateBook(bookDTO, token, bookId);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2002")));
 	}
 	
+	@ApiOperation(value = "Delete a Book Details")
 	@DeleteMapping("/delete")
 	public ResponseEntity<Response> deleteBook(@RequestHeader(name="token") String token, @RequestParam Long bookId){
 		bookService.deleteBook(token, bookId);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2003")));
 	}
 	
+	@ApiOperation(value = "Get verified Book Details")
 	@GetMapping("/getBooks")
 	public ResponseEntity<Response> getBooks(@RequestParam Integer pageNo){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
 	}
 	
-	@GetMapping("/getBooksSortedByPrice")
-	public ResponseEntity<Response> getBooksSortedByPrice(@RequestParam Integer pageNo){
-		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPrice(pageNo)));
+	@ApiOperation(value = "Get Book Details sorted by price in Low-High order")
+	@GetMapping("/getBooksSortedByPriceLow")
+	public ResponseEntity<Response> getBooksSortedByPriceLow(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPriceLow(pageNo)));
 	}
 	
+	@ApiOperation(value = "Get Book Details sorted by price in High-Low order")
+	@GetMapping("/getBooksSortedByPriceHigh")
+	public ResponseEntity<Response> getBooksSortedByPriceHigh(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPriceHigh(pageNo)));
+	}
+	
+	@ApiOperation(value = "Get Book Details sorted by arrival time")
 	@GetMapping("/getBooksSortedByArrival")
 	public ResponseEntity<Response> getBooksSortedByArrival(@RequestParam Integer pageNo){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByArrival(pageNo)));
 	}
 	
+	@ApiOperation(value = "Upload book image")
 	@PutMapping("/upload")
     public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
     {
