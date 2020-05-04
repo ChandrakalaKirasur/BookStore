@@ -41,18 +41,21 @@ public class CartImplementation implements CartService{
 	}
 	
 	@Override
-	public User addBooksQuantityToCart(String token, long cartId,long quantity) {
+	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
 		
 		long id = (Long) jwt.decodeToken(token);
 		QuantityOfBooks cartquantity=new QuantityOfBooks();
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		
-	        user.getCartBooks().forEach((data)->{
-	       		if(data.getCartId()==cartId) {
-	       			cartquantity.setQuantityOfBook(quantity);
-	       			data.getQuantityOfBooks().add(cartquantity);
-	       		}
+	        user.getCartBooks().forEach((cart)->{
+	        	cart.getBooksList().forEach((books)->{
+	        		if(books.getBookId()==bookId) {
+		       			cartquantity.setQuantityOfBook(quantity);
+		       			cart.getQuantityOfBooks().add(cartquantity);
+		       		}
+	        	});
+	       		
 	       	});
 	        return user;
 	}

@@ -22,14 +22,14 @@ import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.UserService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/users")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
-@Api(value="bookStore", description="Operations pertaining to user in Online Store")
+//@Api(value="bookStore", description="Operations pertaining to user in Online Store")
 public class UserController {
 
 	@Autowired
@@ -44,7 +44,7 @@ public class UserController {
 	 * @param RequestBody userlogin
 	 */
 
-	@ApiOperation(value = "User Login",response = Iterable.class)
+	//@ApiOperation(value = "User Login",response = Iterable.class)
 	@PostMapping(value = "/login")
 	public ResponseEntity<UserResponse> loginUser(@Valid @RequestBody LoginDTO user, BindingResult result) {
 		if (result.hasErrors())
@@ -62,7 +62,7 @@ public class UserController {
 	 * @param RequestBody register
 	 */
 
-	@ApiOperation(value = "User Registerartion",response = Iterable.class)
+	//@ApiOperation(value = "User Registerartion",response = Iterable.class)
 	@PostMapping(value = "/add-user")
 	public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterDto userRecord, BindingResult result) {
 		if (result.hasErrors())
@@ -113,7 +113,7 @@ public class UserController {
 	 * @param pathVaraiable token
 	 */
 
-	@ApiOperation(value = "Verifing the user",response = Iterable.class)
+	//@ApiOperation(value = "Verifing the user",response = Iterable.class)
 	@GetMapping(value = "/registration/verify/{token}")
 	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
 		
