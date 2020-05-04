@@ -18,6 +18,7 @@ import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.repository.SellerRepository;
 import com.bridgelabz.bookstoreapi.service.BookService;
+import com.bridgelabz.bookstoreapi.service.IServiceElasticSearch;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 
 @Service
@@ -36,6 +37,8 @@ public class BookServiceImpl implements BookService{
 	@Autowired
 	private Environment env;
 	
+	@Autowired
+	private IServiceElasticSearch iServiceElasticSearch;
 	
 	public void addBook(BookDTO bookDTO, String token) {
 		Long sId = jwt.decodeToken(token);
@@ -45,8 +48,14 @@ public class BookServiceImpl implements BookService{
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
 		seller.getSellerBooks().add(book);
-		bookRepository.save(book);
+		Book bookSave = bookRepository.save(book);
 		sellerRepository.save(seller);
+		try {
+			iServiceElasticSearch.addBook(bookSave);
+		} catch (Exception e) {
+			throw new BookException(401, env.getProperty("111"));
+		}
+			
 		}
 		else {
 			throw new BookException(500, env.getProperty("5001"));
@@ -66,8 +75,13 @@ public class BookServiceImpl implements BookService{
 		filteredBook.setBookPrice(bookDTO.getBookPrice());
 		filteredBook.setNoOfBooks(bookDTO.getNoOfBooks());
 		filteredBook.setBookUpdatedTime(LocalDateTime.now());
-		bookRepository.save(filteredBook);
+		Book bookUpdate = bookRepository.save(filteredBook);
 		sellerRepository.save(seller);
+		try {
+			iServiceElasticSearch.upDateBook(bookUpdate);
+		} catch (Exception ae) {
+			throw new BookException(500, env.getProperty("5001"));
+		}
 	}
 	
 	@Transactional
@@ -80,6 +94,11 @@ public class BookServiceImpl implements BookService{
 		books.remove(filteredBook);
 		bookRepository.delete(filteredBook);
 		sellerRepository.save(seller);
+		try {
+			iServiceElasticSearch.deleteBook(String.valueOf(bookId));
+		} catch (Exception ae) {
+			throw new BookException(500, env.getProperty("5001"));
+		}
 	}
 	
 	public List<Book> getBooks(Integer pageNo){
