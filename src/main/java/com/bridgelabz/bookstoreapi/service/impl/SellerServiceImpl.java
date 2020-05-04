@@ -1,7 +1,11 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -15,6 +19,7 @@ import com.bridgelabz.bookstoreapi.constants.Constants;
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
+import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.repository.SellerRepository;
@@ -43,6 +48,7 @@ public class SellerServiceImpl implements SellerService{
 	
 	@Autowired
 	private Environment env;
+	Seller seller =new Seller();
 	
 	/**
 	 * Saves the user details
@@ -104,8 +110,52 @@ public class SellerServiceImpl implements SellerService{
 			}
 		}
 		return null;
+	}
+	/**
+	 * Api for forget password
+	 * @param emailAddress
+	 * @Return 
+	 */
+	@Transactional
+	@Override
+	public String forgotpassword(@Valid String emailAddress) {
+		Mail mail = new Mail();
+		Optional<Seller> optionalSeller = sellerRepository.findByEmailAddress(emailAddress);
+		return optionalSeller.filter(seller -> {	
+			return seller != null;
+		}).map(seller -> {
+			mail.setTo(seller.getEmailAddress());
+			mail.setSubject(Constants.RESET_PASSWORD_LINK);
+			mail.setContext("Hi " + seller.getSellerName() + " " + Constants.RESET_PASSWORD_LINK
+					+ Constants.RESET_PASSWORD_LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));
+			producer.sendToQueue(mail);
+			consumer.receiveMail(mail);
+			return env.getProperty("403");
+		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
 		
+	}
+
+	/**
+	 * Api for reset password
+	 * @param token
+	 * @RequestBody forgetPasswordDto
+	 * @Return 
+	 */
+	@Transactional
+	@Override
+	public String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto) {
 		
- 
+		Long id = jwt.decodeToken(token);
+		Optional<Seller> optionalSeller = sellerRepository.findById(id);
+		return optionalSeller.filter(seller -> {	
+			return seller != null;
+		}).map(seller -> {
+		String newPassword=encoder.encode(forgetPasswordDto.getPassword());
+		seller.setPassword(newPassword);
+		seller.setUpdatedTime(LocalDateTime.now());
+		 sellerRepository.save(seller);
+			return env.getProperty("203");
+		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
+		
 	}	 
 }
