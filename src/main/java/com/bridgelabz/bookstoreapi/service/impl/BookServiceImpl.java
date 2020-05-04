@@ -38,19 +38,19 @@ public class BookServiceImpl implements BookService{
 	
 	
 	public void addBook(BookDTO bookDTO, String token) {
-//		Long sId = jwt.decodeToken(token);
+		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
-//		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
-//		List<Book> books =  seller.getSellerBooks();
-//		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
-//		if(notExist) {
-//		seller.getSellerBooks().add(book);
+		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+		List<Book> books =  seller.getSellerBooks();
+		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
+		if(notExist) {
+		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
-//		sellerRepository.save(seller);
-//		}
-//		else {
-//			throw new BookException(500, env.getProperty("5001"));
-//		}
+		sellerRepository.save(seller);
+		}
+		else {
+			throw new BookException(500, env.getProperty("5001"));
+		}
 	}
 	
 	@Transactional
