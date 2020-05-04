@@ -120,16 +120,16 @@ public class BookServiceImpl implements BookService{
 	
 	public List<Book> getBooks(Integer pageNo){
 		Integer start = (pageNo-1)*10;
-		bookRepository.findBook(start).forEach(book -> {
-			Map<String, Object> documentMapper = objectMapper.convertValue(book, Map.class);
-			IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(book.getBookId()))
-					.source(documentMapper);
-			try {
-				client.index(indexRequest, RequestOptions.DEFAULT);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+//		bookRepository.findBook(start).forEach(book -> {
+//			Map<String, Object> documentMapper = objectMapper.convertValue(book, Map.class);
+//			IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(book.getBookId()))
+//					.source(documentMapper);
+//			try {
+//				client.index(indexRequest, RequestOptions.DEFAULT);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		});
 		return bookRepository.findBook(start);
 	}
 	
