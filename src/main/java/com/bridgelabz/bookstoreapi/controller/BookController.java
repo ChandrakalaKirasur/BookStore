@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +44,19 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2001")));
 	}
 	
-	@PutMapping("/uploadProfile")
+	@PutMapping("/update")
+	public ResponseEntity<Response> updateBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token, @RequestParam Long bookId){
+		bookService.updateBook(bookDTO, token, bookId);
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2002")));
+	}
+	
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteBook(@RequestHeader(name="token") String token, @RequestParam Long bookId){
+		bookService.deleteBook(token, bookId);
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2003")));
+	}
+	
+	@PutMapping("/upload")
     public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
     {
 		awsService.uploadFileToS3Bucket(file,token, bookId ,ImageType.BOOK);
