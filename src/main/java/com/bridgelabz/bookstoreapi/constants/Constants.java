@@ -15,4 +15,6 @@ public class Constants {
 	public static final String RESET_PASSWORD_LINK = "Using below link reset your password\nhttp://localhost:4200/resetpassword/";
 	public static final String USER_RESET_PASSWORD_LINK = "Using below link reset your password\nhttp://localhost:4200/users/resetpassword/";
 	
+	public static final String INDEX = "books";
+	public static final String TYPE = "_doc";
 }
