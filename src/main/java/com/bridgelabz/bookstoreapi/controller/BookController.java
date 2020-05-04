@@ -88,6 +88,12 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByArrival(pageNo)));
 	}
 	
+	@ApiOperation(value = "Get Book Details Name and Author")
+	@GetMapping("/getBookByNameAndAuthor")
+	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam String text){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBookByNameAndAuthor(text)));
+	}
+	
 	@ApiOperation(value = "Upload book image")
 	@PutMapping("/upload")
     public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)

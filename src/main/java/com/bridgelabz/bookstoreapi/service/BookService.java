@@ -14,5 +14,6 @@ public interface BookService {
 	public List<Book> getBooksSortedByPriceLow(Integer pageNo);
 	public List<Book> getBooksSortedByPriceHigh(Integer pageNo);
 	public List<Book> getBooksSortedByArrival(Integer pageNo);
+	public List<Book> getBookByNameAndAuthor(String text) ;
 	
 }

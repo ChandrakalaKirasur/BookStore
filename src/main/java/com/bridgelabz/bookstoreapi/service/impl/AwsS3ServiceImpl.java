@@ -5,9 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -21,6 +25,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.bridgelabz.bookstoreapi.constants.Constants;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
@@ -33,6 +38,7 @@ import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.AwsS3Service;
 import com.bridgelabz.bookstoreapi.utility.ImageType;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 @PropertySource("classpath:message.properties")
@@ -58,6 +64,12 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RestHighLevelClient client;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 //	@Autowired
 //	private AdminRepository adminRepository;
@@ -102,8 +114,9 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 			Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
 					.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
 			filteredBook.setBookImage(getImageUrl(key));
-			bookRepository.save(filteredBook);
+			Book updatedBook = bookRepository.save(filteredBook);
 			sellerRepository.save(seller);
+			updateBookInES(updatedBook);
 		}
 		else if(type.equals(ImageType.SELLER)) {
 			Seller seller = sellerRepository.findById(id)
@@ -144,5 +157,16 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 			fullName = "admin" + '/' + fileName;
 		}
 		return fullName;
+	}
+	
+	private void updateBookInES(Book filteredBook) {
+		UpdateRequest updateRequest = new UpdateRequest(Constants.INDEX, Constants.TYPE,
+				String.valueOf(filteredBook.getBookId()));
+		updateRequest.doc(objectMapper.convertValue(filteredBook, Map.class));
+		try {
+			client.update(updateRequest, RequestOptions.DEFAULT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
