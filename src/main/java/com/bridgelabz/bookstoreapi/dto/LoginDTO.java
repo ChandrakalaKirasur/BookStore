@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class LoginDTO {
 
+	
 	private String mailOrMobile;
 	private String password;
 	
@@ -24,6 +25,5 @@ public class LoginDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 	
 }

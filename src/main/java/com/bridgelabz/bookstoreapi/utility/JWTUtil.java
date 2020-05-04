@@ -29,6 +29,7 @@ public class JWTUtil {
 	}
 
 	public Long decodeToken(String jwt)  {
+		System.out.println("Decoder*****");
 		Claims claim = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(jwt).getBody();
 		Long id = Long.parseLong(claim.getSubject());
 		return id;
