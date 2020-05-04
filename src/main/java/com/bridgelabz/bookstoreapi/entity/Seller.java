@@ -23,7 +23,6 @@ import lombok.ToString;
 @Entity
 @Table(name = "seller")
 @Data
-@NoArgsConstructor
 @ToString
 public class Seller {
 	
