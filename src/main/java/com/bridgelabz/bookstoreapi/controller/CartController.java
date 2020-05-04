@@ -42,7 +42,7 @@ public class CartController {
 	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		    User cart = cartService.addBooksToCart(token,bookId);
 		    return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("200"), "200-ok", cart));
+					.body(new UserResponse(env.getProperty("500"), "200-ok", cart));
 					
 	}
 
@@ -51,7 +51,7 @@ public class CartController {
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<CartDetails> cartdetails = cartService.getBooksfromCart(token);
 		    return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("200"), "200-ok", cartdetails));
+					.body(new UserResponse(env.getProperty("503"), "200-ok", cartdetails));
 	}
 	
 	@ApiOperation(value = "Adding the quantityofbooks to the Cartlist",response = Iterable.class)
@@ -59,7 +59,7 @@ public class CartController {
 	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId,@RequestParam("quantity") long quantity) throws Exception {
 		   User cartdetails = cartService.addBooksQuantityToCart(token, bookId, quantity);
 		    return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("501"), "200-ok", cartdetails));  	
+					.body(new UserResponse(env.getProperty("502"), "200-ok", cartdetails));  	
 	}
 	
 	@ApiOperation(value = "Removing the books to the Cartlist",response = Iterable.class)
@@ -67,7 +67,7 @@ public class CartController {
 	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		User cartdetails = cartService.removeBooksToCart(token,bookId);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(env.getProperty("501"), "200-ok", cartdetails));    
+				.body(new UserResponse(env.getProperty("504"), "200-ok", cartdetails));    
 		
 					
 	}
