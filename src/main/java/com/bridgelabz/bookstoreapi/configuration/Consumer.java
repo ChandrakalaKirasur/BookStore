@@ -14,7 +14,7 @@ public class Consumer {
 	@Autowired
 	private MailService mailSender;
 	
-	@RabbitListener(queues = Constants.QUEUE_NAME)
+	//@RabbitListener(queues = Constants.QUEUE_NAME)
 	public void receiveMail(Mail mail) {
 		mailSender.sendMail(mail);
 	}
