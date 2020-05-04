@@ -62,6 +62,16 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
 	}
 	
+	@GetMapping("/getBooksSortedByPrice")
+	public ResponseEntity<Response> getBooksSortedByPrice(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPrice(pageNo)));
+	}
+	
+	@GetMapping("/getBooksSortedByArrival")
+	public ResponseEntity<Response> getBooksSortedByArrival(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByArrival(pageNo)));
+	}
+	
 	@PutMapping("/upload")
     public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
     {

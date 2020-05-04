@@ -11,5 +11,7 @@ public interface BookService {
 	public void updateBook(BookDTO bookDTO, String token, Long bookId);
 	public void deleteBook(String token, Long bookId);
 	public List<Book> getBooks(Integer pageNo);
+	public List<Book> getBooksSortedByPrice(Integer pageNo);
+	public List<Book> getBooksSortedByArrival(Integer pageNo);
 	
 }

@@ -41,9 +41,16 @@ public class BookServiceImpl implements BookService{
 //		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
 //		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+//		List<Book> books =  seller.getSellerBooks();
+//		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
+//		if(notExist) {
 //		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 //		sellerRepository.save(seller);
+//		}
+//		else {
+//			throw new BookException(500, env.getProperty("5001"));
+//		}
 	}
 	
 	@Transactional
@@ -78,5 +85,15 @@ public class BookServiceImpl implements BookService{
 	public List<Book> getBooks(Integer pageNo){
 		Integer start = (pageNo-1)*10;
 		return bookRepository.findBook(start);
+	}
+	
+	public List<Book> getBooksSortedByPrice(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBookSortedByPrice(start);
+	}
+	
+	public List<Book> getBooksSortedByArrival(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBookSortedByArrival(start);
 	}
 }
