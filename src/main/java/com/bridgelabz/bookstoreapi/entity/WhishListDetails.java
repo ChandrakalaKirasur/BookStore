@@ -28,28 +28,13 @@ import lombok.ToString;
 @ToString
 public class WhishListDetails {
 
-	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
-	private long WhishListId;
 	
+	@Id
 	@Column
 	private LocalDateTime PlacedTime;
-	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "WhilistListId")
-	private List<QuantityOfBooks> QuantityOfBooks;
-	
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
-
-	public long getWhishListId() {
-		return WhishListId;
-	}
-
-	public void setWhishListId(long whishListId) {
-		WhishListId = whishListId;
-	}
 
 	public LocalDateTime getPlacedTime() {
 		return PlacedTime;
@@ -59,13 +44,6 @@ public class WhishListDetails {
 		PlacedTime = placedTime;
 	}
 
-	public List<QuantityOfBooks> getQuantityOfBooks() {
-		return QuantityOfBooks;
-	}
-
-	public void setQuantityOfBooks(List<QuantityOfBooks> quantityOfBooks) {
-		QuantityOfBooks = quantityOfBooks;
-	}
 
 	public List<Book> getBooksList() {
 		return BooksList;

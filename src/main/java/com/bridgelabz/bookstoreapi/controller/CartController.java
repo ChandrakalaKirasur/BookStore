@@ -20,12 +20,15 @@ import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.CartService;
 import com.bridgelabz.bookstoreapi.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 
 @RestController
 @RequestMapping("/cart")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
-//@Api(value="bookStore", description="Operations pertaining to user in Online Store")
+@Api(value="bookStore", description="Operations pertaining to Cart in Online Store")
 public class CartController {
 
 	@Autowired
@@ -34,35 +37,35 @@ public class CartController {
 	@Autowired
 	private Environment env;
 	
-	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
-	@PostMapping(value="/add_books_cart")
-	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@RequestParam("noteId") long noteId) throws Exception {
-		    User cart = cartService.addBooksToCart(token,noteId);
+	@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
+	@PostMapping(value="/add_books_cart/{token}")
+	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
+		    User cart = cartService.addBooksToCart(token,bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("200"), "200-ok", cart));
 					
 	}
 
-	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
-	@GetMapping(value="/get_cart")
+	@ApiOperation(value = "Getting the books from the Cartlist",response = Iterable.class)
+	@GetMapping(value="/get_cart/{token}")
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<CartDetails> cartdetails = cartService.getBooksfromCart(token);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("200"), "200-ok", cartdetails));
 	}
 	
-	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
+	@ApiOperation(value = "Adding the quantityofbooks to the Cartlist",response = Iterable.class)
 	@PostMapping(value="/add_booksquantity_cart/{token}")
-	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("noteId") long noteId,@RequestParam("quantity") long quantity) throws Exception {
-		   User cartdetails = cartService.addBooksQuantityToCart(token, noteId, quantity);
+	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId,@RequestParam("quantity") long quantity) throws Exception {
+		   User cartdetails = cartService.addBooksQuantityToCart(token, bookId, quantity);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("501"), "200-ok", cartdetails));  	
 	}
 	
-	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
+	@ApiOperation(value = "Removing the books to the Cartlist",response = Iterable.class)
 	@PostMapping(value="/remove_books_cart/{token}")
-	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@RequestParam("noteId") long noteId) throws Exception {
-		User cartdetails = cartService.removeBooksToCart(token,noteId);
+	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
+		User cartdetails = cartService.removeBooksToCart(token,bookId);
 		return ResponseEntity.status(200)
 				.body(new UserResponse(env.getProperty("501"), "200-ok", cartdetails));    
 		

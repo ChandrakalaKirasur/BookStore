@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.entity.WhishListDetails;
 import com.bridgelabz.bookstoreapi.exception.UserException;
+import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.WhishListService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -25,8 +27,8 @@ public class WhishListImplementation implements WhishListService{
 	@Autowired
 	private UserRepository userRepository;
 	
-//	@Autowired
-//	private BookRepository bookRepository;
+	@Autowired
+	private BookRepository bookRepository;
 	
 	@Autowired
 	private JWTUtil jwt;
@@ -44,12 +46,13 @@ public class WhishListImplementation implements WhishListService{
 		
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-//		Books book = bookRepository.findBookById(bookId)
-//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-//		
-//		booklist.add(book);
-//		whishlist.setBooksList(booklist);
-//	    user.getWhilistBooks().add(whishlist);
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
+		booklist.add(book);
+		whishlist.setPlacedTime(LocalDateTime.now());
+		whishlist.setBooksList(booklist);
+	    user.getWhilistBooks().add(whishlist);
 	   
 	
 		return userRepository.save(user);
@@ -64,14 +67,14 @@ public class WhishListImplementation implements WhishListService{
 		
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-//		Books book = bookRepository.findBookById(bookId)
-//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-//		
-//		user.getWhilistBooks().forEach((notes)->{
-//			notes.getBooksList().remove(book);
-//		});
-//
-//	    user.getWhilistBooks().add(whishlist);
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
+		user.getWhilistBooks().forEach((notes)->{
+			notes.getBooksList().remove(book);
+		});
+
+	    user.getWhilistBooks().add(whishlist);
 	   
 	
 		return userRepository.save(user);
@@ -88,22 +91,22 @@ public class WhishListImplementation implements WhishListService{
 	  	return whishList;
 	}
 	
-	@Override
-	public User addBooksQuantityToWhilist(String token, long wishListId,long quantity) {
-		
-		long id = (Long) jwt.decodeToken(token);
-		QuantityOfBooks cartquantity=new QuantityOfBooks();
-		User user = userRepository.findUserById(id)
-				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-		
-	        user.getWhilistBooks().forEach((data)->{
-	        	
-	       		if(data.getWhishListId()==wishListId) {
-	       			cartquantity.setQuantityOfBook(quantity);
-	       			data.getQuantityOfBooks().add(cartquantity);
-	       		}
-	       	});
-	        return user;
-	}
+//	@Override
+//	public User addBooksQuantityToWhilist(String token, long wishListId,long quantity) {
+//		
+//		long id = (Long) jwt.decodeToken(token);
+//		QuantityOfBooks cartquantity=new QuantityOfBooks();
+//		User user = userRepository.findUserById(id)
+//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+//		
+//	        user.getWhilistBooks().forEach((data)->{
+//	        	
+//	       		if(data.getWhishListId()==wishListId) {
+//	       			cartquantity.setQuantityOfBook(quantity);
+//	       			data.getQuantityOfBooks().add(cartquantity);
+//	       		}
+//	       	});
+//	        return user;
+//	}
 	
 }

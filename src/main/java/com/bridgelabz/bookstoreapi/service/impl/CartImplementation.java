@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class CartImplementation implements CartService{
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		
 		booklist.add(book);
+		cart.setPlaceTime(LocalDateTime.now());
 		cart.setBooksList(booklist);
 	    user.getCartBooks().add(cart);
 	   
@@ -92,6 +94,7 @@ public class CartImplementation implements CartService{
 	@Override
 	public User removeBooksToCart(String token, long bookId) {
 		
+		CartDetails cart=new CartDetails();
 		long id = (Long) jwt.decodeToken(token);
 		
 		User user = userRepository.findUserById(id)
@@ -100,11 +103,12 @@ public class CartImplementation implements CartService{
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		
+		cart.setPlaceTime(LocalDateTime.now());
 		user.getCartBooks().forEach((books)->{
-			books.getBooksList().remove(book);
+			 books.getBooksList().remove(book);
 		});
 		
-	  
+		user.getCartBooks().add(cart);
 		return userRepository.save(user);
 	}
 }

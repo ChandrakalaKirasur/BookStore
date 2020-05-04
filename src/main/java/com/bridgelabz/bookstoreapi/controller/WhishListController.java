@@ -21,11 +21,14 @@ import com.bridgelabz.bookstoreapi.entity.WhishListDetails;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.WhishListService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/whishList")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
-//@Api(value="bookStore", description="Operations pertaining to Cart in Online Store")
+@Api(value="bookStore", description="Operations pertaining to Whishlist in Online Store")
 public class WhishListController {
 
 	@Autowired
@@ -34,7 +37,7 @@ public class WhishListController {
 	@Autowired
 	private Environment env;
 	
-	//@ApiOperation(value = "Adding the books to the Whishlist",response = Iterable.class)
+	@ApiOperation(value = "Adding the books to the Whishlist",response = Iterable.class)
 	@PostMapping(value="/add_books_WhishList/{token}")
 	public ResponseEntity<UserResponse> addBooksToWhilist(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		    User whishlist = whishlistService.addBooksToWhishList(token,bookId);
@@ -42,7 +45,7 @@ public class WhishListController {
 					.body(new UserResponse(env.getProperty("601"), "200-ok", whishlist));  	
 	}
 	
-	//@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
+	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
 	@GetMapping(value="/books_cart/{token}")
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<WhishListDetails> whishlist = whishlistService.getBooksfromWhishList(token);
@@ -50,7 +53,7 @@ public class WhishListController {
 					.body(new UserResponse(env.getProperty("611"), "200-ok", whishlist));  
 	}
 	
-	//@ApiOperation(value = "Removing the books to the Whishlist",response = Iterable.class)
+	@ApiOperation(value = "Removing the books to the Whishlist",response = Iterable.class)
 	@PostMapping(value="/remove_books_WhishList/{token}")
 	public ResponseEntity<UserResponse> removeBooksToWhilist(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		    User whishlist = whishlistService.removeBooksToWhishList(token,bookId);

@@ -19,7 +19,6 @@ import lombok.ToString;
 @Entity
 @Table(name="books")
 @Data
-@NoArgsConstructor
 @ToString
 public class Book {
 	
@@ -66,6 +65,12 @@ public class Book {
 		this.bookAddedTime = LocalDateTime.now();
 		this.bookUpdatedTime = LocalDateTime.now();
 	}
+
+	
+	public Book() {
+		super();
+	}
+
 
 	public Long getBookId() {
 		return bookId;

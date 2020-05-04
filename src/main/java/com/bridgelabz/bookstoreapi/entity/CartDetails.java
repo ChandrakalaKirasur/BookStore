@@ -28,11 +28,12 @@ import lombok.ToString;
 @ToString
 public class CartDetails {
 
-	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
-	private long cartId;
 	
+//	@GenericGenerator(name = "idGen", strategy = "increment")
+//	@GeneratedValue(generator = "idGen")
+	//private long cartId;
+	
+	@Id
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
 	
@@ -43,13 +44,6 @@ public class CartDetails {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
 
-	public long getCartId() {
-		return cartId;
-	}
-
-	public void setCartId(long cartId) {
-		this.cartId = cartId;
-	}
 
 	public LocalDateTime getPlaceTime() {
 		return placeTime;
