@@ -58,6 +58,16 @@ public class WhishListImplementation implements WhishListService{
 			books=d.getBooksList();
 		}
 		/**
+		 * For the first time adding the book the whishList
+		 */
+		if(books==null) {
+			booklist.add(book);
+			whishlist.setPlacedTime(LocalDateTime.now());
+			whishlist.setBooksList(booklist);
+		    user.getWhilistBooks().add(whishlist);
+		    return userRepository.save(user);
+		}
+		/**
 		 * Checking whether book is already present r not
 		 */
 		Optional<Book> cartbook = books.stream().filter(t -> t.getBookId() == bookId).findFirst();
@@ -89,8 +99,6 @@ public class WhishListImplementation implements WhishListService{
 		user.getWhilistBooks().forEach((notes)->{
 			notes.getBooksList().remove(book);
 		});
-
-	    user.getWhilistBooks().add(whishlist);
 	   
 	
 		return userRepository.save(user);

@@ -36,6 +36,7 @@ public class CartImplementation implements CartService{
 	
 	@Autowired
 	private Environment env;
+
 	
 	@Override
 	public User addBooksToCart(String token, long bookId) {
@@ -49,6 +50,7 @@ public class CartImplementation implements CartService{
 		
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new UserException(201, env.getProperty("4041")));
+		
 		/**
 		 * Getting the bookList
 		 */
@@ -57,13 +59,24 @@ public class CartImplementation implements CartService{
 			books=d.getBooksList();
 		}
 		/**
+		 * For the first time adding the book the cartList
+		 */
+		if(books==null) {
+			booklist.add(book);
+			cart.setPlaceTime(LocalDateTime.now());
+			cart.setBooksList(booklist);
+		    user.getCartBooks().add(cart);
+		    return userRepository.save(user);
+		}
+		/**
 		 * Checking whether book is already present r not
 		 */
 		Optional<Book> cartbook = books.stream().filter(t -> t.getBookId() == bookId).findFirst();
 		
 		if(cartbook.isPresent()) {
-			throw new UserException(201, env.getProperty("505"));
+			return null;
 		}else {
+			
 		booklist.add(book);
 		cart.setPlaceTime(LocalDateTime.now());
 		cart.setBooksList(booklist);
@@ -124,7 +137,6 @@ public class CartImplementation implements CartService{
 			 books.getBooksList().remove(book);
 		});
 		
-		user.getCartBooks().add(cart);
 		return userRepository.save(user);
 	}
 }
