@@ -8,9 +8,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
@@ -41,12 +38,12 @@ public class BookServiceImpl implements BookService{
 	
 	
 	public void addBook(BookDTO bookDTO, String token) {
-		Long sId = jwt.decodeToken(token);
+//		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
-		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
-		seller.getSellerBooks().add(book);
+//		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+//		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
-		sellerRepository.save(seller);
+//		sellerRepository.save(seller);
 	}
 	
 	@Transactional
@@ -78,7 +75,8 @@ public class BookServiceImpl implements BookService{
 		sellerRepository.save(seller);
 	}
 	
-//	public List<Book> getBooks(Integer pageNo, String sortBy){
-//		Pageable paging = PageRequest.of(pageNo, 10, Sort.by(sortBy));
-//	}
+	public List<Book> getBooks(Integer pageNo){
+		Integer start = (pageNo-1)*10;
+		return bookRepository.findBook(start);
+	}
 }

@@ -47,6 +47,9 @@ public class Book {
 	@Column(name = "book_description", nullable = false)
 	private String bookDescription;
 	
+	@Column(name = "book_verified")
+	private boolean isBookVerified;
+	
 	@Column(name = "book_added_time", nullable = false)
 	private LocalDateTime bookAddedTime;	
 
@@ -59,6 +62,7 @@ public class Book {
 		this.bookPrice = dto.getBookPrice();
 		this.noOfBooks = dto.getNoOfBooks();
 		this.bookDescription = dto.getBookDescription();
+		this.isBookVerified = false;
 		this.bookAddedTime = LocalDateTime.now();
 		this.bookUpdatedTime = LocalDateTime.now();
 	}

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.bridgelabz.bookstoreapi.exception.BookException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.response.ExceptionResponse;
 
@@ -20,6 +21,13 @@ public class UserExceptionHandler {
 	public final ResponseEntity<ExceptionResponse> handlerUserException(UserException ex) {
 		
 		return ResponseEntity.status(ex.getErrorCode()).body(new ExceptionResponse(LocalDateTime.now(),ex.getErrorMessage()));
+	
+	}
+	
+	@ExceptionHandler(BookException.class)
+	public final ResponseEntity<ExceptionResponse> handlerUserException(BookException ex) {
+		
+		return ResponseEntity.status(ex.getErrorCode()).body(new ExceptionResponse(LocalDateTime.now(),ex.getErrorMsg()));
 	
 	}
 }
