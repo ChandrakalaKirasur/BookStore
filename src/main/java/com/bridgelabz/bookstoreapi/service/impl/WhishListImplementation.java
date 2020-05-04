@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import com.bridgelabz.bookstoreapi.service.WhishListService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 
 @Service
+@PropertySource("classpath:message.properties")
 public class WhishListImplementation implements WhishListService{
 
 	@Autowired

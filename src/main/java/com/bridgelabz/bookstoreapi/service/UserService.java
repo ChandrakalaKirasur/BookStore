@@ -16,5 +16,5 @@ public interface UserService {
 
 	boolean updateVerificationStatus(String token);
 
-	
+	//User removeBooksToCart(String token, long bookId);
 }

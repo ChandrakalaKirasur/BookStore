@@ -78,6 +78,22 @@ public class UserController {
 	}
 
 	/**
+	 * API for verifying the token User
+	 * @param pathVaraiable token
+	 */
+
+	//@ApiOperation(value = "Verifing the user",response = Iterable.class)
+	@GetMapping(value = "/registration/verify/{token}")
+	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
+		
+		boolean verification = userService.updateVerificationStatus(token);
+		if (verification) {
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200"));
+		}
+		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401"));
+	}
+	
+	/**
 	 * API for verify resting password
 	 * @param RequestParam emailId
 	 */
@@ -108,20 +124,6 @@ public class UserController {
 //		
 //	}
 
-	/**
-	 * API for verifying the token User
-	 * @param pathVaraiable token
-	 */
-
-	//@ApiOperation(value = "Verifing the user",response = Iterable.class)
-	@GetMapping(value = "/registration/verify/{token}")
-	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
-		
-		boolean verification = userService.updateVerificationStatus(token);
-		if (verification) {
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200"));
-		}
-		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401"));
-	}
+	
 
 }

@@ -42,12 +42,30 @@ public class CartController {
 					.body(new UserResponse(env.getProperty("200"), "200-ok", cart));
 					
 	}
-	
+
 	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
-	@GetMapping(value="/books_cart")
+	@GetMapping(value="/get_cart")
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<CartDetails> cartdetails = cartService.getBooksfromCart(token);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("200"), "200-ok", cartdetails));
+	}
+	
+	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
+	@PostMapping(value="/add_booksquantity_cart/{token}")
+	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("noteId") long noteId,@RequestParam("quantity") long quantity) throws Exception {
+		   User cartdetails = cartService.addBooksQuantityToCart(token, noteId, quantity);
+		    return ResponseEntity.status(200)
+					.body(new UserResponse(env.getProperty("501"), "200-ok", cartdetails));  	
+	}
+	
+	//@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
+	@PostMapping(value="/remove_books_cart/{token}")
+	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@RequestParam("noteId") long noteId) throws Exception {
+		User cartdetails = cartService.removeBooksToCart(token,noteId);
+		return ResponseEntity.status(200)
+				.body(new UserResponse(env.getProperty("501"), "200-ok", cartdetails));    
+		
+					
 	}
 }

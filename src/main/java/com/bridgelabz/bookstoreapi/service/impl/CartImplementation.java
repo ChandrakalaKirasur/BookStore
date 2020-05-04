@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
@@ -37,7 +39,19 @@ public class CartImplementation implements CartService{
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		
-	       	return user;
+		CartDetails cart=new CartDetails();
+		ArrayList<Book> booklist=new ArrayList<>();
+		
+//		Book book = bookRepository.findBookById(bookId)
+//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+//		
+//		booklist.add(book);
+//		cart.setBooksList(booklist);
+//	    user.getCartBooks().add(cart);
+	   
+	
+		return userRepository.save(user);
+	       	
 	}
 	
 	@Override
@@ -58,6 +72,7 @@ public class CartImplementation implements CartService{
 	       		
 	       	});
 	        return user;
+	        
 	}
 
 	
@@ -71,5 +86,22 @@ public class CartImplementation implements CartService{
 	 return cartBooks;
 	}
 
-	
+	@Override
+	public User removeBooksToCart(String token, long bookId) {
+		
+		long id = (Long) jwt.decodeToken(token);
+		
+		User user = userRepository.findUserById(id)
+				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
+//		Book book = bookRepository.findBookById(bookId)
+//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+//		
+//		user.getCartBooks().forEach((books)->{
+//			books.getBooksList().remove(book);
+//		});
+		
+	  
+		return userRepository.save(user);
+	}
 }

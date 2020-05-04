@@ -14,4 +14,6 @@ public interface CartService {
 
 	User addBooksQuantityToCart(String token, long noteId, long quantity);
 
+	User removeBooksToCart(String token, long bookId);
+
 }
