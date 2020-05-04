@@ -5,7 +5,11 @@ import org.springframework.data.repository.CrudRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.data.jpa.repository.Query;
+
+import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
 
 public interface UserRepository extends CrudRepository<User, Long>{
@@ -30,5 +34,7 @@ public interface UserRepository extends CrudRepository<User, Long>{
 
 	@Query(value = "select * from user where user_number=?", nativeQuery = true)
 	Optional<User> findByMobile(Long mbl);
+
+	
 
 }

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,11 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
+import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.User;
+import com.bridgelabz.bookstoreapi.response.SellerResponse;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.UserService;
 
@@ -100,33 +105,28 @@ public class UserController {
 	 * API for verify resting password
 	 * @param RequestParam emailId
 	 */
-//	@ApiOperation(value = "Reset the user password",response = Iterable.class)
-//	@PostMapping(value = "/emailId")
-//	public ResponseEntity<UserResponse> resetEmailVerify(@RequestParam("email") String emailId) {
-//
-//		String result = userService.resetPassword(emailId);
-//	
-//		return ResponseEntity.status(200)
-//				.body(new UserResponse(result,env.getProperty("107"),200));
-//		
-//	}
+	@PostMapping("seller/forgetPassword")
+	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
+		String message = userService.forgotpassword(emailAddress);
+		return ResponseEntity.status(200)
+				.body(new UserResponse(message,env.getProperty("107"),200));
+	}
+
+	
 
 	/**
 	 * API for user Forgot Passsword
 	 * @param pathVaraiable token
 	 * @param RequestParam newpassword
 	 */
-//	@ApiOperation(value = "Forgot password",response = Iterable.class)
-//	@PutMapping(value = "/forgotPassword/{token}")
-//	public ResponseEntity<UserResponse> forgetPassword(@PathVariable String token,@RequestParam("newPassword") String rest) {
-//
-//		User result = userService.forgotPassword(rest,token);
-//
-//		return ResponseEntity.status(HttpStatus.ACCEPTED)
-//					.body(new UserResponse(env.getProperty("108"), "200-ok", result));
-//		
-//	}
 
+	@PostMapping("seller/restPassword/{token}")
+	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
+			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
+		String message = userService.resetpassword(token, forgetPasswordDto);
+		return ResponseEntity.status(200)
+				.body(new UserResponse(message,env.getProperty("107"),200));
+	}
 	
 
 }

@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -18,7 +22,10 @@ import com.bridgelabz.bookstoreapi.constants.Constants;
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
+import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
+import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
@@ -50,6 +57,13 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private Environment env;
 	
+	@Value("${spring.mail.username}")
+	private String email;
+	
+	@Value("${spring.mail.password}")
+	private String password;
+	
+	
 	/**
 	 * Saves the user details
 	 * @return 
@@ -59,6 +73,8 @@ public class UserServiceImpl implements UserService{
 
 		Optional<User> useremail = userRepository.findUserByEmail(register.getEmailAddress());
 
+		System.out.println(email+"email from yml...");
+		System.out.println(password+"password from yml...");
 		if (useremail.isPresent())
 			throw new UserException(208, env.getProperty("103"));
 		
@@ -122,6 +138,46 @@ public class UserServiceImpl implements UserService{
          return users;
 	}
 
+	@Transactional
+	@Override
+	public String forgotpassword(@Valid String emailAddress) {
+		Mail mail = new Mail();
+		Optional<User> optionalUser = userRepository.findUserByEmail(emailAddress);
+		return optionalUser.filter(user -> {	
+			return user != null;
+		}).map(user -> {
+			mail.setTo(user.getEmail());
+			mail.setSubject(Constants.RESET_PASSWORD_LINK);
+			mail.setContext("Hi " + user.getName() + " " + Constants.USER_RESET_PASSWORD_LINK
+					+ Constants.RESET_PASSWORD_LINK + jwt.generateToken(user.getUserId(), Token.WITH_EXPIRE_TIME));
+			producer.sendToQueue(mail);
+			consumer.receiveMail(mail);
+			return env.getProperty("403");
+		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
+		
+	}
 	
-	
+	/**
+	 * Api for reset password
+	 * @param token
+	 * @RequestBody forgetPasswordDto
+	 * @Return 
+	 */
+	@Transactional
+	@Override
+	public String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto) {
+		
+		Long id = jwt.decodeToken(token);
+		Optional<User> optionalSeller = userRepository.findById(id);
+		return optionalSeller.filter(seller -> {	
+			return seller != null;
+		}).map(seller -> {
+		String newPassword=encoder.encode(forgetPasswordDto.getPassword());
+		seller.setPassword(newPassword);
+		//seller.set;(LocalDateTime.now());
+		 userRepository.save(seller);
+			return env.getProperty("203");
+		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
+		
+	}	 
 }
