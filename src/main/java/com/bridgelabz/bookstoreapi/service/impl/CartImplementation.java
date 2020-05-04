@@ -14,6 +14,7 @@ import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
+import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.CartService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -28,6 +29,8 @@ public class CartImplementation implements CartService{
 	@Autowired
 	private JWTUtil jwt;
 	
+	@Autowired
+	private BookRepository bookRepository;
 	
 	@Autowired
 	private Environment env;
@@ -42,12 +45,12 @@ public class CartImplementation implements CartService{
 		CartDetails cart=new CartDetails();
 		ArrayList<Book> booklist=new ArrayList<>();
 		
-//		Book book = bookRepository.findBookById(bookId)
-//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-//		
-//		booklist.add(book);
-//		cart.setBooksList(booklist);
-//	    user.getCartBooks().add(cart);
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
+		booklist.add(book);
+		cart.setBooksList(booklist);
+	    user.getCartBooks().add(cart);
 	   
 	
 		return userRepository.save(user);
@@ -94,12 +97,12 @@ public class CartImplementation implements CartService{
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		
-//		Book book = bookRepository.findBookById(bookId)
-//				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
-//		
-//		user.getCartBooks().forEach((books)->{
-//			books.getBooksList().remove(book);
-//		});
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
+		user.getCartBooks().forEach((books)->{
+			books.getBooksList().remove(book);
+		});
 		
 	  
 		return userRepository.save(user);
