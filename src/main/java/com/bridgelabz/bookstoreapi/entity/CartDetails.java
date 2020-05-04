@@ -29,10 +29,6 @@ import lombok.ToString;
 public class CartDetails {
 
 	
-//	@GenericGenerator(name = "idGen", strategy = "increment")
-//	@GeneratedValue(generator = "idGen")
-	//private long cartId;
-	
 	@Id
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
