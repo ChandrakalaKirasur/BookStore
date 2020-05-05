@@ -1,7 +1,6 @@
 package com.bridgelabz.bookstoreapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -9,7 +8,6 @@ import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.Seller;
-import com.bridgelabz.bookstoreapi.response.Response;
 
 public interface SellerService {
 	/**
