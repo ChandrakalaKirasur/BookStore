@@ -15,4 +15,6 @@ public interface AdminService {
 	boolean verifyEmail(String token);
 
 	boolean register(AdminDto adminDto);
+
+	boolean verifyBook(Long bookId);
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,7 @@ import com.bridgelabz.bookstoreapi.exception.AdminException;
 import com.bridgelabz.bookstoreapi.repository.AdminRepository;
 import com.bridgelabz.bookstoreapi.service.AdminService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
+import com.bridgelabz.bookstoreapi.utility.MailService;
 import com.bridgelabz.bookstoreapi.utility.Token;
 
 @Service
@@ -38,12 +38,14 @@ public class AdminServiceImpl implements AdminService{
 	private Consumer consumer;
 	@Autowired
 	private Environment env;
+	@Autowired
+	private MailService mailService;
 	
 	@Override
 	public boolean register(AdminDto adminDto) {
 		Admin newUser = new Admin();
 		BeanUtils.copyProperties(adminDto, newUser);
-		if (adminRepo.existsByFirstName(newUser.getName())) {
+		if (adminRepo.existsByName(newUser.getName())) {
 			return false;
 		}
 		newUser.setPassword(encoder.encode(newUser.getPassword()));
@@ -57,9 +59,10 @@ public class AdminServiceImpl implements AdminService{
 				mail.setTo(admin.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
 				mail.setContext("Hi " + admin.getName() + " " + Constants.REGISTRATION_MESSAGE
-						+ Constants.ADMIN_VERIFICATION_LINK + util.generateToken(admin.getAdminId(), Token.WITH_EXPIRE_TIME));
-				producer.sendToQueue(mail);
-				consumer.receiveMail(mail);
+						+ Constants.ADMIN_VERIFICATION_LINK + util.generateToken(admin.getAdminId(), Token.WITHOUT_EXPIRE_TIME));
+				//producer.sendToQueue(mail);
+				//consumer.receiveMail(mail);
+				mailService.sendMail(mail);
 		} catch (AdminException e) {
 			throw new AdminException(400, env.getProperty("102"));
 		}
@@ -68,6 +71,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public boolean verifyEmail(String token) {
+		System.out.println(util.decodeToken(token));
 		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, "Admin not found"));
 		if (!fetchedAdmin.isVerified()) {
 			fetchedAdmin.setVerified(true);
@@ -109,6 +113,11 @@ public class AdminServiceImpl implements AdminService{
 		fetchedAdmin.setPassword(encoder.encode(resetDto.getPassword()));
 		adminRepo.save(fetchedAdmin);
 		return true;
+	}
+	@Override
+	public boolean verifyBook(Long bookId) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
