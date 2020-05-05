@@ -1,15 +1,17 @@
 package com.bridgelabz.bookstoreapi.service;
 
-cvk
-import java.util.List;
-import java.util.Optional;
 
-master
+import java.util.List;
+
+
 import javax.validation.Valid;
 
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+
+import com.bridgelabz.bookstoreapi.entity.Seller;
+
 
 public interface SellerService {
 	/**
