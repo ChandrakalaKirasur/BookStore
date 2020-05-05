@@ -95,9 +95,9 @@ public class UserController {
 		
 		boolean verification = userService.updateVerificationStatus(token);
 		if (verification) {
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200"));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",verification));
 		}
-		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401"));
+		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401",verification));
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class UserController {
 	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
 		String message = userService.forgotpassword(emailAddress);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(message,env.getProperty("107"),200));
+				.body(new UserResponse(env.getProperty("107"),"200",message));
 	}
 
 	
@@ -128,4 +128,14 @@ public class UserController {
 	}
 	
 
+	@ApiOperation(value = "Getting the user",response = Iterable.class)
+	@GetMapping(value = "/get")
+	public ResponseEntity<UserResponse> gettingUser() throws Exception {
+		
+		User userdetails = userService.getUser();
+		
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+		
+	}
+	
 }

@@ -20,5 +20,7 @@ public interface UserService {
 
 	String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto);
 
+	User getUser();
+
 	//User removeBooksToCart(String token, long bookId);
 }

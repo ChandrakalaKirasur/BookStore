@@ -66,13 +66,16 @@ public class User {
 	@JoinColumn(name = "userId")
 	private List<ReviewAndRating> bookRatingAndReview;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "userId")
 	private List<CartDetails> cartBooks;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "userId")
 	private List<WhishListDetails> whilistBooks;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "userId")
 	private List<OrderDetails> orderBookDetails;
 
 	public User(RegisterDto register) {

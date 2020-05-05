@@ -175,5 +175,13 @@ public class UserServiceImpl implements UserService{
 			return env.getProperty("203");
 		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
 		
+	}
+
+	@Override
+	public User getUser() {
+		//Iterable<User> userdetails = userRepository.findAll();
+		User userdetails = userRepository.findById((long) 1)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		return userdetails;
 	}	 
 }
