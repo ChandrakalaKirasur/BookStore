@@ -176,7 +176,7 @@ public class SellerServiceImpl implements SellerService{
 			Seller seller = sellerRepository.findSellerById(id);
 
 			return seller;
-		} catch (Exception e) {
+		} catch (SellerException e) {
 			throw  new SellerException(env.getProperty("104"));
 		}
 	}

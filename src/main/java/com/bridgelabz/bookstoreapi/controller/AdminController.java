@@ -65,7 +65,7 @@ public class AdminController {
 	 * @param pathVaraiable token
 	 */
 	@ApiOperation(value = "Verifing the admin",response = Iterable.class)
-	@RequestMapping("/{emailId}")
+	@GetMapping("/registration/verify/{token}")
 	public ResponseEntity<AdminResponse> verifyMail(@PathVariable String token) {
 		boolean resultStatus = service.verifyEmail(token);
 		if (resultStatus) {
@@ -123,5 +123,20 @@ public class AdminController {
 		}
 		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
 				.body(new AdminResponse("Admin not found kindly try again", 208, resultStatus));
+	}
+	/**
+	 * API for verifying book
+	 * @param PathVariable 
+	 */
+	@ApiOperation(value = "Verify seller book",response = Iterable.class)
+	@PutMapping("/verify/book")
+	public ResponseEntity<AdminResponse> verifyBook(@PathVariable Long bookId){
+		boolean resultStatus = service.verifyBook(bookId);
+		if (resultStatus) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new AdminResponse("book verification successful", 200, resultStatus));
+		}
+		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+				.body(new AdminResponse("Got error while verifying book!! try again", 208, resultStatus));
 	}
 }

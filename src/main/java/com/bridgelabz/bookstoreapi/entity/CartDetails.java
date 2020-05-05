@@ -28,7 +28,6 @@ import lombok.ToString;
 @ToString
 public class CartDetails {
 
-	
 	@Id
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
@@ -41,6 +40,7 @@ public class CartDetails {
 	private List<Book> BooksList;
 
 
+	
 	public LocalDateTime getPlaceTime() {
 		return placeTime;
 	}
@@ -64,6 +64,4 @@ public class CartDetails {
 	public void setBooksList(List<Book> booksList) {
 		BooksList = booksList;
 	}
-	
-	
 }
