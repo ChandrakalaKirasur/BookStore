@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.bridgelabz.bookstoreapi.exception.AdminException;
 import com.bridgelabz.bookstoreapi.exception.BookException;
+import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.response.ExceptionResponse;
 
@@ -35,6 +36,12 @@ public class UserExceptionHandler {
 	public final ResponseEntity<ExceptionResponse> handlerAdminException(AdminException ex) {
 		
 		return ResponseEntity.status(ex.getErrorCode()).body(new ExceptionResponse(LocalDateTime.now(),ex.getErrorMessage()));
+	
+	}
+	@ExceptionHandler(SellerException.class)
+	public final ResponseEntity<ExceptionResponse> handlerAdminException(SellerException ex) {
+		
+		return ResponseEntity.status(ex.getErrorCode()).body(new ExceptionResponse(LocalDateTime.now(),ex.getErrorMsg()));
 	
 	}
 }
