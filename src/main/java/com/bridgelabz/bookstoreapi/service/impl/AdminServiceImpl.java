@@ -15,8 +15,11 @@ import com.bridgelabz.bookstoreapi.dto.AdminPasswordResetDto;
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.entity.Admin;
+import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.exception.AdminException;
+import com.bridgelabz.bookstoreapi.exception.BookException;
 import com.bridgelabz.bookstoreapi.repository.AdminRepository;
+import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.service.AdminService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 import com.bridgelabz.bookstoreapi.utility.MailService;
@@ -40,7 +43,8 @@ public class AdminServiceImpl implements AdminService{
 	private Environment env;
 	@Autowired
 	private MailService mailService;
-	
+	@Autowired
+	private BookRepository bookRepo;
 	@Override
 	public boolean register(AdminDto adminDto) {
 		if (adminRepo.existsByName(adminDto.getName())) {
@@ -117,8 +121,9 @@ public class AdminServiceImpl implements AdminService{
 	}
 	@Override
 	public boolean verifyBook(Long bookId) {
-		// TODO Auto-generated method stub
-		return false;
+		Book fetchedBookForVerification=bookRepo.findById(bookId).orElseThrow(()-> new BookException(400,"book doesnt exist"));
+		fetchedBookForVerification.setBookVerified(true);
+		return true;
 	}
 
 }
