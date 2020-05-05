@@ -31,7 +31,7 @@ import io.swagger.annotations.Api;
 @RestController
 @CrossOrigin("*")
 @RequestMapping(path = "/seller")
-@Api(value="bookStore", description="Operations pertaining to Seller in Online Store")
+@Api(value="bookStore", description="Operations pertaining to Seller in Book Store")
 public class SellerController {
 	private SellerService sellerService;
 	@Autowired
