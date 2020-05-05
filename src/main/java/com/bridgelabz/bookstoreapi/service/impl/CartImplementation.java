@@ -3,6 +3,7 @@ package com.bridgelabz.bookstoreapi.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -35,6 +36,7 @@ public class CartImplementation implements CartService{
 	
 	@Autowired
 	private Environment env;
+
 	
 	@Override
 	public User addBooksToCart(String token, long bookId) {
@@ -47,13 +49,40 @@ public class CartImplementation implements CartService{
 		ArrayList<Book> booklist=new ArrayList<>();
 		
 		Book book = bookRepository.findById(bookId)
-				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+				.orElseThrow(() -> new UserException(201, env.getProperty("4041")));
 		
+		/**
+		 * Getting the bookList
+		 */
+		List<Book> books = null;
+		for(CartDetails d:user.getCartBooks()) {
+			books=d.getBooksList();
+		}
+		/**
+		 * For the first time adding the book the cartList
+		 */
+		if(books==null) {
+			booklist.add(book);
+			cart.setPlaceTime(LocalDateTime.now());
+			cart.setBooksList(booklist);
+		    user.getCartBooks().add(cart);
+		    return userRepository.save(user);
+		}
+		/**
+		 * Checking whether book is already present r not
+		 */
+		Optional<Book> cartbook = books.stream().filter(t -> t.getBookId() == bookId).findFirst();
+		
+		if(cartbook.isPresent()) {
+			return null;
+		}else {
+			
 		booklist.add(book);
 		cart.setPlaceTime(LocalDateTime.now());
 		cart.setBooksList(booklist);
+		
 	    user.getCartBooks().add(cart);
-	   
+		}
 	
 		return userRepository.save(user);
 	       	
@@ -108,7 +137,6 @@ public class CartImplementation implements CartService{
 			 books.getBooksList().remove(book);
 		});
 		
-		user.getCartBooks().add(cart);
 		return userRepository.save(user);
 	}
 }

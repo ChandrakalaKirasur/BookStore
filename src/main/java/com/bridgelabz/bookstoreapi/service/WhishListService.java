@@ -13,7 +13,5 @@ public interface WhishListService {
 
     User removeBooksToWhishList(String token, long bookId);
     
-	//User addBooksQuantityToWhilist(String token, long bookId, long quantity);
-
 	
 }
