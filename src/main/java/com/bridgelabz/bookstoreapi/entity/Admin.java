@@ -40,6 +40,9 @@ public class Admin {
 	
 	@Column(name = "admin_phone", nullable = false)
 	private long phoneNum;
+	
+	@Column(name = "verified", nullable = false)
+	private boolean verified;
 
 	public long getAdminId() {
 		return adminId;

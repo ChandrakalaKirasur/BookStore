@@ -1,6 +1,5 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -11,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.http.ResponseEntity;
+
 import com.bridgelabz.bookstoreapi.configuration.Consumer;
 import com.bridgelabz.bookstoreapi.configuration.Producer;
 import com.bridgelabz.bookstoreapi.constants.Constants;
@@ -26,10 +23,12 @@ import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
+cvk
+
 import com.bridgelabz.bookstoreapi.exception.UserException;
+master
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
-import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.UserService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -83,7 +82,7 @@ public class UserServiceImpl implements UserService{
 		Mail mail = new Mail();
 		user.setVerified(false);
 		User usr = userRepository.save(user);
-		try {
+		try {     
 			if (usr != null) {
 				mail.setTo(user.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
