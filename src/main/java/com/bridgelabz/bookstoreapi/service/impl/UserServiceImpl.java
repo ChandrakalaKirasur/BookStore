@@ -1,6 +1,5 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -11,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.http.ResponseEntity;
+
 import com.bridgelabz.bookstoreapi.configuration.Consumer;
 import com.bridgelabz.bookstoreapi.configuration.Producer;
 import com.bridgelabz.bookstoreapi.constants.Constants;
@@ -23,13 +20,13 @@ import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
-import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.UserService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -83,7 +80,7 @@ public class UserServiceImpl implements UserService{
 		Mail mail = new Mail();
 		user.setVerified(false);
 		User usr = userRepository.save(user);
-		try {
+		try {     
 			if (usr != null) {
 				mail.setTo(user.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
@@ -98,6 +95,7 @@ public class UserServiceImpl implements UserService{
 		return usr;
 	}
 	
+	@Transactional
 	@Override
 	public UserResponse loginByEmailOrMobile(LoginDTO login) {
 		
@@ -179,5 +177,29 @@ public class UserServiceImpl implements UserService{
 			return env.getProperty("203");
 		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
 		
+	}
+	@Transactional
+	@Override
+	public User getUser(String token) {
+		
+		Long id = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(id)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		return userdetails;
 	}	 
+	@Transactional
+	@Override
+	public User getOrderList(String token) {
+		Long id = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(id)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		OrderDetails orderDetails=new OrderDetails();
+		userdetails.getCartBooks().forEach((books)->{
+			orderDetails.setBooksList(books.getBooksList());
+		});
+		
+		userdetails.getOrderBookDetails().add(orderDetails);
+		userdetails.getCartBooks().clear();
+		return userRepository.save(userdetails);
+	}
 }

@@ -40,6 +40,9 @@ public class Admin {
 	
 	@Column(name = "admin_phone", nullable = false)
 	private long phoneNum;
+	
+	@Column(name = "verified", nullable = false)
+	private boolean verified;
 
 	public long getAdminId() {
 		return adminId;
@@ -95,6 +98,14 @@ public class Admin {
 
 	public void setPhoneNum(long phoneNum) {
 		this.phoneNum = phoneNum;
+	}
+
+	public boolean isVerified() {
+		return verified;
+	}
+
+	public void setVerified(boolean verified) {
+		this.verified = verified;
 	}
 	
 	

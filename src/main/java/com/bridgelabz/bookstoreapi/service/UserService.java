@@ -6,7 +6,6 @@ import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.User;
-import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 
 public interface UserService {
@@ -20,6 +19,11 @@ public interface UserService {
 	String forgotpassword(@Valid String emailAddress);
 
 	String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto);
+
+	User getUser(String token);
+
+	User getOrderList(String token);
+	
 
 	//User removeBooksToCart(String token, long bookId);
 }

@@ -7,18 +7,17 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
@@ -96,20 +95,20 @@ public class UserController {
 		
 		boolean verification = userService.updateVerificationStatus(token);
 		if (verification) {
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200"));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",verification));
 		}
-		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401"));
+		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401",verification));
 	}
 	
 	/**
 	 * API for verify resting password
 	 * @param RequestParam emailId
 	 */
-	@PostMapping("seller/forgetPassword")
+	@PostMapping("/forgetPassword")
 	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
 		String message = userService.forgotpassword(emailAddress);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(message,env.getProperty("107"),200));
+				.body(new UserResponse(env.getProperty("107"),"200",message));
 	}
 
 	
@@ -120,7 +119,7 @@ public class UserController {
 	 * @param RequestParam newpassword
 	 */
 
-	@PostMapping("seller/restPassword/{token}")
+	@PostMapping("/restPassword/{token}")
 	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);
@@ -129,4 +128,23 @@ public class UserController {
 	}
 	
 
+	@ApiOperation(value = "Getting the user")
+	@GetMapping(value = "/get/{token}")
+	public ResponseEntity<UserResponse> gettingUser(@RequestHeader String token) throws Exception {
+		
+		User userdetails = userService.getUser(token);
+		
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+		
+	}
+	
+	@ApiOperation(value = "Getting the order books of user")
+	@GetMapping(value = "/order/{token}")
+	public ResponseEntity<UserResponse> getOrderBooks(@RequestHeader String token) throws Exception {
+		
+		User userdetails = userService.getOrderList(token);
+		
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+		
+	}
 }
