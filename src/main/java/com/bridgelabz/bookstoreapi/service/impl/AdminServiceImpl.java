@@ -43,14 +43,14 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public boolean register(AdminDto adminDto) {
-		Admin newUser = new Admin();
-		BeanUtils.copyProperties(adminDto, newUser);
-		if (adminRepo.existsByName(newUser.getName())) {
+		if (adminRepo.existsByName(adminDto.getName())) {
 			return false;
 		}
-		newUser.setPassword(encoder.encode(newUser.getPassword()));
-		if (sendNotification(newUser))
-			adminRepo.save(newUser);
+		Admin newAdmin = new Admin();
+		BeanUtils.copyProperties(adminDto, newAdmin);
+		newAdmin.setPassword(encoder.encode(newAdmin.getPassword()));
+		adminRepo.save(newAdmin);
+		sendNotification(newAdmin);
 		return true;
 	}
 	private boolean sendNotification(Admin admin) {
@@ -59,7 +59,7 @@ public class AdminServiceImpl implements AdminService{
 				mail.setTo(admin.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
 				mail.setContext("Hi " + admin.getName() + " " + Constants.REGISTRATION_MESSAGE
-						+ Constants.ADMIN_VERIFICATION_LINK + util.generateToken(admin.getAdminId(), Token.WITHOUT_EXPIRE_TIME));
+						+ Constants.ADMIN_VERIFICATION_LINK + util.generateToken(admin.getAdminId(), Token.WITH_EXPIRE_TIME));
 				//producer.sendToQueue(mail);
 				//consumer.receiveMail(mail);
 				mailService.sendMail(mail);
@@ -99,8 +99,9 @@ public class AdminServiceImpl implements AdminService{
 				mail.setSubject("Reset password");
 				mail.setContext("Hi " + fetchedAdmin.getName() + " " + Constants.RESET_MSG
 						+ Constants.ADMIN_RESET_PASSWORD_LINK + util.generateToken(fetchedAdmin.getAdminId(), Token.WITH_EXPIRE_TIME));
-				producer.sendToQueue(mail);
-				consumer.receiveMail(mail);
+				//producer.sendToQueue(mail);
+				//consumer.receiveMail(mail);
+				mailService.sendMail(mail);
 		} catch (AdminException e) {
 			throw new AdminException(400, env.getProperty("102"));
 		}

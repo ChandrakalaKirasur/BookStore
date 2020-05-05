@@ -2,7 +2,6 @@ package com.bridgelabz.bookstoreapi.utility;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -34,4 +33,5 @@ public class JWTUtil {
 		Long id = Long.parseLong(claim.getSubject());
 		return id;
 	}
+	
 }

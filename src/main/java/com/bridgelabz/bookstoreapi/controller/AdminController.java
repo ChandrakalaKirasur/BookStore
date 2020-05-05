@@ -114,7 +114,7 @@ public class AdminController {
 	 * @param RequestBody resetDetails
 	 */
 	@ApiOperation(value = "Admin reset password",response = Iterable.class)
-	@PutMapping("/resetpassword")
+	@PutMapping("/reset")
 	public ResponseEntity<AdminResponse> resetAdminPassword(@RequestBody AdminPasswordResetDto resetDetails){
 		boolean resultStatus = service.resetAdminPassword(resetDetails);
 		if (resultStatus) {
