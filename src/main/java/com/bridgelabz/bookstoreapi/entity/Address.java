@@ -46,6 +46,9 @@ public class Address {
 	@Column(name = "country", nullable = false)
 	private String country;
 
+	@Column(name = "type")
+	private String type;
+	
 	public long getAddressId() {
 		return addressId;
 	}
@@ -116,6 +119,14 @@ public class Address {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

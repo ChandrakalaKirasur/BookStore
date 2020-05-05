@@ -104,7 +104,7 @@ public class UserController {
 	 * API for verify resting password
 	 * @param RequestParam emailId
 	 */
-	@PostMapping("seller/forgetPassword")
+	@PostMapping("/forgetPassword")
 	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
 		String message = userService.forgotpassword(emailAddress);
 		return ResponseEntity.status(200)
@@ -119,7 +119,7 @@ public class UserController {
 	 * @param RequestParam newpassword
 	 */
 
-	@PostMapping("seller/restPassword/{token}")
+	@PostMapping("/restPassword/{token}")
 	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);
