@@ -20,6 +20,7 @@ import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
@@ -94,6 +95,7 @@ public class UserServiceImpl implements UserService{
 		return usr;
 	}
 	
+	@Transactional
 	@Override
 	public UserResponse loginByEmailOrMobile(LoginDTO login) {
 		
@@ -176,12 +178,28 @@ public class UserServiceImpl implements UserService{
 		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
 		
 	}
-
+	@Transactional
 	@Override
-	public User getUser() {
-		//Iterable<User> userdetails = userRepository.findAll();
-		User userdetails = userRepository.findById((long) 1)
+	public User getUser(String token) {
+		
+		Long id = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(id)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		return userdetails;
 	}	 
+	@Transactional
+	@Override
+	public User getOrderList(String token) {
+		Long id = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(id)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		OrderDetails orderDetails=new OrderDetails();
+		userdetails.getCartBooks().forEach((books)->{
+			orderDetails.setBooksList(books.getBooksList());
+		});
+		
+		userdetails.getOrderBookDetails().add(orderDetails);
+		userdetails.getCartBooks().clear();
+		return userRepository.save(userdetails);
+	}
 }

@@ -20,7 +20,10 @@ public interface UserService {
 
 	String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto);
 
-	User getUser();
+	User getUser(String token);
+
+	User getOrderList(String token);
+	
 
 	//User removeBooksToCart(String token, long bookId);
 }

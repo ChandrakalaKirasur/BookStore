@@ -128,14 +128,23 @@ public class UserController {
 	}
 	
 
-	@ApiOperation(value = "Getting the user",response = Iterable.class)
-	@GetMapping(value = "/get")
-	public ResponseEntity<UserResponse> gettingUser() throws Exception {
+	@ApiOperation(value = "Getting the user")
+	@GetMapping(value = "/get/{token}")
+	public ResponseEntity<UserResponse> gettingUser(@RequestHeader String token) throws Exception {
 		
-		User userdetails = userService.getUser();
+		User userdetails = userService.getUser(token);
 		
 			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
 		
 	}
 	
+	@ApiOperation(value = "Getting the order books of user")
+	@GetMapping(value = "/order/{token}")
+	public ResponseEntity<UserResponse> getOrderBooks(@RequestHeader String token) throws Exception {
+		
+		User userdetails = userService.getOrderList(token);
+		
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+		
+	}
 }
