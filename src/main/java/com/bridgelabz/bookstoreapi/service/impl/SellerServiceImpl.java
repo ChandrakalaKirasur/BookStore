@@ -2,6 +2,7 @@ package com.bridgelabz.bookstoreapi.service.impl;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -158,4 +159,25 @@ public class SellerServiceImpl implements SellerService{
 		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
 		
 	}	 
+	@Transactional
+	@Override
+	public List<Seller> getSellers() {
+		List<Seller> users = sellerRepository.getSellers();
+		return users;
+	}
+
+
+	@Transactional
+	@Override
+	public Seller getSingleUser(String token) {
+		try {
+			Long id = jwt.decodeToken(token);
+
+			Seller seller = sellerRepository.findSellerById(id);
+
+			return seller;
+		} catch (Exception e) {
+			throw  new SellerException(env.getProperty("104"));
+		}
+	}
 }

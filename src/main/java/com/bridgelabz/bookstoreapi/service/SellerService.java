@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -35,4 +36,15 @@ public interface SellerService {
 	 * @return
 	 */
 	public String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto);
+	/**
+	 * 
+	 * @return all sellers
+	 */
+	public List<Seller> getSellers();
+	/**
+	 * 
+	 * @param token
+	 * @return 
+	 */
+	public Seller getSingleUser(String token);
 }
