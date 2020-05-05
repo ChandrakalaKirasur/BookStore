@@ -99,6 +99,14 @@ public class Admin {
 	public void setPhoneNum(long phoneNum) {
 		this.phoneNum = phoneNum;
 	}
+
+	public boolean isVerified() {
+		return verified;
+	}
+
+	public void setVerified(boolean verified) {
+		this.verified = verified;
+	}
 	
 	
 }

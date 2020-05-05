@@ -1,5 +1,7 @@
 package com.bridgelabz.bookstoreapi.service;
 
+import javax.validation.Valid;
+
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;

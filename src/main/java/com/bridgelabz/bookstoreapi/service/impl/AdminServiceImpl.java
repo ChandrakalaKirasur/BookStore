@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapi.configuration.Consumer;
@@ -30,7 +31,7 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private JWTUtil util;
 	@Autowired
-	private BCryptPasswordEncoder encoder;
+	private PasswordEncoder encoder;
 	@Autowired
 	private Producer producer;
 	@Autowired
