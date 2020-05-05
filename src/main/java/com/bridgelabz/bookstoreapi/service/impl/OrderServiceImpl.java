@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
+import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.CartRepository;
@@ -55,26 +56,32 @@ public class OrderServiceImpl implements OrderService{
 		User userdetails = userRepository.findById(id)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		OrderDetails orderDetails=new OrderDetails();
-		
+		QuantityOfBooks order=new QuantityOfBooks();
 		Random random=new Random();
         userdetails.getOrderBookDetails().clear();
 		ArrayList<Book> list=new ArrayList<>();
+		/**
+		 * adding the books to orderlist by fetching it from cartlist
+		 */
 		userdetails.getCartBooks().forEach((cart)->{
 			cart.getBooksList().forEach(book->{
 				list.add(book);
-				long otp=random.nextInt(1000000);
-				if(otp<0) {
-					otp=otp*-1;
+				long orderId=random.nextInt(1000000);
+				if(orderId<0) {
+					orderId=orderId*-1;
 				}
-				orderDetails.setOrderId(otp);
+//				cartquantity.setQuantityOfBook(quantity);
+//       		cart.getQuantityOfBooks().add(cartquantity);
+				orderDetails.setOrderId(orderId);
 				orderDetails.setOrderPlaceTime(LocalDateTime.now());
 				orderDetails.setBooksList(list);
-				orderDetails.setQuantityOfBooks(cart.getQuantityOfBooks());
 				userdetails.getOrderBookDetails().add(orderDetails);
 			});
 			
 		});
-		
+		/**
+		 * clearing the cart after added to the orderlist
+		 */
 		userdetails.getCartBooks().clear();
 		return userRepository.save(userdetails);
 		
