@@ -1,0 +1,13 @@
+package com.bridgelabz.bookstoreapi.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AdminPasswordResetDto {
+	private String password;
+	private String token;
+}
