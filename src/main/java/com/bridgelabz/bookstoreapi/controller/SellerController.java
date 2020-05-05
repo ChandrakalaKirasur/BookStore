@@ -1,12 +1,15 @@
 package com.bridgelabz.bookstoreapi.controller;
 
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.SellerResponse;
 import com.bridgelabz.bookstoreapi.service.SellerService;
@@ -80,5 +84,27 @@ public class SellerController {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(new SellerResponse(environment.getProperty("201"), 201, messege));
 	}
+	/**
+	 * API for retrieving the all the Sellers 
+	 * @return all sellers
+	 */
+	@GetMapping("user/allSellers")
+	public List<Seller> getAllSellers() {
+		List<Seller> users = sellerService.getSellers();
+		return  users;
+	}
+	/**
+	 * API to get the single Seller information  
+	 * @param token
+	 * @return
+	 * @throws Exception
+	 */
+
+	@GetMapping("user/singleSeller")
+	public ResponseEntity<SellerResponse> singleUser(@RequestHeader("token") String token) throws Exception {
+		Seller user = sellerService.getSingleUser(token);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SellerResponse(environment.getProperty("201"), 202, user));
+	}
+	
 }
 
