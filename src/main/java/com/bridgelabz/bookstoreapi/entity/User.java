@@ -62,10 +62,6 @@ public class User {
 	@JoinColumn(name = "userId")
 	private List<Address> address;
 	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = ReviewAndRating.class)
-	@JoinColumn(name = "userId")
-	private List<ReviewAndRating> bookRatingAndReview;
-	
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = CartDetails.class)
 	@JoinColumn(name = "userId")
 	private List<CartDetails> cartBooks;
@@ -162,14 +158,6 @@ public class User {
 
 	public void setAddress(List<Address> address) {
 		this.address = address;
-	}
-
-	public List<ReviewAndRating> getBookRatingAndReview() {
-		return bookRatingAndReview;
-	}
-
-	public void setBookRatingAndReview(List<ReviewAndRating> bookRatingAndReview) {
-		this.bookRatingAndReview = bookRatingAndReview;
 	}
 
 	public List<CartDetails> getCartBooks() {

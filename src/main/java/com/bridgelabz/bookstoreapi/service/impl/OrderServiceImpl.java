@@ -34,6 +34,9 @@ public class OrderServiceImpl implements OrderService{
 	private UserRepository userRepository;
 	
 	@Autowired
+	private CartRepository cartRepository;
+	
+	@Autowired
 	private JWTUtil jwt;
 	
 	@Autowired
@@ -59,13 +62,13 @@ public class OrderServiceImpl implements OrderService{
 		OrderDetails orderDetails=new OrderDetails();
 		QuantityOfBooks order=new QuantityOfBooks();
 		Random random=new Random();
-        //userdetails.getOrderBookDetails().clear();
 		ArrayList<Book> list=new ArrayList<>();
 		/**
 		 * adding the books to orderlist by fetching it from cartlist
 		 */
 		userdetails.getCartBooks().forEach((cart)->{
 			cart.getBooksList().forEach(book->{
+				
 				list.add(book);
 				long orderId=random.nextInt(1000000);
 				if(orderId<0) {
@@ -76,20 +79,22 @@ public class OrderServiceImpl implements OrderService{
 				orderDetails.setBooksList(list);
 				userdetails.getOrderBookDetails().add(orderDetails);
 				long quantity = cart.getQuantityOfBooks().getQuantityOfBook();
-				System.out.println("*****************"+cart.getQuantityOfBooks().getQuantityOfBook());
 				order.setQuantityOfBook(quantity);
-				userdetails.getOrderBookDetails().forEach(orders->{
-					orders.setQuantityOfBooks(order);
-					});
-				
+			
 			});
 				
 		});
-		
+		/**
+		 * adding the quantity of books to the orderdetails
+		 */
+		userdetails.getOrderBookDetails().forEach(orders->{
+			orders.setQuantityOfBooks(order);
+			});
 		/**
 		 * clearing the cart after added to the orderlist
 		 */
-		userdetails.getCartBooks().remove(userdetails);
+		userdetails.getCartBooks().clear();
+		
 		return userRepository.save(userdetails);
 		
 	}
