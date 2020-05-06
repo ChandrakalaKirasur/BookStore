@@ -6,60 +6,63 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name="cart_details")
-@Data
-@NoArgsConstructor
-@ToString
 public class CartDetails {
 
 	
 	@Id
-	@Column(name = "placed_timed", nullable = false)
-	private LocalDateTime placeTime;
+	@GenericGenerator(name = "idGen", strategy = "increment")
+	@GeneratedValue(generator = "idGen")
+	private Long cartId;
 	
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
-	@JoinColumn(name = "bookquantity")
-	private QuantityOfBooks QuantityOfBooks;
+	@Column(name = "quantity_of_books", nullable = false)
+	private Long quantityOfBook;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	private List<Book> BooksList;
-
+	@OneToOne
+	@JsonIgnore
+	@JoinTable(name="purchasing_book", joinColumns = @JoinColumn(name="quantityId"),
+	inverseJoinColumns = @JoinColumn(name="book_id"))
+	private Book book;
 	
-	public LocalDateTime getPlaceTime() {
-		return placeTime;
+	public CartDetails() {
 	}
 
-	public void setPlaceTime(LocalDateTime placeTime) {
-		this.placeTime = placeTime;
+	public CartDetails(Long quantity, Book book) {
+		this.quantityOfBook = quantity;
+		this.book = book;
 	}
 
-	
-	public QuantityOfBooks getQuantityOfBooks() {
-		return QuantityOfBooks;
+	public Long getQuantityOfBook() {
+		return quantityOfBook;
 	}
 
-	public void setQuantityOfBooks(QuantityOfBooks quantityOfBooks) {
-		QuantityOfBooks = quantityOfBooks;
+	public void setQuantityOfBook(Long quantityOfBook) {
+		this.quantityOfBook = quantityOfBook;
 	}
 
-	public List<Book> getBooksList() {
-		return BooksList;
+	public Book getBook() {
+		return book;
 	}
 
-	public void setBooksList(List<Book> booksList) {
-		BooksList = booksList;
+	public void setBook(Book book) {
+		this.book = book;
 	}
-	
-	
 }

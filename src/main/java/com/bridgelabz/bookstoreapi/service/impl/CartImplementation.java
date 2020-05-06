@@ -46,105 +46,68 @@ public class CartImplementation implements CartService{
 
 	@Transactional
 	@Override
-	public User addBooksToCart(String token, long bookId) {
-		long id = (Long) jwt.decodeToken(token);
+	public void addBooksToCart(String token, Long bookId, Long quantity) {
+		Long id = jwt.decodeToken(token);
 		
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		
-		CartDetails cart=new CartDetails();
-		ArrayList<Book> booklist=new ArrayList<>();
+		boolean notExist = user.getCartBooks().stream().noneMatch(cart -> cart.getBook().getBookId().equals(bookId));
 		
-		Book book = bookRepository.findById(bookId)
-				.orElseThrow(() -> new UserException(201, env.getProperty("4041")));
-		
-		/**
-		 * Getting the bookList
-		 */
-		List<Book> books = null;
-		for(CartDetails d:user.getCartBooks()) {
-			books=d.getBooksList();
+		if(notExist) {
+			Book book = bookRepository.findById(bookId)
+					.orElseThrow(() -> new UserException(201, env.getProperty("4041")));
+			CartDetails cart = new CartDetails(quantity, book);
+			user.getCartBooks().add(cart);
+			cartRepository.save(cart);
+			userRepository.save(user);
 		}
-		/**
-		 * For the first time adding the book the cartList
-		 */
-		if(books==null) {
-			booklist.add(book);
-			cart.setPlaceTime(LocalDateTime.now());
-			cart.setBooksList(booklist);
-		    user.getCartBooks().add(cart);
-		    return userRepository.save(user);
+		else {
+			throw new UserException(500, env.getProperty("505"));
 		}
-		/**
-		 * Checking whether book is already present r not
-		 */
-		Optional<Book> cartbook = books.stream().filter(t -> t.getBookId() == bookId).findFirst();
-		
-		if(cartbook.isPresent()) {
-			return null;
-		}else {
-	    
-		booklist.add(book);
-		cart.setPlaceTime(LocalDateTime.now());
-		cart.setBooksList(booklist);
-		
-	    user.getCartBooks().add(cart);
-		}
-	    
-		return userRepository.save(user);
 	       	
 	}
 	
 	@Transactional
 	@Override
-	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
+	public void addBooksQuantityToCart(String token, Long bookId,Long quantity) {
 		
-		long id = (Long) jwt.decodeToken(token);
-		QuantityOfBooks cartquantity=new QuantityOfBooks();
+		Long id = jwt.decodeToken(token);
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
-		
-	        user.getCartBooks().forEach((cart)->{
-	        	cart.getBooksList().forEach((books)->{
-	        		if(books.getBookId()==bookId) {
-		       			cartquantity.setQuantityOfBook(quantity);
-		       			cart.setQuantityOfBooks(cartquantity);
-		       		}
-	        	});
-	       		
-	       	});
-	        return userRepository.save(user);
-	        
+		CartDetails crt =  user.getCartBooks().stream().filter(cart -> cart.getBook().getBookId().equals(bookId)).findFirst().orElseThrow(() -> new UserException(404, env.getProperty("507")));
+		crt.setQuantityOfBook(quantity);
+		cartRepository.save(crt);
+		userRepository.save(user);
 	}
 
 	@Transactional
 	@Override
 	public List<CartDetails> getBooksfromCart(String token) {
-		long id = (Long) jwt.decodeToken(token);
+		Long id = jwt.decodeToken(token);
 		
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 	 List<CartDetails> cartBooks = user.getCartBooks();
+	 cartBooks.forEach(cart -> {
+		 System.out.println(cart.getBook().getBookName()+" ---> "+cart.getQuantityOfBook());
+	 });
 	 return cartBooks;
 	}
 
 	@Transactional
 	@Override
-	public User removeBooksToCart(String token, long bookId) {
+	public void removeBooksToCart(String token, Long bookId) {
 		
-		CartDetails cart=new CartDetails();
-		long id = (Long) jwt.decodeToken(token);
+		Long id =  jwt.decodeToken(token);
 		
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		CartDetails crt =  user.getCartBooks().stream().filter(cart -> cart.getBook().getBookId().equals(bookId)).findFirst().orElseThrow(() -> new UserException(404, env.getProperty("507")));
 		
-		Book book = bookRepository.findById(bookId)
-				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		user.getCartBooks().remove(crt);
 		
-		user.getCartBooks().forEach((books)->{
-			 books.getBooksList().remove(book);
-		});
+		userRepository.save(user);
 		
-		return userRepository.save(user);
 	}
 }
