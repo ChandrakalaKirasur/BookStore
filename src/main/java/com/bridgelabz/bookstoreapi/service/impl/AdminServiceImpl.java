@@ -96,7 +96,7 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public boolean sendLinkForPassword(String email) {
-		Admin fetchedAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new AdminException(400, "User not found"));
+		Admin fetchedAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new AdminException(400, "Admin not found"));
 		Mail mail = new Mail();
 		try {     
 				mail.setTo(fetchedAdmin.getEmail());
@@ -120,10 +120,11 @@ public class AdminServiceImpl implements AdminService{
 		return true;
 	}
 	@Override
-	public boolean verifyBook(Long bookId) {
-		Book fetchedBookForVerification=bookRepo.findById(bookId).orElseThrow(()-> new BookException(400,"book doesnt exist"));
+	public boolean verifyBook(Long bookId,String token) {
+		adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, "Admin not found"));
+		Book fetchedBookForVerification=bookRepo.findById(bookId).orElseThrow(()-> new BookException(400,"book doesn't exist"));
 		fetchedBookForVerification.setBookVerified(true);
-		
+		bookRepo.save(fetchedBookForVerification);
 		return true;
 	}
 
