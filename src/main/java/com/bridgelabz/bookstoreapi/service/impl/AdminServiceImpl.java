@@ -45,7 +45,6 @@ public class AdminServiceImpl implements AdminService{
 	private Environment env;
 	@Autowired
 	private MailService mailService;
-	
 	@Override
 	public boolean register(AdminDto adminDto) {
 		if (adminRepo.existsByName(adminDto.getName())) {
@@ -124,6 +123,7 @@ public class AdminServiceImpl implements AdminService{
 	public boolean verifyBook(Long bookId) {
 		Book fetchedBookForVerification=bookRepo.findById(bookId).orElseThrow(()-> new BookException(400,"book doesnt exist"));
 		fetchedBookForVerification.setBookVerified(true);
+		
 		return true;
 	}
 	

@@ -24,6 +24,9 @@ public class CartDetails {
 
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cartId;
+	
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
 	

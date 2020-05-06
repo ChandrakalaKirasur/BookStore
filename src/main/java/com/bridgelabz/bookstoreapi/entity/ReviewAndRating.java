@@ -18,9 +18,13 @@ import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 public class ReviewAndRating {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long ratingReviewId;
+
 	@GenericGenerator(name = "idGen", strategy = "increment")
 	@GeneratedValue(generator = "idGen")
 	private Long ratingReviewId;
+
 	
 	@Column(name = "rating", nullable = false)
 	private Integer rating;

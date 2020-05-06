@@ -30,8 +30,8 @@ import lombok.ToString;
 public class User {
 
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+	//@GenericGenerator(name = "idGen", strategy = "increment")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long userId;
 	
 	@Column(name = "user_name", nullable = false)
