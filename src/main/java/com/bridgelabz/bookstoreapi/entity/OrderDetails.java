@@ -25,14 +25,15 @@ import lombok.ToString;
 @ToString
 public class OrderDetails {
 
-	//should be generated using the random class
+
 	@Id
 	private long orderId;
 	
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	
-	@Column
+	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
+	@JoinColumn(name = "bookquantity")
 	private Long quantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
