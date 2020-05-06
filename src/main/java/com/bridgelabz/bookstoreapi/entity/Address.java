@@ -20,7 +20,7 @@ public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long addressId;
+	private Long addressId;
 	
 	@Column(name = "address", nullable = false)
 	private String address;
@@ -49,11 +49,11 @@ public class Address {
 	@Column(name = "type")
 	private String type;
 	
-	public long getAddressId() {
+	public Long getAddressId() {
 		return addressId;
 	}
 
-	public void setAddressId(long addressId) {
+	public void setAddressId(Long addressId) {
 		this.addressId = addressId;
 	}
 
