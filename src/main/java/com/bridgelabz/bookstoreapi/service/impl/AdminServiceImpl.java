@@ -45,8 +45,6 @@ public class AdminServiceImpl implements AdminService{
 	private Environment env;
 	@Autowired
 	private MailService mailService;
-	@Autowired
-	private BookRepository bookRepo;
 	@Override
 	public boolean register(AdminDto adminDto) {
 		if (adminRepo.existsByName(adminDto.getName())) {
