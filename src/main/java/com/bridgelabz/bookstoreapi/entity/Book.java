@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -23,8 +24,9 @@ import lombok.ToString;
 public class Book {
 	
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+//	@GenericGenerator(name = "idGen", strategy = "increment")
+//	@GeneratedValue(generator = "idGen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "book_id")
 	private Long bookId;
 	

@@ -21,8 +21,9 @@ import lombok.ToString;
 public class Address {
 
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+//	@GenericGenerator(name = "idGen", strategy = "increment")
+//	@GeneratedValue(generator = "idGen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long addressId;
 	
 	@Column(name = "address", nullable = false)

@@ -21,8 +21,9 @@ import lombok.ToString;
 public class ReviewAndRating {
 
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+//	@GenericGenerator(name = "idGen", strategy = "increment")
+//	@GeneratedValue(generator = "idGen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long ratingReviewId;
 	
 	@Column(name = "rating", nullable = false)
