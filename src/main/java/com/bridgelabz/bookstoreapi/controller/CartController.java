@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/cart")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
-@Api(value="bookStore", description="Operations pertaining to Cart in Online Store")
+@Api(value="bookStore", description="Operations pertaining to Cart in Book Store")
 public class CartController {
 
 	@Autowired

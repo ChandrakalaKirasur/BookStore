@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,8 +21,14 @@ import lombok.ToString;
 public class Address {
 
 	@Id
+<<<<<<< HEAD
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long addressId;
+=======
+	@GenericGenerator(name = "idGen", strategy = "increment")
+	@GeneratedValue(generator = "idGen")
+	private long addressId;
+>>>>>>> 4a5804c2502690ee0c4759800f9c0b3e13af2709
 	
 	@Column(name = "address", nullable = false)
 	private String address;

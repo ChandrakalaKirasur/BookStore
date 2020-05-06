@@ -17,6 +17,7 @@ import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
+import com.bridgelabz.bookstoreapi.repository.CartRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.CartService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -33,6 +34,10 @@ public class CartImplementation implements CartService{
 	
 	@Autowired
 	private BookRepository bookRepository;
+	
+	@Autowired
+	private CartRepository cartRepository;
+	
 	
 	@Autowired
 	private Environment env;
@@ -76,14 +81,14 @@ public class CartImplementation implements CartService{
 		if(cartbook.isPresent()) {
 			return null;
 		}else {
-			
+	    
 		booklist.add(book);
 		cart.setPlaceTime(LocalDateTime.now());
 		cart.setBooksList(booklist);
 		
 	    user.getCartBooks().add(cart);
 		}
-	
+	    
 		return userRepository.save(user);
 	       	
 	}
@@ -132,7 +137,6 @@ public class CartImplementation implements CartService{
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		
-		cart.setPlaceTime(LocalDateTime.now());
 		user.getCartBooks().forEach((books)->{
 			 books.getBooksList().remove(book);
 		});
