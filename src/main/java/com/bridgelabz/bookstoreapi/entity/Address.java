@@ -20,10 +20,10 @@ import lombok.ToString;
 @ToString
 public class Address {
 
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
-	private long addressId;
+	private Long addressId;
 	
 	@Column(name = "address", nullable = false)
 	private String address;
