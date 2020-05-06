@@ -44,6 +44,7 @@ public class Admin {
 	@Column(name = "verified", nullable = false)
 	private boolean verified;
 
+	
 	public long getAdminId() {
 		return adminId;
 	}

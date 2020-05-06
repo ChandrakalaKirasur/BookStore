@@ -1,25 +1,23 @@
 package com.bridgelabz.bookstoreapi.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 @Entity
 @Table(name="books")
-@Data
-@ToString
 public class Book {
 	
 	@Id
@@ -55,6 +53,10 @@ public class Book {
 	@Column(name = "book_updated_time", nullable = false)
 	private LocalDateTime bookUpdatedTime;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "book_id")
+	private List<ReviewAndRating> reviewRating;
+	
 	public Book(BookDTO dto) {
 		this.bookName = dto.getBookName();
 		this.bookAuthor = dto.getBookAuthor();
@@ -69,6 +71,16 @@ public class Book {
 	
 	public Book() {
 		super();
+	}
+
+
+	public boolean isBookVerified() {
+		return isBookVerified;
+	}
+
+
+	public void setBookVerified(boolean isBookVerified) {
+		this.isBookVerified = isBookVerified;
 	}
 
 
@@ -95,6 +107,16 @@ public class Book {
 	public void setBookAuthor(String bookAuthor) {
 		this.bookAuthor = bookAuthor;
 	}
+
+	public List<ReviewAndRating> getReviewRating() {
+		return reviewRating;
+	}
+
+
+	public void setReviewRating(List<ReviewAndRating> reviewRating) {
+		this.reviewRating = reviewRating;
+	}
+
 
 	public Double getBookPrice() {
 		return bookPrice;

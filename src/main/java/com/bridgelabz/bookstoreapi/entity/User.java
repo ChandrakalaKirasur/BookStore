@@ -58,23 +58,19 @@ public class User {
 	@Column(name = "user_profile")
 	private String profile;
 	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Address.class, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Address.class)
 	@JoinColumn(name = "userId")
 	private List<Address> address;
 	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = ReviewAndRating.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId")
-	private List<ReviewAndRating> bookRatingAndReview;
-	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = CartDetails.class)
 	@JoinColumn(name = "userId")
 	private List<CartDetails> cartBooks;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = WhishListDetails.class)
 	@JoinColumn(name = "userId")
 	private List<WhishListDetails> whilistBooks;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = OrderDetails.class)
 	@JoinColumn(name = "userId")
 	private List<OrderDetails> orderBookDetails;
 
@@ -162,14 +158,6 @@ public class User {
 
 	public void setAddress(List<Address> address) {
 		this.address = address;
-	}
-
-	public List<ReviewAndRating> getBookRatingAndReview() {
-		return bookRatingAndReview;
-	}
-
-	public void setBookRatingAndReview(List<ReviewAndRating> bookRatingAndReview) {
-		this.bookRatingAndReview = bookRatingAndReview;
 	}
 
 	public List<CartDetails> getCartBooks() {

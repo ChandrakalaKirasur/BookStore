@@ -1,13 +1,14 @@
 package com.bridgelabz.bookstoreapi.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.bookstoreapi.dto.AddressDto;
 import com.bridgelabz.bookstoreapi.dto.UpdateAddressDto;
 import com.bridgelabz.bookstoreapi.entity.Address;
-import com.bridgelabz.bookstoreapi.response.UserResponse;
+import com.bridgelabz.bookstoreapi.entity.User;
+import com.bridgelabz.bookstoreapi.response.AddressResponse;
 import com.bridgelabz.bookstoreapi.service.AddressService;
 
 import io.swagger.annotations.Api;
@@ -36,23 +38,31 @@ public class AddressController {
 	@Autowired
 	private Environment environment;
 	@PostMapping("/add")
-	public  void addAddress(@RequestBody AddressDto address,@RequestHeader String token) throws Exception {
-		 addressService.addAddress(address,token);
+	public  ResponseEntity<AddressResponse> addAddress(@RequestBody AddressDto address,@RequestHeader String token) throws Exception {
+		
+		 
+		Address addres= addressService.addAddress(address,token);
+			
+		if (addres != null) {
+			return ResponseEntity.status(200)
+					.body(new AddressResponse(environment.getProperty("300"), "300-ok", addres));
+		}
+		 return ResponseEntity.status(401)
+				.body(new AddressResponse(environment.getProperty("102"), "", addres));	
 		
 	}
 	/*Api for  update*/
 	@PutMapping("/update/{token}")
-	public ResponseEntity<UserResponse> updateNote(@PathVariable("token") String token,@RequestBody UpdateAddressDto address)
+	public ResponseEntity<AddressResponse> updateAddress(@PathVariable("token") String token,@RequestBody UpdateAddressDto address)
 	{
 		
-		System.out.println("====update enter");
-		List<Address> addres=addressService.updateAddress(address,token);
+		Optional<Address> addres=addressService.updateAddress(address,token);
 		if (addres != null) {
 			return ResponseEntity.status(200)
-					.body(new UserResponse(environment.getProperty("200"), "200-ok", addres));
+					.body(new AddressResponse(environment.getProperty("301"), "301", addres));
 		}
 		return ResponseEntity.status(401)
-				.body(new UserResponse(environment.getProperty("102"), "", addres));
+				.body(new AddressResponse(environment.getProperty("102"), "", addres));
 
 	}
 	/**
@@ -63,16 +73,25 @@ public class AddressController {
 	 */
 	/*Api for  delete*/
 	@PutMapping("/delete")
-	public ResponseEntity<UserResponse> deletNote(@RequestParam Long addressId,@RequestHeader String token )
+	public ResponseEntity<AddressResponse> deleteAddress(@RequestParam Long addressId,@RequestHeader String token )
 	{
 		System.out.println("####");
-		Address message= addressService.deleteNote(token, addressId);
+		User message= addressService.deleteAddress(token, addressId);
 		System.out.println("==="+message);
 		if (message != null) {
 			return ResponseEntity.status(200)
-					.body(new UserResponse(environment.getProperty("200"), "200-ok", message));
+					.body(new AddressResponse(environment.getProperty("302"), "302", message));
 		}
 		return ResponseEntity.status(401)
-				.body(new UserResponse(environment.getProperty("102"), "", message));		
+				.body(new AddressResponse(environment.getProperty("102"), "", message));		
+	}
+	/*Api for fetching all notes*/
+	@GetMapping("/getAllAddress")
+	public List<Address> getAllAddress()
+	{
+
+
+		return addressService.getAllAddress();
+
 	}
 }

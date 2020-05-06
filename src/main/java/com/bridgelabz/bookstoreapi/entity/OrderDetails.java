@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -31,9 +32,9 @@ public class OrderDetails {
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "orderId")
-	private List<QuantityOfBooks> QuantityOfBooks;
+	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
+	@JoinColumn(name = "bookQuantity")
+	private QuantityOfBooks QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
@@ -54,11 +55,12 @@ public class OrderDetails {
 		this.orderPlaceTime = orderPlaceTime;
 	}
 
-	public List<QuantityOfBooks> getQuantityOfBooks() {
+
+	public QuantityOfBooks getQuantityOfBooks() {
 		return QuantityOfBooks;
 	}
 
-	public void setQuantityOfBooks(List<QuantityOfBooks> quantityOfBooks) {
+	public void setQuantityOfBooks(QuantityOfBooks quantityOfBooks) {
 		QuantityOfBooks = quantityOfBooks;
 	}
 

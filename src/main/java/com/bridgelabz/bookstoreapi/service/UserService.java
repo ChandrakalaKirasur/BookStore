@@ -15,7 +15,7 @@ public interface UserService {
 
 	User userRegistration(RegisterDto register);
 	
-	UserResponse loginByEmailOrMobile(LoginDTO login);
+	String loginByEmailOrMobile(LoginDTO login);
 
 	boolean updateVerificationStatus(String token);
 

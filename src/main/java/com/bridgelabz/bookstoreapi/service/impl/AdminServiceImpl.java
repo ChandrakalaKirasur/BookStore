@@ -32,6 +32,8 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	AdminRepository adminRepo;
 	@Autowired
+	private BookRepository bookRepo;
+	@Autowired
 	private JWTUtil util;
 	@Autowired
 	private PasswordEncoder encoder;

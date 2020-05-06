@@ -9,5 +9,5 @@ public interface OrderService {
 
 	List<OrderDetails> getOrderList(String token);
 
-	User getOrderConfrim(String token);
+	List<OrderDetails> getOrderConfrim(String token);
 }

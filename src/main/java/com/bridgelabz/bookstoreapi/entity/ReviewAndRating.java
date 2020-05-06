@@ -3,35 +3,45 @@ package com.bridgelabz.bookstoreapi.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 
 @Entity
 @Table(name="review_and_rating")
-@Data
-@NoArgsConstructor
-@ToString
 public class ReviewAndRating {
 
 	@Id
 	@GenericGenerator(name = "idGen", strategy = "increment")
 	@GeneratedValue(generator = "idGen")
-	private long ratingReviewId;
+	private Long ratingReviewId;
 	
 	@Column(name = "rating", nullable = false)
-	private int rating;
+	private Integer rating;
 	
 	@Column(name = "review", nullable = false)
 	private String review;
+	
+	@OneToOne
+	@JoinTable(name="rating_review_user", joinColumns = @JoinColumn(name="ratingReviewId"),
+	inverseJoinColumns = @JoinColumn(name="user_id"))
+	private User user;
+	
+	public ReviewAndRating() {
+	}
 
-	public long getRatingReviewId() {
+	public ReviewAndRating(RatingReviewDTO rrDTO) {
+		this.rating = rrDTO.getRating();
+		this.review = rrDTO.getReview();
+	}
+	
+	public Long getRatingReviewId() {
 		return ratingReviewId;
 	}
 
@@ -39,7 +49,7 @@ public class ReviewAndRating {
 		this.ratingReviewId = ratingReviewId;
 	}
 
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
 
@@ -54,7 +64,21 @@ public class ReviewAndRating {
 	public void setReview(String review) {
 		this.review = review;
 	}
-		
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setRatingReviewId(Long ratingReviewId) {
+		this.ratingReviewId = ratingReviewId;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,13 +35,13 @@ public class OrderController {
 	@Autowired
 	private Environment env;
 	
-	@ApiOperation(value = "Getting the order books of user")
+	@ApiOperation(value = "Getting the confrim order of user")
 	@PutMapping(value = "/orderConfrim/{token}")
 	public ResponseEntity<UserResponse> OrderConfrim(@RequestHeader String token) throws Exception {
 		
-		 User userdetails = orderService.getOrderConfrim(token);
+		 List<OrderDetails> userdetails = orderService.getOrderConfrim(token);
 		
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"), userdetails,HttpStatus.OK));
 		
 	}
 	
@@ -50,7 +51,7 @@ public class OrderController {
 		
 		List<OrderDetails> userdetails = orderService.getOrderList(token);
 		
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"),userdetails,HttpStatus.OK));
 		
 	}
 }
