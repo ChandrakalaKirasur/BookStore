@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,11 +55,12 @@ public class UserController {
 	public ResponseEntity<UserResponse> loginUser(@Valid @RequestBody LoginDTO user, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
-					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "200"));
+					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.OK));
 		
-		 UserResponse userdetails = userService.loginByEmailOrMobile(user);
+		 String token = userService.loginByEmailOrMobile(user);
 		
-		return  ResponseEntity.status(200).body(userdetails);
+		 return ResponseEntity.status(200)
+					.body(new UserResponse(token, env.getProperty("200"),HttpStatus.OK));
 		
 	}
 	
@@ -72,14 +74,14 @@ public class UserController {
 	public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterDto userRecord, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
-					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "200"));
+					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.BAD_REQUEST));
 		User user = userService.userRegistration(userRecord);
 		if (user != null) {
 			return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("200"), "200-ok", userRecord));
+					.body(new UserResponse(env.getProperty("202"), userRecord,HttpStatus.OK));
 		}
 		return ResponseEntity.status(401)
-				.body(new UserResponse(env.getProperty("102"), "", userRecord));
+				.body(new UserResponse(env.getProperty("102"),  userRecord,HttpStatus.NOT_FOUND));
 	}
 
 	/**
@@ -93,9 +95,9 @@ public class UserController {
 		
 		boolean verification = userService.updateVerificationStatus(token);
 		if (verification) {
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",verification));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), verification,HttpStatus.OK));
 		}
-		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401",verification));
+		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), verification,HttpStatus.HTTP_VERSION_NOT_SUPPORTED));
 	}
 	
 	/**
@@ -106,7 +108,7 @@ public class UserController {
 	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
 		String message = userService.forgotpassword(emailAddress);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(env.getProperty("107"),"200",message));
+				.body(new UserResponse(env.getProperty("107"),message,HttpStatus.OK));
 	}
 
 
@@ -121,7 +123,7 @@ public class UserController {
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(message,env.getProperty("107"),200));
+				.body(new UserResponse(message,env.getProperty("107"),HttpStatus.OK));
 	}
 	
 
@@ -131,7 +133,7 @@ public class UserController {
 		
 		User userdetails = userService.getUser(token);
 		
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"),userdetails,HttpStatus.OK));
 		
 	}
 	

@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Transactional
 	@Override
-	public UserResponse loginByEmailOrMobile(LoginDTO login) {
+	public String loginByEmailOrMobile(LoginDTO login) {
 		
 		User user = null;
 //		boolean email = Pattern.compile("^((\"[\\w-\\s]+\")|([\\w-]+(?:\\.[\\w-]+)*)|(\"[\\w-\\s]+\")([\\w-]+(?:\\.[\\w-]+)*))(@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$)|(@\\[?((25[0-5]\\.|2[0-4][0-9]\\.|1[0-9]{2}\\.|[0-9]{1,2}\\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\]?$)").matcher(login.getMailOrMobile()).matches();
@@ -109,8 +109,8 @@ public class UserServiceImpl implements UserService{
 			if (encoder.matches(login.getPassword(), user.getPassword())) {
 				
 				String token = jwt.generateToken(user.getUserId(),Token.WITHOUT_EXPIRE_TIME);
-				UserResponse userr = new UserResponse(env.getProperty("202"),token, user);
-				return userr;
+				//UserResponse userr = new UserResponse(env.getProperty("202"),token, user);
+				return token;
 			}
 			throw new UserException(208, env.getProperty("404"));
 		}

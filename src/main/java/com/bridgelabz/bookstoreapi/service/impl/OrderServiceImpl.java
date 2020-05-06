@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public User getOrderConfrim(String token) {
+	public List<OrderDetails> getOrderConfrim(String token) {
 		Long id = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(id)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
@@ -80,7 +80,6 @@ public class OrderServiceImpl implements OrderService{
 				userdetails.getOrderBookDetails().add(orderDetails);
 				long quantity = cart.getQuantityOfBooks().getQuantityOfBook();
 				order.setQuantityOfBook(quantity);
-			
 			});
 				
 		});
@@ -95,7 +94,7 @@ public class OrderServiceImpl implements OrderService{
 		 */
 		userdetails.getCartBooks().clear();
 		
-		return userRepository.save(userdetails);
+		return userRepository.save(userdetails).getOrderBookDetails();
 		
 	}
 

@@ -42,7 +42,7 @@ public class WhishListController {
 	public ResponseEntity<UserResponse> addBooksToWhilist(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		    User whishlist = whishlistService.addBooksToWhishList(token,bookId);
 		    return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new UserResponse(env.getProperty("600"), "200-ok", whishlist));  	
+					.body(new UserResponse(env.getProperty("600"), whishlist,HttpStatus.OK));  	
 	}
 	
 	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
@@ -50,7 +50,7 @@ public class WhishListController {
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<WhishListDetails> whishlist = whishlistService.getBooksfromWhishList(token);
 		    return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new UserResponse(env.getProperty("603"), "200-ok", whishlist));  
+					.body(new UserResponse(env.getProperty("603"),  whishlist,HttpStatus.OK));  
 	}
 	
 	@ApiOperation(value = "Removing the books to the Whishlist",response = Iterable.class)
@@ -58,6 +58,6 @@ public class WhishListController {
 	public ResponseEntity<UserResponse> removeBooksToWhilist(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		    User whishlist = whishlistService.removeBooksToWhishList(token,bookId);
 		    return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new UserResponse(env.getProperty("604"), "200-ok", whishlist));  	
+					.body(new UserResponse(env.getProperty("604"), whishlist,HttpStatus.OK));  	
 	}
 }
