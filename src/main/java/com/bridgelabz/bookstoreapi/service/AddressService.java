@@ -23,7 +23,7 @@ public interface AddressService {
 	 * @param addressId
 	 * @return message
 	 */
-	User deleteNote(String token, Long addressId);
+	User deleteAddress(String token, Long addressId);
 	/**
 	 * 
 	 * @param address

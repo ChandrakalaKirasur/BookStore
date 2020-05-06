@@ -55,9 +55,9 @@ public class AddressServiceImpl implements AddressService{
 		return   addressRepository.save(add);
 		
 	}
-
+	@Transactional
 	@Override
-	public User deleteNote(String token, Long addressId) {
+	public User deleteAddress(String token, Long addressId) {
 
 		Long uId = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(uId)
@@ -72,7 +72,7 @@ public class AddressServiceImpl implements AddressService{
 
 
 	}
-
+	@Transactional
 	@Override
 	public Optional<Address> updateAddress(UpdateAddressDto addressupdate, String token) {
 		List<Address> list=new ArrayList<>();
@@ -99,7 +99,7 @@ public class AddressServiceImpl implements AddressService{
 			return ad;
 		}).orElseThrow(()-> new UserException(400, env.getProperty("104")));
 	}
-
+	@Transactional
 	@Override
 	public List<Address> getAllAddress() {
 		List<Address> addList=new ArrayList<>();

@@ -45,7 +45,7 @@ public class AddressController {
 			
 		if (addres != null) {
 			return ResponseEntity.status(200)
-					.body(new AddressResponse(environment.getProperty("200"), "200-ok", addres));
+					.body(new AddressResponse(environment.getProperty("300"), "300-ok", addres));
 		}
 		 return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("102"), "", addres));	
@@ -59,7 +59,7 @@ public class AddressController {
 		Optional<Address> addres=addressService.updateAddress(address,token);
 		if (addres != null) {
 			return ResponseEntity.status(200)
-					.body(new AddressResponse(environment.getProperty("200"), "200-ok", addres));
+					.body(new AddressResponse(environment.getProperty("301"), "301", addres));
 		}
 		return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("102"), "", addres));
@@ -73,20 +73,20 @@ public class AddressController {
 	 */
 	/*Api for  delete*/
 	@PutMapping("/delete")
-	public ResponseEntity<AddressResponse> deletNote(@RequestParam Long addressId,@RequestHeader String token )
+	public ResponseEntity<AddressResponse> deleteAddress(@RequestParam Long addressId,@RequestHeader String token )
 	{
 		System.out.println("####");
-		User message= addressService.deleteNote(token, addressId);
+		User message= addressService.deleteAddress(token, addressId);
 		System.out.println("==="+message);
 		if (message != null) {
 			return ResponseEntity.status(200)
-					.body(new AddressResponse(environment.getProperty("200"), "200-ok", message));
+					.body(new AddressResponse(environment.getProperty("302"), "302", message));
 		}
 		return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("102"), "", message));		
 	}
 	/*Api for fetching all notes*/
-	@GetMapping("/getAllNotes")
+	@GetMapping("/getAllAddress")
 	public List<Address> getAllAddress()
 	{
 
