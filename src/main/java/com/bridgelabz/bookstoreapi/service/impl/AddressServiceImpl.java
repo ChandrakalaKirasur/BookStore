@@ -16,8 +16,10 @@ import com.bridgelabz.bookstoreapi.dto.AddressDto;
 import com.bridgelabz.bookstoreapi.dto.UpdateAddressDto;
 import com.bridgelabz.bookstoreapi.entity.Address;
 import com.bridgelabz.bookstoreapi.entity.User;
+import com.bridgelabz.bookstoreapi.exception.AddressException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.AddressRepository;
+import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.AddressService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 @Service
@@ -29,13 +31,16 @@ public class AddressServiceImpl implements AddressService{
 	private AddressRepository addressRepository;
 	@Autowired
 	private Environment env;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Transactional
 	@Override
-	public boolean addAddress(AddressDto address,String token) {
+	public Address addAddress(AddressDto address,String token) {
 		Long uId = jwt.decodeToken(token);
-		User user=addressRepository.findUserById(uId);
 		Address add=new Address();
+		User userdetails = userRepository.findById(uId)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		BeanUtils.copyProperties(address,add);
 		add.setAddress(address.getAddress());
 		add.setType(address.getType());
@@ -46,33 +51,37 @@ public class AddressServiceImpl implements AddressService{
 		add.setPincode(address.getPincode());
 		add.setState(address.getState());
 		add.setStreet(address.getStreet());
-		addressRepository.save(add);
-		return user.getAddress().add(add);
+		userdetails.getAddress().add(add);
+		return   addressRepository.save(add);
+
 	}
-
+	@Transactional
 	@Override
-	public Address deleteNote(String token, long addressId) {
+	public User deleteAddress(String token, Long addressId) {
 
-		Address address=new Address();
 		Long uId = jwt.decodeToken(token);
-		User user =addressRepository.findUserById(uId);
-		List<Address> add = addressRepository.findAddressByUserId(addressId);
-
-		addressRepository.delete(address);
-		return address;
+		User userdetails = userRepository.findById(uId)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		List<Address> deleteaddress = getAllAddress();
+		Address filteredaddress = deleteaddress.stream().filter(address -> address.getAddressId().equals(addressId)).findFirst()
+				.orElseThrow(() -> new AddressException(404, env.getProperty("4041")));
+		deleteaddress.remove(filteredaddress);
+		addressRepository.delete(filteredaddress);
+		return userRepository.save(userdetails);
 
 
 
 	}
-
+	@Transactional
 	@Override
-	public List<Address> updateAddress(UpdateAddressDto addressupdate, String token) {
+	public Optional<Address> updateAddress(UpdateAddressDto addressupdate, String token) {
 		List<Address> list=new ArrayList<>();
 
 		Long uId = jwt.decodeToken(token);
-		User user=addressRepository.findUserById(uId);
-		Optional<Address> noteInformation= addressRepository.findById(addressupdate.getAddressId());
-		return noteInformation.filter(note -> {
+		User userdetails = userRepository.findById(uId)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		Optional<Address> ad= addressRepository.findById(addressupdate.getAddressId());
+		return ad.filter(note -> {
 			return note != null;
 		}).map(add->{
 			add.setAddressId((addressupdate.getAddressId()));
@@ -86,11 +95,41 @@ public class AddressServiceImpl implements AddressService{
 			add.setState(addressupdate.getState());
 			add.setStreet(addressupdate.getStreet());
 			addressRepository.save(add);
-			user.getAddress().add(add);
-			return list;
+			userdetails.getAddress().add(add);
+			return ad;
 		}).orElseThrow(()-> new UserException(400, env.getProperty("104")));
 	}
+	@Transactional
+	@Override
+	public List<Address> getAllAddress() {
+		List<Address> addList=new ArrayList<>();
+		addressRepository.findAll().forEach(addList::add);
+		return addList;
+	}
+	@Override
+	public Address getAddress(Long id) {
+		Address add=addressRepository.findAddressById(id);
+		return add;
+	}
+	@Override
+	public List<Address> getAddressByUserId(String token) {
+
+		Long uId = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(uId)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+
+		try {
+			List<Address> user = addressRepository.findAddressByUserId(uId);
+			if (user != null) {
+				return user;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
+
 
 
 

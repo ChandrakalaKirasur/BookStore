@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -54,24 +55,19 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private Environment env;
 	
-	@Value("${spring.mail.username}")
-	private String email;
-	
-	@Value("${spring.mail.password}")
-	private String password;
 	
 	
 	/**
 	 * Saves the user details
 	 * @return 
 	 */
+	@Transactional
 	@Override
 	public User userRegistration(RegisterDto register)  {
 
 		Optional<User> useremail = userRepository.findUserByEmail(register.getEmailAddress());
 
-		System.out.println(email+"email from yml...");
-		System.out.println(password+"password from yml...");
+		
 		if (useremail.isPresent())
 			throw new UserException(208, env.getProperty("103"));
 		
@@ -97,21 +93,24 @@ public class UserServiceImpl implements UserService{
 	
 	@Transactional
 	@Override
-	public UserResponse loginByEmailOrMobile(LoginDTO login) {
+	public String loginByEmailOrMobile(LoginDTO login) {
 		
 		User user = null;
+//		boolean email = Pattern.compile("^((\"[\\w-\\s]+\")|([\\w-]+(?:\\.[\\w-]+)*)|(\"[\\w-\\s]+\")([\\w-]+(?:\\.[\\w-]+)*))(@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$)|(@\\[?((25[0-5]\\.|2[0-4][0-9]\\.|1[0-9]{2}\\.|[0-9]{1,2}\\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\]?$)").matcher(login.getMailOrMobile()).matches();
+//		boolean mobile = Pattern.compile("^[0-9]{10}$").matcher(login.getMailOrMobile()).matches();
+//		Long mbl = mobile ? Long.parseLong(login.getMailOrMobile()) : 0; 
 		boolean email = Pattern.compile("^((\"[\\w-\\s]+\")|([\\w-]+(?:\\.[\\w-]+)*)|(\"[\\w-\\s]+\")([\\w-]+(?:\\.[\\w-]+)*))(@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$)|(@\\[?((25[0-5]\\.|2[0-4][0-9]\\.|1[0-9]{2}\\.|[0-9]{1,2}\\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\]?$)").matcher(login.getMailOrMobile()).matches();
 		boolean mobile = Pattern.compile("^[0-9]{10}$").matcher(login.getMailOrMobile()).matches();
 		Long mbl = mobile ? Long.parseLong(login.getMailOrMobile()) : 0; 
 		user = email ? userRepository.findUserByEmail(login.getMailOrMobile()).orElseThrow(() -> new UserException(404, env.getProperty("104"))) :
 			   mobile ? userRepository.findByMobile(mbl).orElseThrow(() -> new UserException(404, env.getProperty("104"))) : null;
-
+		//if (userRepository.findUserByEmail(login.getMailOrMobile()).isPresent())
 		if (user.isVerified()&& user !=null) {
 			if (encoder.matches(login.getPassword(), user.getPassword())) {
 				
 				String token = jwt.generateToken(user.getUserId(),Token.WITHOUT_EXPIRE_TIME);
-				UserResponse userr = new UserResponse(env.getProperty("202"),token, user);
-				return userr;
+				//UserResponse userr = new UserResponse(env.getProperty("202"),token, user);
+				return token;
 			}
 			throw new UserException(208, env.getProperty("404"));
 		}
@@ -187,19 +186,5 @@ public class UserServiceImpl implements UserService{
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		return userdetails;
 	}	 
-	@Transactional
-	@Override
-	public User getOrderList(String token) {
-		Long id = jwt.decodeToken(token);
-		User userdetails = userRepository.findById(id)
-				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-		OrderDetails orderDetails=new OrderDetails();
-		userdetails.getCartBooks().forEach((books)->{
-			orderDetails.setBooksList(books.getBooksList());
-		});
-		
-		userdetails.getOrderBookDetails().add(orderDetails);
-		userdetails.getCartBooks().clear();
-		return userRepository.save(userdetails);
-	}
+	
 }
