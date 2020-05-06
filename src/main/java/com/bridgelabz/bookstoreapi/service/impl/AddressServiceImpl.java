@@ -53,7 +53,7 @@ public class AddressServiceImpl implements AddressService{
 		add.setStreet(address.getStreet());
 		userdetails.getAddress().add(add);
 		return   addressRepository.save(add);
-		
+
 	}
 	@Transactional
 	@Override
@@ -106,7 +106,30 @@ public class AddressServiceImpl implements AddressService{
 		addressRepository.findAll().forEach(addList::add);
 		return addList;
 	}
+	@Override
+	public Address getAddress(Long id) {
+		Address add=addressRepository.findAddressById(id);
+		return add;
+	}
+	@Override
+	public List<Address> getAddressByUserId(String token) {
+
+		Long uId = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(uId)
+				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+
+		try {
+			List<Address> user = addressRepository.findAddressByUserId(uId);
+			if (user != null) {
+				return user;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
+
 
 
 

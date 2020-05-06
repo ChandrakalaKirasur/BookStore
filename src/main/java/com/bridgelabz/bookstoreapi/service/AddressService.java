@@ -33,9 +33,21 @@ public interface AddressService {
 	Optional<Address> updateAddress(UpdateAddressDto address, String token);
 	/**
 	 * 
-	 * @return
+	 * @return List<Address>
 	 */
 	List<Address> getAllAddress();
+	/**
+	 * 
+	 * @param id
+	 * @return adress
+	 */
+	Address getAddress(Long id);
+	/**
+	 * 
+	 * @param token
+	 * @return Address
+	 */
+	List<Address> getAddressByUserId(String token);
 
 
 }
