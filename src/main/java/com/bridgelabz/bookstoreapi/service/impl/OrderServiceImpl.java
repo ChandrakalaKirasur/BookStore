@@ -83,19 +83,15 @@ public class OrderServiceImpl implements OrderService{
 			});
 				
 		});
-		/**
-		 * adding the quantity of books to the orderdetails
-		 */
-		userdetails.getOrderBookDetails().forEach(orders->{
-			orders.setQuantityOfBooks(order);
-			});
+		
 		/**
 		 * clearing the cart after added to the orderlist
 		 */
 		userdetails.getCartBooks().clear();
 		
-		return userRepository.save(userdetails).getOrderBookDetails();
-		
+		userRepository.save(userdetails);
+		return userdetails.getOrderBookDetails();
+	
 	}
 
 }
