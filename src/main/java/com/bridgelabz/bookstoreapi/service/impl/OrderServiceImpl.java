@@ -55,10 +55,11 @@ public class OrderServiceImpl implements OrderService{
 		Long id = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(id)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+		
 		OrderDetails orderDetails=new OrderDetails();
 		QuantityOfBooks order=new QuantityOfBooks();
 		Random random=new Random();
-        userdetails.getOrderBookDetails().clear();
+        //userdetails.getOrderBookDetails().clear();
 		ArrayList<Book> list=new ArrayList<>();
 		/**
 		 * adding the books to orderlist by fetching it from cartlist
@@ -70,20 +71,27 @@ public class OrderServiceImpl implements OrderService{
 				if(orderId<0) {
 					orderId=orderId*-1;
 				}
-//				cartquantity.setQuantityOfBook(quantity);
-//       		cart.getQuantityOfBooks().add(cartquantity);
 				orderDetails.setOrderId(orderId);
 				orderDetails.setOrderPlaceTime(LocalDateTime.now());
 				orderDetails.setBooksList(list);
 				userdetails.getOrderBookDetails().add(orderDetails);
+				long quantity = cart.getQuantityOfBooks().getQuantityOfBook();
+				System.out.println("*****************"+cart.getQuantityOfBooks().getQuantityOfBook());
+				order.setQuantityOfBook(quantity);
+				userdetails.getOrderBookDetails().forEach(orders->{
+					orders.setQuantityOfBooks(order);
+					});
+				
 			});
-			
+				
 		});
+		
 		/**
 		 * clearing the cart after added to the orderlist
 		 */
-		userdetails.getCartBooks().clear();
+		userdetails.getCartBooks().remove(userdetails);
 		return userRepository.save(userdetails);
 		
 	}
+
 }
