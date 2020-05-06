@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
+import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.service.AwsS3Service;
 import com.bridgelabz.bookstoreapi.service.BookService;
@@ -57,6 +58,13 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2002")));
 	}
 	
+	@ApiOperation(value = "Write Review of the book")
+	@PutMapping("/ratingReview")
+	public ResponseEntity<Response> writeReview(@RequestBody RatingReviewDTO rrDto,@RequestHeader(name="token") String token, @RequestParam Long bookId){
+		bookService.writeReviewAndRating(token, rrDto, bookId);
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2004")));
+	}
+	
 	@ApiOperation(value = "Delete a Book Details")
 	@DeleteMapping("/delete")
 	public ResponseEntity<Response> deleteBook(@RequestHeader(name="token") String token, @RequestParam Long bookId){
@@ -92,6 +100,12 @@ public class BookController {
 	@GetMapping("/getBookByNameAndAuthor")
 	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam String text){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBookByNameAndAuthor(text)));
+	}
+	
+	@ApiOperation(value = "Get Book rating and review")
+	@GetMapping("/getBookRatingAndReview")
+	public ResponseEntity<Response> getBookRatingAndReview(@RequestParam Long bookId){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3002"), bookService.getRatingsOfBook(bookId)));
 	}
 	
 	@ApiOperation(value = "Upload book image")

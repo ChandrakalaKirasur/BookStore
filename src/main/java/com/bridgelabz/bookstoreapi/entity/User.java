@@ -58,23 +58,18 @@ public class User {
 	@Column(name = "user_profile")
 	private String profile;
 	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Address.class, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Address.class)
 	@JoinColumn(name = "userId")
 	private List<Address> address;
 	
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = ReviewAndRating.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId")
-	private List<ReviewAndRating> bookRatingAndReview;
-	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = CartDetails.class)
 	@JoinColumn(name = "userId")
 	private List<CartDetails> cartBooks;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "userId")
-	private List<WhishListDetails> whilistBooks;
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Book> whilistBooks;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = OrderDetails.class)
 	@JoinColumn(name = "userId")
 	private List<OrderDetails> orderBookDetails;
 
@@ -164,14 +159,6 @@ public class User {
 		this.address = address;
 	}
 
-	public List<ReviewAndRating> getBookRatingAndReview() {
-		return bookRatingAndReview;
-	}
-
-	public void setBookRatingAndReview(List<ReviewAndRating> bookRatingAndReview) {
-		this.bookRatingAndReview = bookRatingAndReview;
-	}
-
 	public List<CartDetails> getCartBooks() {
 		return cartBooks;
 	}
@@ -180,11 +167,27 @@ public class User {
 		this.cartBooks = cartBooks;
 	}
 
-	public List<WhishListDetails> getWhilistBooks() {
+	public LocalDateTime getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(LocalDateTime createTime) {
+		this.createTime = createTime;
+	}
+
+	public LocalDateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(LocalDateTime updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public List<Book> getWhilistBooks() {
 		return whilistBooks;
 	}
 
-	public void setWhilistBooks(List<WhishListDetails> whilistBooks) {
+	public void setWhilistBooks(List<Book> whilistBooks) {
 		this.whilistBooks = whilistBooks;
 	}
 

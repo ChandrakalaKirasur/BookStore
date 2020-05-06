@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -17,6 +19,7 @@ import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
+import com.bridgelabz.bookstoreapi.repository.CartRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.CartService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -35,9 +38,13 @@ public class CartImplementation implements CartService{
 	private BookRepository bookRepository;
 	
 	@Autowired
+	private CartRepository cartRepository;
+	
+	
+	@Autowired
 	private Environment env;
 
-	
+	@Transactional
 	@Override
 	public User addBooksToCart(String token, long bookId) {
 		long id = (Long) jwt.decodeToken(token);
@@ -76,18 +83,19 @@ public class CartImplementation implements CartService{
 		if(cartbook.isPresent()) {
 			return null;
 		}else {
-			
+	    
 		booklist.add(book);
 		cart.setPlaceTime(LocalDateTime.now());
 		cart.setBooksList(booklist);
 		
 	    user.getCartBooks().add(cart);
 		}
-	
+	    
 		return userRepository.save(user);
 	       	
 	}
 	
+	@Transactional
 	@Override
 	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
 		
@@ -100,16 +108,16 @@ public class CartImplementation implements CartService{
 	        	cart.getBooksList().forEach((books)->{
 	        		if(books.getBookId()==bookId) {
 		       			cartquantity.setQuantityOfBook(quantity);
-		       			cart.getQuantityOfBooks().add(cartquantity);
+		       			cart.setQuantityOfBooks(cartquantity);
 		       		}
 	        	});
 	       		
 	       	});
-	        return user;
+	        return userRepository.save(user);
 	        
 	}
 
-	
+	@Transactional
 	@Override
 	public List<CartDetails> getBooksfromCart(String token) {
 		long id = (Long) jwt.decodeToken(token);
@@ -120,6 +128,7 @@ public class CartImplementation implements CartService{
 	 return cartBooks;
 	}
 
+	@Transactional
 	@Override
 	public User removeBooksToCart(String token, long bookId) {
 		
@@ -132,7 +141,6 @@ public class CartImplementation implements CartService{
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		
-		cart.setPlaceTime(LocalDateTime.now());
 		user.getCartBooks().forEach((books)->{
 			 books.getBooksList().remove(book);
 		});

@@ -26,12 +26,18 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapi.constants.Constants;
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
+import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 import com.bridgelabz.bookstoreapi.entity.Book;
+import com.bridgelabz.bookstoreapi.entity.ReviewAndRating;
 import com.bridgelabz.bookstoreapi.entity.Seller;
+import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.BookException;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
+import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
+import com.bridgelabz.bookstoreapi.repository.ReviewRatingRepository;
 import com.bridgelabz.bookstoreapi.repository.SellerRepository;
+import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.BookService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +51,12 @@ public class BookServiceImpl implements BookService{
 	
 	@Autowired
 	private SellerRepository sellerRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ReviewRatingRepository rrRepository;
 	
 	@Autowired
 	private JWTUtil jwt;
@@ -61,7 +73,7 @@ public class BookServiceImpl implements BookService{
 	public void addBook(BookDTO bookDTO, String token) {
 		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
-		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
 		List<Book> books =  seller.getSellerBooks();
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
@@ -85,7 +97,7 @@ public class BookServiceImpl implements BookService{
 	@Transactional
 	public void updateBook(BookDTO bookDTO, String token, Long bookId) {
 		Long sId = jwt.decodeToken(token);
-		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
 		List<Book> books = seller.getSellerBooks();
 		Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
 				.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
@@ -103,7 +115,7 @@ public class BookServiceImpl implements BookService{
 	@Transactional
 	public void deleteBook(String token, Long bookId) {
 		Long sId = jwt.decodeToken(token);
-		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
 		List<Book> books = seller.getSellerBooks();
 		Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
 				.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
@@ -116,6 +128,32 @@ public class BookServiceImpl implements BookService{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void writeReviewAndRating(String token, RatingReviewDTO rrDTO, Long bookId) {
+		Long uId = jwt.decodeToken(token);
+		User user = userRepository.findById(uId).orElseThrow(() -> new UserException(404, env.getProperty("104")));
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+		boolean notExist = book.getReviewRating().stream().noneMatch(rr -> rr.getUser().getUserId()==uId);
+		if(notExist) {
+			ReviewAndRating rr = new ReviewAndRating(rrDTO);
+			rr.setUser(user);
+			book.getReviewRating().add(rr);
+			rrRepository.save(rr);
+			bookRepository.save(book);
+		}
+		else {
+			ReviewAndRating rr = book.getReviewRating().stream().filter(r -> r.getUser().getUserId()==uId).findFirst().orElseThrow(() -> new BookException(500, env.getProperty("104")));
+			rr.setRating(rrDTO.getRating());
+			rr.setReview(rrDTO.getReview());
+			rrRepository.save(rr);
+			bookRepository.save(book);
+		}
+	}
+	
+	public List<ReviewAndRating> getRatingsOfBook(Long bookId){
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+		return book.getReviewRating();
 	}
 	
 	public List<Book> getBooks(Integer pageNo){

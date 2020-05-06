@@ -1,5 +1,7 @@
 package com.bridgelabz.bookstoreapi.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,31 +14,28 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
-import com.bridgelabz.bookstoreapi.response.SellerResponse;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.UserService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/users")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
-@Api(value="bookStore", description="Operations pertaining to user in Online Store")
+@Api(value="bookStore", description="Operations pertaining to user in Book Store")
 public class UserController {
 
 	@Autowired
@@ -56,11 +55,12 @@ public class UserController {
 	public ResponseEntity<UserResponse> loginUser(@Valid @RequestBody LoginDTO user, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
-					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "200"));
+					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.OK));
 		
-		 UserResponse userdetails = userService.loginByEmailOrMobile(user);
+		 String token = userService.loginByEmailOrMobile(user);
 		
-		return  ResponseEntity.status(200).body(userdetails);
+		 return ResponseEntity.status(200)
+					.body(new UserResponse(token, env.getProperty("200"),HttpStatus.OK));
 		
 	}
 	
@@ -74,14 +74,14 @@ public class UserController {
 	public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterDto userRecord, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
-					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "200"));
+					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.BAD_REQUEST));
 		User user = userService.userRegistration(userRecord);
 		if (user != null) {
 			return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("200"), "200-ok", userRecord));
+					.body(new UserResponse(env.getProperty("202"), userRecord,HttpStatus.OK));
 		}
 		return ResponseEntity.status(401)
-				.body(new UserResponse(env.getProperty("102"), "", userRecord));
+				.body(new UserResponse(env.getProperty("102"),  userRecord,HttpStatus.NOT_FOUND));
 	}
 
 	/**
@@ -95,9 +95,9 @@ public class UserController {
 		
 		boolean verification = userService.updateVerificationStatus(token);
 		if (verification) {
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",verification));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), verification,HttpStatus.OK));
 		}
-		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), "401",verification));
+		return ResponseEntity.status(401).body(new UserResponse(env.getProperty("104"), verification,HttpStatus.HTTP_VERSION_NOT_SUPPORTED));
 	}
 	
 	/**
@@ -108,10 +108,9 @@ public class UserController {
 	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
 		String message = userService.forgotpassword(emailAddress);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(env.getProperty("107"),"200",message));
+				.body(new UserResponse(env.getProperty("107"),message,HttpStatus.OK));
 	}
 
-	
 
 	/**
 	 * API for user Forgot Passsword
@@ -119,12 +118,12 @@ public class UserController {
 	 * @param RequestParam newpassword
 	 */
 
-	@PostMapping("/restPassword/{token}")
+	@PutMapping("/restPassword/{token}")
 	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);
 		return ResponseEntity.status(200)
-				.body(new UserResponse(message,env.getProperty("107"),200));
+				.body(new UserResponse(message,env.getProperty("107"),HttpStatus.OK));
 	}
 	
 
@@ -134,17 +133,9 @@ public class UserController {
 		
 		User userdetails = userService.getUser(token);
 		
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"),userdetails,HttpStatus.OK));
 		
 	}
 	
-	@ApiOperation(value = "Getting the order books of user")
-	@GetMapping(value = "/order/{token}")
-	public ResponseEntity<UserResponse> getOrderBooks(@RequestHeader String token) throws Exception {
-		
-		User userdetails = userService.getOrderList(token);
-		
-			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"), "200",userdetails));
-		
-	}
+	
 }
