@@ -22,8 +22,7 @@ public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	private Long addressId;
+	private long addressId;
 	
 	@Column(name = "address", nullable = false)
 	private String address;

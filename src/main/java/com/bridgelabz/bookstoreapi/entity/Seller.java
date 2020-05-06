@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -27,8 +28,7 @@ import lombok.ToString;
 public class Seller {
 	
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "seller_id")
 	private Long sellerId;
 

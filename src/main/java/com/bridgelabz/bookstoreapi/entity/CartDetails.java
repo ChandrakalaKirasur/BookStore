@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -24,6 +26,9 @@ public class CartDetails {
 
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cartId;
+	
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
 	
@@ -35,6 +40,15 @@ public class CartDetails {
 	private List<Book> BooksList;
 
 	
+	
+	public Long getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Long cartId) {
+		this.cartId = cartId;
+	}
+
 	public LocalDateTime getPlaceTime() {
 		return placeTime;
 	}

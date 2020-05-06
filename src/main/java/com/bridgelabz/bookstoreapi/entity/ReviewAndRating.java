@@ -3,6 +3,7 @@ package com.bridgelabz.bookstoreapi.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
@@ -18,9 +19,9 @@ import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 public class ReviewAndRating {
 
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ratingReviewId;
+
 	
 	@Column(name = "rating", nullable = false)
 	private Integer rating;

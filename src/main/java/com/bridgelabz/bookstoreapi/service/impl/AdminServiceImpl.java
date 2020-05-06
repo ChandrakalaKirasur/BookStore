@@ -123,6 +123,7 @@ public class AdminServiceImpl implements AdminService{
 	public boolean verifyBook(Long bookId) {
 		Book fetchedBookForVerification=bookRepo.findById(bookId).orElseThrow(()-> new BookException(400,"book doesnt exist"));
 		fetchedBookForVerification.setBookVerified(true);
+		
 		return true;
 	}
 	
