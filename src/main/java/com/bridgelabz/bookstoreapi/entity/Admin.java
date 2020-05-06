@@ -20,8 +20,6 @@ import lombok.NoArgsConstructor;
 public class Admin {
 
 	@Id
-//	@GenericGenerator(name = "idGen", strategy = "increment")
-//	@GeneratedValue(generator = "idGen")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long adminId;
 	

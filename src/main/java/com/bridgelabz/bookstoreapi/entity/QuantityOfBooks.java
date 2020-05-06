@@ -3,6 +3,7 @@ package com.bridgelabz.bookstoreapi.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,8 +21,7 @@ import lombok.ToString;
 public class QuantityOfBooks {
 
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long quantityId;
 	
 	@Column(name = "quantity_of_books", nullable = false)

@@ -22,8 +22,6 @@ import com.bridgelabz.bookstoreapi.dto.BookDTO;
 public class Book {
 	
 	@Id
-//	@GenericGenerator(name = "idGen", strategy = "increment")
-//	@GeneratedValue(generator = "idGen")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "book_id")
 	private Long bookId;
