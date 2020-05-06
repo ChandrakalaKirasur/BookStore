@@ -22,17 +22,17 @@ public class QuantityOfBooks {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long quantityId;
+	private Long quantityId;
 	
 	@Column(name = "quantity_of_books", nullable = false)
-	private long quantityOfBook;
+	private Long quantityOfBook;
 	
 	
-	public long getQuantityOfBook() {
+	public Long getQuantityOfBook() {
 		return quantityOfBook;
 	}
 
-	public void setQuantityOfBook(long quantityOfBook) {
+	public void setQuantityOfBook(Long quantityOfBook) {
 		this.quantityOfBook = quantityOfBook;
 	}
 
