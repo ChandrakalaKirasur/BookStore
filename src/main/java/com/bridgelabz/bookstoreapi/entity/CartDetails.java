@@ -23,17 +23,17 @@ import lombok.ToString;
 @ToString
 public class CartDetails {
 
+	
 	@Id
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
 	
 	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "cartId")
-	private List<QuantityOfBooks> QuantityOfBooks;
+	@JoinColumn(name = "bookquantity")
+	private QuantityOfBooks QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
-
 
 	
 	public LocalDateTime getPlaceTime() {
@@ -44,11 +44,12 @@ public class CartDetails {
 		this.placeTime = placeTime;
 	}
 
-	public List<QuantityOfBooks> getQuantityOfBooks() {
+	
+	public QuantityOfBooks getQuantityOfBooks() {
 		return QuantityOfBooks;
 	}
 
-	public void setQuantityOfBooks(List<QuantityOfBooks> quantityOfBooks) {
+	public void setQuantityOfBooks(QuantityOfBooks quantityOfBooks) {
 		QuantityOfBooks = quantityOfBooks;
 	}
 
@@ -59,4 +60,6 @@ public class CartDetails {
 	public void setBooksList(List<Book> booksList) {
 		BooksList = booksList;
 	}
+	
+	
 }

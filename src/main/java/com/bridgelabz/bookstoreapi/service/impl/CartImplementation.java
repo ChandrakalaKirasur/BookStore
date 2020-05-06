@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -42,7 +44,7 @@ public class CartImplementation implements CartService{
 	@Autowired
 	private Environment env;
 
-	
+	@Transactional
 	@Override
 	public User addBooksToCart(String token, long bookId) {
 		long id = (Long) jwt.decodeToken(token);
@@ -93,6 +95,7 @@ public class CartImplementation implements CartService{
 	       	
 	}
 	
+	@Transactional
 	@Override
 	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
 		
@@ -105,16 +108,16 @@ public class CartImplementation implements CartService{
 	        	cart.getBooksList().forEach((books)->{
 	        		if(books.getBookId()==bookId) {
 		       			cartquantity.setQuantityOfBook(quantity);
-		       			cart.getQuantityOfBooks().add(cartquantity);
+		       			cart.setQuantityOfBooks(cartquantity);
 		       		}
 	        	});
 	       		
 	       	});
-	        return user;
+	        return userRepository.save(user);
 	        
 	}
 
-	
+	@Transactional
 	@Override
 	public List<CartDetails> getBooksfromCart(String token) {
 		long id = (Long) jwt.decodeToken(token);
@@ -125,6 +128,7 @@ public class CartImplementation implements CartService{
 	 return cartBooks;
 	}
 
+	@Transactional
 	@Override
 	public User removeBooksToCart(String token, long bookId) {
 		
