@@ -32,7 +32,7 @@ public class OrderDetails {
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
 	@JoinColumn(name = "bookQuantity")
 	private QuantityOfBooks QuantityOfBooks;
 	

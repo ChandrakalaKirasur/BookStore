@@ -28,7 +28,7 @@ public class CartDetails {
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
 	
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
 	@JoinColumn(name = "bookquantity")
 	private QuantityOfBooks QuantityOfBooks;
 	
