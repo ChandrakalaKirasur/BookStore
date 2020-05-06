@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -54,24 +55,19 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private Environment env;
 	
-	@Value("${spring.mail.username}")
-	private String email;
-	
-	@Value("${spring.mail.password}")
-	private String password;
 	
 	
 	/**
 	 * Saves the user details
 	 * @return 
 	 */
+	@Transactional
 	@Override
 	public User userRegistration(RegisterDto register)  {
 
 		Optional<User> useremail = userRepository.findUserByEmail(register.getEmailAddress());
 
-		System.out.println(email+"email from yml...");
-		System.out.println(password+"password from yml...");
+		
 		if (useremail.isPresent())
 			throw new UserException(208, env.getProperty("103"));
 		
@@ -187,19 +183,5 @@ public class UserServiceImpl implements UserService{
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		return userdetails;
 	}	 
-	@Transactional
-	@Override
-	public User getOrderList(String token) {
-		Long id = jwt.decodeToken(token);
-		User userdetails = userRepository.findById(id)
-				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-		OrderDetails orderDetails=new OrderDetails();
-		userdetails.getCartBooks().forEach((books)->{
-			orderDetails.setBooksList(books.getBooksList());
-		});
-		
-		userdetails.getOrderBookDetails().add(orderDetails);
-		userdetails.getCartBooks().clear();
-		return userRepository.save(userdetails);
-	}
+	
 }

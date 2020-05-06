@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/whishList")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
-@Api(value="bookStore", description="Operations pertaining to Whishlist in Online Store")
+@Api(value="bookStore", description="Operations pertaining to Whishlist in Book Store")
 public class WhishListController {
 
 	@Autowired
