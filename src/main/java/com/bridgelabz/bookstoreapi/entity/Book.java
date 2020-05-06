@@ -72,6 +72,16 @@ public class Book {
 	}
 
 
+	public boolean isBookVerified() {
+		return isBookVerified;
+	}
+
+
+	public void setBookVerified(boolean isBookVerified) {
+		this.isBookVerified = isBookVerified;
+	}
+
+
 	public Long getBookId() {
 		return bookId;
 	}

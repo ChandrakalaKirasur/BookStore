@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 public class Address {
 
-	
+	@Id
 	@GenericGenerator(name = "idGen", strategy = "increment")
 	@GeneratedValue(generator = "idGen")
 	private long addressId;
