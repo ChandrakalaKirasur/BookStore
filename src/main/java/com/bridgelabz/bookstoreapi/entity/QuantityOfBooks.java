@@ -36,5 +36,4 @@ public class QuantityOfBooks {
 		this.quantityOfBook = quantityOfBook;
 	}
 
-	
 }
