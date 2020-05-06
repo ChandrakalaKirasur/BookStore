@@ -32,9 +32,8 @@ public class OrderDetails {
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
-	@JoinColumn(name = "bookQuantity")
-	private QuantityOfBooks QuantityOfBooks;
+	@Column
+	private Long quantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
@@ -55,13 +54,12 @@ public class OrderDetails {
 		this.orderPlaceTime = orderPlaceTime;
 	}
 
-
-	public QuantityOfBooks getQuantityOfBooks() {
-		return QuantityOfBooks;
+	public Long getQuantityOfBooks() {
+		return quantityOfBooks;
 	}
 
-	public void setQuantityOfBooks(QuantityOfBooks quantityOfBooks) {
-		QuantityOfBooks = quantityOfBooks;
+	public void setQuantityOfBooks(Long quantityOfBooks) {
+		this.quantityOfBooks = quantityOfBooks;
 	}
 
 	public List<Book> getBooksList() {

@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
-import com.bridgelabz.bookstoreapi.entity.WhishListDetails;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.WhishListService;
 
@@ -48,7 +47,7 @@ public class WhishListController {
 	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
 	@GetMapping(value="/books_cart/{token}")
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
-		    List<WhishListDetails> whishlist = whishlistService.getBooksfromWhishList(token);
+		    List<Book> whishlist = whishlistService.getBooksfromWhishList(token);
 		    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("603"),  whishlist,HttpStatus.OK));  
 	}

@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService{
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		
 		OrderDetails orderDetails=new OrderDetails();
-		QuantityOfBooks order=new QuantityOfBooks();
+		//QuantityOfBooks order=new QuantityOfBooks();
 		Random random=new Random();
 		ArrayList<Book> list=new ArrayList<>();
 		/**
@@ -78,11 +78,17 @@ public class OrderServiceImpl implements OrderService{
 				orderDetails.setOrderPlaceTime(LocalDateTime.now());
 				orderDetails.setBooksList(list);
 				userdetails.getOrderBookDetails().add(orderDetails);
+				if(cart.getQuantityOfBooks()!=null) {
 				long quantity = cart.getQuantityOfBooks().getQuantityOfBook();
-				order.setQuantityOfBook(quantity);
+				//order.setQuantityOfBook(quantity);
+				userdetails.getOrderBookDetails().forEach((books)->{
+					books.setQuantityOfBooks(quantity);
+				});
+				}
 			});
 				
 		});
+		
 		
 		/**
 		 * clearing the cart after added to the orderlist
