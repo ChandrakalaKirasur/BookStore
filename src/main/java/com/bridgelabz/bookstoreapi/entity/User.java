@@ -30,9 +30,8 @@ import lombok.ToString;
 public class User {
 
 	@Id
-	//@GenericGenerator(name = "idGen", strategy = "increment")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long userId;
+	private Long userId;
 	
 	@Column(name = "user_name", nullable = false)
 	private String name;
@@ -87,11 +86,11 @@ public class User {
 		super();
 	}
 
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

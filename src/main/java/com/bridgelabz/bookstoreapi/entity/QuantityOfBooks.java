@@ -3,6 +3,7 @@ package com.bridgelabz.bookstoreapi.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,21 +21,19 @@ import lombok.ToString;
 public class QuantityOfBooks {
 
 	@Id
-	@GenericGenerator(name = "idGen", strategy = "increment")
-	@GeneratedValue(generator = "idGen")
-	private long quantityId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long quantityId;
 	
 	@Column(name = "quantity_of_books", nullable = false)
-	private long quantityOfBook;
+	private Long quantityOfBook;
 	
 	
-	public long getQuantityOfBook() {
+	public Long getQuantityOfBook() {
 		return quantityOfBook;
 	}
 
-	public void setQuantityOfBook(long quantityOfBook) {
+	public void setQuantityOfBook(Long quantityOfBook) {
 		this.quantityOfBook = quantityOfBook;
 	}
 
-	
 }

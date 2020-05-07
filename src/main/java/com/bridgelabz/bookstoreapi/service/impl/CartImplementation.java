@@ -4,22 +4,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
-import com.bridgelabz.bookstoreapi.repository.CartRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.CartService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -37,8 +32,6 @@ public class CartImplementation implements CartService{
 	@Autowired
 	private BookRepository bookRepository;
 	
-	@Autowired
-	private CartRepository cartRepository;
 	
 	
 	@Autowired
@@ -100,19 +93,30 @@ public class CartImplementation implements CartService{
 	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
 		
 		long id = (Long) jwt.decodeToken(token);
+		
 		QuantityOfBooks cartquantity=new QuantityOfBooks();
+		
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		
+		ArrayList<String> list=new ArrayList<String>();
 	        user.getCartBooks().forEach((cart)->{
-	        	cart.getBooksList().forEach((books)->{
-	        		if(books.getBookId()==bookId) {
-		       			cartquantity.setQuantityOfBook(quantity);
-		       			cart.setQuantityOfBooks(cartquantity);
-		       		}
-	        	});
-	       		
+	        	/**
+	        	 * checking the number of books available
+	        	 */
+	        	boolean notExist = cart.getBooksList().stream().noneMatch(books-> books.getBookId()==bookId && quantity<books.getNoOfBooks());
+	        	
+	        	if(notExist) {
+	        		list.add(token);
+	        	}else {
+	        		cartquantity.setQuantityOfBook(quantity);
+	       			cart.setQuantityOfBooks(cartquantity);
+	        	}
+	     
 	       	});
+	       if(list.contains(token)) {
+	    	   return null;
+	       }
 	        return userRepository.save(user);
 	        
 	}
@@ -132,7 +136,6 @@ public class CartImplementation implements CartService{
 	@Override
 	public User removeBooksToCart(String token, long bookId) {
 		
-		CartDetails cart=new CartDetails();
 		long id = (Long) jwt.decodeToken(token);
 		
 		User user = userRepository.findUserById(id)

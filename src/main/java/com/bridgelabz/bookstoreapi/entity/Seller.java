@@ -28,8 +28,6 @@ import lombok.ToString;
 public class Seller {
 	
 	@Id
-//	@GenericGenerator(name = "idGen", strategy = "increment")
-//	@GeneratedValue(generator = "idGen")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "seller_id")
 	private Long sellerId;

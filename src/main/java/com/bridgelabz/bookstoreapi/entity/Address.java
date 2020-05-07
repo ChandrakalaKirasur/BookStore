@@ -21,7 +21,6 @@ import lombok.ToString;
 public class Address {
 
 	@Id
-
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long addressId;
 	

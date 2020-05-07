@@ -20,8 +20,8 @@ public class ReviewAndRating {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long ratingReviewId;
-	
+	private Long ratingReviewId;
+
 	@Column(name = "rating", nullable = false)
 	private Integer rating;
 	

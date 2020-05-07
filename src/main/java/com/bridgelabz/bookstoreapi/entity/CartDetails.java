@@ -40,6 +40,15 @@ public class CartDetails {
 	private List<Book> BooksList;
 
 	
+	
+	public Long getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Long cartId) {
+		this.cartId = cartId;
+	}
+
 	public LocalDateTime getPlaceTime() {
 		return placeTime;
 	}
