@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
-import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
@@ -74,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 					orderDetails.setBooksList(list);
 					userdetails.getOrderBookDetails().add(orderDetails);
 					if (cart.getQuantityOfBooks() != null) {
-						long quantity = cart.getQuantityOfBooks().getQuantityOfBook();
+						long quantity = cart.getQuantityOfBooks();
 						userdetails.getOrderBookDetails().forEach((books) -> {
 							books.setQuantityOfBooks(quantity);
 						});

@@ -11,7 +11,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
-import com.bridgelabz.bookstoreapi.entity.QuantityOfBooks;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
@@ -32,8 +31,6 @@ public class CartImplementation implements CartService{
 	@Autowired
 	private BookRepository bookRepository;
 	
-	
-	
 	@Autowired
 	private Environment env;
 
@@ -50,7 +47,6 @@ public class CartImplementation implements CartService{
 		
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new UserException(201, env.getProperty("4041")));
-		
 		/**
 		 * Getting the bookList
 		 */
@@ -65,6 +61,8 @@ public class CartImplementation implements CartService{
 			booklist.add(book);
 			cart.setPlaceTime(LocalDateTime.now());
 			cart.setBooksList(booklist);
+			long quantity=1;
+			cart.setQuantityOfBooks(quantity);
 		    user.getCartBooks().add(cart);
 		    return userRepository.save(user);
 		}
@@ -93,9 +91,7 @@ public class CartImplementation implements CartService{
 	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
 		
 		long id = (Long) jwt.decodeToken(token);
-		
-		QuantityOfBooks cartquantity=new QuantityOfBooks();
-		
+				
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		
@@ -109,8 +105,7 @@ public class CartImplementation implements CartService{
 	        	if(notExist) {
 	        		list.add(token);
 	        	}else {
-	        		cartquantity.setQuantityOfBook(quantity);
-	       			cart.setQuantityOfBooks(cartquantity);
+	       			cart.setQuantityOfBooks(quantity);
 	        	}
 	     
 	       	});

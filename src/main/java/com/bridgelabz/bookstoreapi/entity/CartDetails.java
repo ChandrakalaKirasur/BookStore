@@ -31,10 +31,9 @@ public class CartDetails {
 	
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
-	
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
-	@JoinColumn(name = "bookquantity")
-	private QuantityOfBooks QuantityOfBooks;
+
+	@Column(name = "bookquantity")
+	private Long QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
@@ -57,12 +56,12 @@ public class CartDetails {
 		this.placeTime = placeTime;
 	}
 
-	
-	public QuantityOfBooks getQuantityOfBooks() {
+
+	public Long getQuantityOfBooks() {
 		return QuantityOfBooks;
 	}
 
-	public void setQuantityOfBooks(QuantityOfBooks quantityOfBooks) {
+	public void setQuantityOfBooks(Long quantityOfBooks) {
 		QuantityOfBooks = quantityOfBooks;
 	}
 
