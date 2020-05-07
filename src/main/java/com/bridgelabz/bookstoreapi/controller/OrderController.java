@@ -40,8 +40,10 @@ public class OrderController {
 	public ResponseEntity<UserResponse> OrderConfrim(@RequestHeader String token) throws Exception {
 		
 		 List<OrderDetails> userdetails = orderService.getOrderConfrim(token);
-		
+		if(userdetails!=null)
 			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"), userdetails,HttpStatus.OK));
+		
+		return ResponseEntity.status(200).body(new UserResponse(env.getProperty("701"), userdetails,HttpStatus.OK));
 		
 	}
 	
