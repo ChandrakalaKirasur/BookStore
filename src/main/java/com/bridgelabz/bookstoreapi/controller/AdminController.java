@@ -130,7 +130,7 @@ public class AdminController {
 	 * @param PathVariable 
 	 */
 	@ApiOperation(value = "Verify seller book",response = Iterable.class)
-	@PutMapping("/verify/book")
+	@PutMapping("/verify/book/{bookId}")
 	public ResponseEntity<AdminResponse> verifyBook(@PathVariable Long bookId,@RequestHeader String token){
 		boolean resultStatus = service.verifyBook(bookId,token);
 		if (resultStatus) {

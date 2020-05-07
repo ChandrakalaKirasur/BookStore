@@ -22,7 +22,9 @@ import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.Seller;
+import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
+import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.SellerRepository;
 import com.bridgelabz.bookstoreapi.service.SellerService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -180,4 +182,16 @@ public class SellerServiceImpl implements SellerService{
 			throw  new SellerException(env.getProperty("104"));
 		}
 	}
-}
+
+
+	@Transactional
+	@Override
+	public boolean updateVerificationStatus(String token) {	
+			Long id = jwt.decodeToken(token);
+			Seller seller = sellerRepository.findSellerById(id);
+			seller.setVerificationStatus(true);
+			boolean sellers = sellerRepository.save(seller) != null ? true : false;
+	         return sellers;
+		}
+	}
+
