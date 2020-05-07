@@ -16,4 +16,6 @@ public interface CartService {
 
 	User removeBooksToCart(String token, long bookId);
 
+	boolean verifyBookInCart(String token, long bookId);
+
 }

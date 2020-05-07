@@ -147,6 +147,8 @@ public class CartImplementation implements CartService{
 		return userRepository.save(user);
 	}
 	
+	@Transactional
+	@Override
    public boolean verifyBookInCart(String token, long bookId) {
 	   
 	    this.getBooksfromCart(token).forEach((cart)->{
