@@ -127,7 +127,7 @@ public class AdminController {
 	}
 	/**
 	 * API for verifying book
-	 * @param PathVariable 
+	 * @param PathVariable book token and @RequestHeader as admin token
 	 */
 	@ApiOperation(value = "Verify seller book",response = Iterable.class)
 	@PutMapping("/verify/book/{booktoken}")
