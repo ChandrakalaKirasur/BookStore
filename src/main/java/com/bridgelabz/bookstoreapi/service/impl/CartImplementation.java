@@ -72,7 +72,7 @@ public class CartImplementation implements CartService{
 		Optional<Book> cartbook = books.stream().filter(t -> t.getBookId() == bookId).findFirst();
 		
 		if(cartbook.isPresent()) {
-			return null;
+			throw new UserException(401, env.getProperty("505"));
 		}else {
 	    
 		booklist.add(book);
@@ -86,6 +86,7 @@ public class CartImplementation implements CartService{
 	       	
 	}
 	
+	
 	@Transactional
 	@Override
 	public User addBooksQuantityToCart(String token, long bookId,long quantity) {
@@ -95,7 +96,7 @@ public class CartImplementation implements CartService{
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		
-		ArrayList<String> list=new ArrayList<String>();
+		
 	        user.getCartBooks().forEach((cart)->{
 	        	/**
 	        	 * checking the number of books available
@@ -103,18 +104,18 @@ public class CartImplementation implements CartService{
 	        	boolean notExist = cart.getBooksList().stream().noneMatch(books-> books.getBookId()==bookId && quantity<books.getNoOfBooks());
 	        	
 	        	if(notExist) {
-	        		list.add(token);
+	        		throw new UserException(401, env.getProperty("506"));
 	        	}else {
 	       			cart.setQuantityOfBooks(quantity);
 	        	}
 	     
 	       	});
-	       if(list.contains(token)) {
-	    	   return null;
-	       }
+	   
 	        return userRepository.save(user);
 	        
 	}
+
+  
 
 	@Transactional
 	@Override
@@ -144,5 +145,16 @@ public class CartImplementation implements CartService{
 		});
 		
 		return userRepository.save(user);
+	}
+	
+   public boolean verifyBookInCart(String token, long bookId) {
+	   
+	    this.getBooksfromCart(token).forEach((cart)->{
+			boolean notExist = cart.getBooksList().stream().noneMatch(books-> books.getBookId()==bookId);
+			if(notExist)
+				throw new UserException(401, env.getProperty("506"));
+				
+		});
+	    return true;
 	}
 }

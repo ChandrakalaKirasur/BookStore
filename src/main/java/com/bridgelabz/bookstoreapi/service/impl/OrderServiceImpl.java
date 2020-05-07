@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
 						});
 					}
 				} catch (Exception e) {
-                     //return new UserException(400, env.getProperty("104"));
+					throw new UserException(401, env.getProperty("701"));
 				}
 			});
 
@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
          try {
 		userRepository.save(userdetails);
          } catch (Exception e) {
-        	 return null;
+        	 throw new UserException(401, env.getProperty("701"));
 		}
 		return userdetails.getOrderBookDetails();
 

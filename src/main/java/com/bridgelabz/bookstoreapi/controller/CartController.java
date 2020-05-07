@@ -42,12 +42,9 @@ public class CartController {
 	@PostMapping(value="/add_books_cart/{token}")
 	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
 		    User cart = cartService.addBooksToCart(token,bookId);
-		    if(cart!=null)
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));
-		    return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("505"),  cart,HttpStatus.NOT_FOUND));			
-	}
+		  	}
 
 	@ApiOperation(value = "Getting the books from the Cartlist",response = Iterable.class)
 	@GetMapping(value="/get_cart/{token}")
@@ -61,11 +58,9 @@ public class CartController {
 	@PostMapping(value="/add_booksquantity_cart/{token}")
 	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId,@RequestParam("quantity") long quantity) throws Exception {
 		   User cartdetails = cartService.addBooksQuantityToCart(token, bookId, quantity);
-		   if(cartdetails!=null)
 		   return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("502"), cartdetails,HttpStatus.OK));  	
-		   return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("507"), cartdetails,HttpStatus.OK));  
+		
 	}
 	
 	@ApiOperation(value = "Removing the books to the Cartlist",response = Iterable.class)

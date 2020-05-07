@@ -160,14 +160,13 @@ public class UserServiceImpl implements UserService{
 	public String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto) {
 		
 		Long id = jwt.decodeToken(token);
-		Optional<User> optionalSeller = userRepository.findById(id);
-		return optionalSeller.filter(seller -> {	
-			return seller != null;
-		}).map(seller -> {
+		Optional<User> optionalUser = userRepository.findById(id);
+		return optionalUser.filter(user -> {	
+			return user != null;
+		}).map(user -> {
 		String newPassword=encoder.encode(forgetPasswordDto.getPassword());
-		seller.setPassword(newPassword);
-		//seller.set;(LocalDateTime.now());
-		 userRepository.save(seller);
+		user.setPassword(newPassword);
+		 userRepository.save(user);
 			return env.getProperty("203");
 		}).orElseThrow(() -> new SellerException(env.getProperty("104")));
 		
