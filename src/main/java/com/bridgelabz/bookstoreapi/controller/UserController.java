@@ -69,7 +69,7 @@ public class UserController {
 	 * @param RequestBody register
 	 */
 
-	@ApiOperation(value = "User Registerartion",response = Iterable.class)
+	@ApiOperation(value = "register",response = Iterable.class)
 	@PostMapping(value = "/add-user")
 	public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterDto userRecord, BindingResult result) {
 		if (result.hasErrors())
@@ -89,7 +89,7 @@ public class UserController {
 	 * @param pathVaraiable token
 	 */
 
-	@ApiOperation(value = "Verifing the user",response = Iterable.class)
+	@ApiOperation(value = "verifing the user",response = Iterable.class)
 	@GetMapping(value = "/registration/verify/{token}")
 	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
 		
@@ -127,7 +127,7 @@ public class UserController {
 	}
 	
 
-	@ApiOperation(value = "Getting the user")
+	@ApiOperation(value = "getting the user")
 	@GetMapping(value = "/get/{token}")
 	public ResponseEntity<UserResponse> gettingUser(@RequestHeader String token) throws Exception {
 		
