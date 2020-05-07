@@ -116,7 +116,8 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 			filteredBook.setBookImage(getImageUrl(key));
 			Book updatedBook = bookRepository.save(filteredBook);
 			sellerRepository.save(seller);
-			updateBookInES(updatedBook);
+			if(updatedBook.isBookVerified())
+				updateBookInES(updatedBook);
 		}
 		else if(type.equals(ImageType.SELLER)) {
 			Seller seller = sellerRepository.findById(id)
