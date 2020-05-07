@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -129,9 +130,13 @@ public class AdminController {
 	 * @param PathVariable 
 	 */
 	@ApiOperation(value = "Verify seller book",response = Iterable.class)
-	@PutMapping("/verify/book")
-	public ResponseEntity<AdminResponse> verifyBook(@PathVariable Long bookId){
-		boolean resultStatus = service.verifyBook(bookId);
+	@PutMapping("/verify/book/{bookId}")
+	public ResponseEntity<AdminResponse> verifyBook(@PathVariable Long bookId,@RequestHeader String token){
+		boolean resultStatus = service.verifyBook(bookId,token);
+
+	@PutMapping("/verify/book/{booktoken}")
+	public ResponseEntity<AdminResponse> verifyBook(@PathVariable String booktoken,@RequestHeader String token){
+		boolean resultStatus = service.verifyBook(booktoken,token);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse("book verification successful", 200, resultStatus));

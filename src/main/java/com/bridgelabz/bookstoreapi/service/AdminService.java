@@ -16,5 +16,5 @@ public interface AdminService {
 
 	boolean register(AdminDto adminDto);
 
-	boolean verifyBook(Long bookId);
+	boolean verifyBook(String booktoken,String token);
 }
