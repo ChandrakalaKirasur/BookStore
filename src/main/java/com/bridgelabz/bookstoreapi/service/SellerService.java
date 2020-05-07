@@ -49,4 +49,10 @@ public interface SellerService {
 	 * @return 
 	 */
 	public Seller getSingleUser(String token);
+	/**
+	 * 
+	 * @param token
+	 * @return
+	 */
+	public boolean updateVerificationStatus(String token);
 }
