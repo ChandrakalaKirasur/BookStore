@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
 						});
 					}
 				} catch (Exception e) {
-
+                     //return new UserException(400, env.getProperty("104"));
 				}
 			});
 
@@ -90,8 +90,11 @@ public class OrderServiceImpl implements OrderService {
 		 * clearing the cart after added to the orderlist
 		 */
 		userdetails.getCartBooks().clear();
-
+         try {
 		userRepository.save(userdetails);
+         } catch (Exception e) {
+        	 return null;
+		}
 		return userdetails.getOrderBookDetails();
 
 	}

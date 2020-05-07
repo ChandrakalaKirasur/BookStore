@@ -9,9 +9,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 
 @Entity
