@@ -1,5 +1,11 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.io.IOException;
+import java.util.Map;
+
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -24,6 +30,7 @@ import com.bridgelabz.bookstoreapi.service.AdminService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 import com.bridgelabz.bookstoreapi.utility.MailService;
 import com.bridgelabz.bookstoreapi.utility.Token;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 @PropertySource("classpath:message.properties")
@@ -45,6 +52,12 @@ public class AdminServiceImpl implements AdminService{
 	private Environment env;
 	@Autowired
 	private MailService mailService;
+	@Autowired
+	private RestHighLevelClient client;
+
+	@Autowired
+	private ObjectMapper objectMapper;
+	
 	@Override
 	public boolean register(AdminDto adminDto) {
 		if (adminRepo.existsByName(adminDto.getName())) {
@@ -124,8 +137,17 @@ public class AdminServiceImpl implements AdminService{
 		adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, "Admin not found"));
 		Book fetchedBookForVerification=bookRepo.findById(util.decodeToken(booktoken)).orElseThrow(()-> new BookException(400,"book doesn't exist"));
 		fetchedBookForVerification.setBookVerified(true);
-		bookRepo.save(fetchedBookForVerification);
-		return true;
+		Book bookSave = bookRepo.save(fetchedBookForVerification);
+		
+		Map<String, Object> documentMapper = objectMapper.convertValue(bookSave, Map.class);
+		IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(bookSave.getBookId()))
+				.source(documentMapper);
+		try {
+			client.index(indexRequest, RequestOptions.DEFAULT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bookSave != null;
 	}
 
 }
