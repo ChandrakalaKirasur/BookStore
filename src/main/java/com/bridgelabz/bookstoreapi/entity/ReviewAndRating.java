@@ -22,7 +22,6 @@ public class ReviewAndRating {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ratingReviewId;
 
-	
 	@Column(name = "rating", nullable = false)
 	private Integer rating;
 	

@@ -42,15 +42,6 @@ public class AddressServiceImpl implements AddressService{
 		User userdetails = userRepository.findById(uId)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 		BeanUtils.copyProperties(address,add);
-		add.setAddress(address.getAddress());
-		add.setType(address.getType());
-		add.setCity(address.getCity());
-		add.setCountry(address.getCountry());
-		add.setHouseNo(address.getHouseNo());
-		add.setLandmark(address.getLandmark());
-		add.setPincode(address.getPincode());
-		add.setState(address.getState());
-		add.setStreet(address.getStreet());
 		userdetails.getAddress().add(add);
 		return   addressRepository.save(add);
 

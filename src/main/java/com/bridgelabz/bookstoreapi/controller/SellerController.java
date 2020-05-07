@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,9 +25,11 @@ import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.SellerResponse;
+import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.SellerService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @CrossOrigin("*")
@@ -113,5 +116,13 @@ public class SellerController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SellerResponse(environment.getProperty("201"), 202, user));
 	}
 	
+	@ApiOperation(value = "Verifing the user",response = Iterable.class)
+	@GetMapping(value = "/registration/verify/{token}")
+	public ResponseEntity<SellerResponse> sellerVerify(@PathVariable("token") String token) throws Exception {
+		
+		boolean verification = sellerService.updateVerificationStatus(token);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new SellerResponse(environment.getProperty("308"), 201, verification));
+	}
 }
 

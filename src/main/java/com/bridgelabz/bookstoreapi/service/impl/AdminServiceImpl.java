@@ -120,9 +120,9 @@ public class AdminServiceImpl implements AdminService{
 		return true;
 	}
 	@Override
-	public boolean verifyBook(Long bookId,String token) {
+	public boolean verifyBook(String booktoken,String token) {
 		adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, "Admin not found"));
-		Book fetchedBookForVerification=bookRepo.findById(bookId).orElseThrow(()-> new BookException(400,"book doesn't exist"));
+		Book fetchedBookForVerification=bookRepo.findById(util.decodeToken(booktoken)).orElseThrow(()-> new BookException(400,"book doesn't exist"));
 		fetchedBookForVerification.setBookVerified(true);
 		bookRepo.save(fetchedBookForVerification);
 		return true;
