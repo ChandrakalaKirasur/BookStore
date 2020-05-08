@@ -8,13 +8,13 @@ import com.bridgelabz.bookstoreapi.entity.User;
 public interface CartService {
 
 	
-	User addBooksToCart(String token, long bookId);
+	List<CartDetails> addBooksToCart(String token, long bookId);
 
 	List<CartDetails> getBooksfromCart(String token);
 
-	User addBooksQuantityToCart(String token, long noteId, long quantity);
+	List<CartDetails> addBooksQuantityToCart(String token, long noteId, long quantity);
 
-	User removeBooksToCart(String token, long bookId);
+	List<CartDetails> removeBooksToCart(String token, long bookId);
 
 	boolean verifyBookInCart(String token, long bookId);
 

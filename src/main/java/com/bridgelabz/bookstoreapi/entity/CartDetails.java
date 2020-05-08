@@ -40,6 +40,17 @@ public class CartDetails {
 
 	
 	
+	public CartDetails() {
+		super();
+	}
+	
+	public CartDetails(LocalDateTime placeTime, Long quantityOfBooks, List<Book> booksList) {
+		super();
+		this.placeTime = placeTime;
+		QuantityOfBooks = quantityOfBooks;
+		BooksList = booksList;
+	}
+
 	public Long getCartId() {
 		return cartId;
 	}
