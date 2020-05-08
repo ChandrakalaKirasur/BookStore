@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 		ArrayList<Book> list = new ArrayList<>();
 
 		/**
-		 * adding the books to orderlist by fetching it from cartlist
+		 * adding the books from cartlist to orderlist by generating the OrderId
 		 */
 		userdetails.getCartBooks().forEach((cart) -> {
 			cart.getBooksList().forEach(book -> {
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 
 				/**
-				 * If order is confrim decreasing the quantityOfBooks in BookList
+				 * If order is confrim decreasing the numberOfBooks in BookList
 				 */
 				if (cart.getBooksList() != null) {
 					long quantity = cart.getQuantityOfBooks();
