@@ -81,5 +81,4 @@ public class OrderDetails {
 	public void setBooksList(List<Book> booksList) {
 		BooksList = booksList;
 	}
-	
 }

@@ -89,22 +89,22 @@ public class CartImplementation implements CartService {
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 
-		user.getCartBooks().forEach((cart) -> {
-			/**
-			 * checking the number of books available
-			 */
-			boolean notExist = cart.getBooksList().stream()
-					.noneMatch(books -> books.getBookId() == bookId && quantity < books.getNoOfBooks());
-
-			if (notExist) {
-				throw new UserException(401, env.getProperty("506"));
-			} else {
-				cart.setQuantityOfBooks(quantity);
+	    Book bookdetails = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("104")));
+			for(CartDetails cartt:user.getCartBooks()) {
+				/**
+				 * checking the number of books available
+				 */
+				boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId);
+				
+				if (!notExist) {
+					if(quantity <= bookdetails.getNoOfBooks()) {
+					cartt.setQuantityOfBooks(quantity);
+					return userRepository.save(user).getCartBooks();
+					}
+				} 
 			}
-
-		});
-
-		return userRepository.save(user).getCartBooks();
+			
+		return null;
 
 	}
 
@@ -127,12 +127,22 @@ public class CartImplementation implements CartService {
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(201, env.getProperty("104")));
 
 		Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
 
-		user.getCartBooks().forEach((books) -> {
-			books.getBooksList().remove(book);
-		});
+		for(CartDetails cartt:user.getCartBooks()) {
+			/**
+			 * checking the number of books available
+			 */
+			boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId);
+			
+			if (!notExist) {
+				cartt.getBooksList().remove(book);
+				return userRepository.save(user).getCartBooks();
+				
+			} 
+		}
 
-		return userRepository.save(user).getCartBooks();
+		return null;
 	}
 
 	@Transactional
