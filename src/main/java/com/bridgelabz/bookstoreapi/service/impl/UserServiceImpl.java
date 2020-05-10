@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 * @return
 	 */
-	@Transactional
+	//@Transactional
 	@Override
 	public User userRegistration(RegisterDto register) {
 

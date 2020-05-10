@@ -68,8 +68,7 @@ public class OrderServiceImpl implements OrderService {
 					orderDetails.setOrderId(orderId);
 					orderDetails.setOrderPlaceTime(LocalDateTime.now());
 					orderDetails.setBooksList(list);
-					userdetails.getOrderBookDetails().add(orderDetails);
-
+		
 				} catch (Exception e) {
 					throw new UserException(401, env.getProperty("701"));
 				}
@@ -77,20 +76,20 @@ public class OrderServiceImpl implements OrderService {
 				/**
 				 * If order is confrim decreasing the numberOfBooks in BookList
 				 */
-				if (cart.getBooksList() != null) {
-					long quantity = cart.getQuantityOfBooks();
-					for (OrderDetails orderedBooks : userdetails.getOrderBookDetails()) {
-						if (orderedBooks.getOrderId().equals(orderId))
-							orderedBooks.setQuantityOfBooks(quantity);
-					}
-					Long noOfBooks = book.getNoOfBooks() - quantity;
-					book.setNoOfBooks(noOfBooks);
-					bookRepository.save(book);
-				}
+//				if (cart.getBooksList() != null) {
+//					long quantity = cart.getQuantityOfBooks();
+//					for (OrderDetails orderedBooks : userdetails.getOrderBookDetails()) {
+//						if (orderedBooks.getOrderId().equals(orderId))
+//							orderedBooks.setQuantityOfBooks(quantity);
+//					}
+//					Long noOfBooks = book.getNoOfBooks() - quantity;
+//					book.setNoOfBooks(noOfBooks);
+//					bookRepository.save(book);
+//				}
 			});
 
 		});
-
+		userdetails.getOrderBookDetails().add(orderDetails);
 		/**
 		 * clearing the cart after added to the orderlist
 		 */

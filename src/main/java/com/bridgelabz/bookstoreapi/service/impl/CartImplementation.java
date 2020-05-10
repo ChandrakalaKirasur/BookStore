@@ -36,8 +36,18 @@ public class CartImplementation implements CartService {
 
 	@Transactional
 	@Override
+	public List<CartDetails> getBooksfromCart(String token) {
+		Long id = jwt.decodeToken(token);
+
+		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+		List<CartDetails> cartBooks = user.getCartBooks();
+		return cartBooks;
+	}
+	
+	@Transactional
+	@Override
 	public List<CartDetails> addBooksToCart(String token, long bookId) {
-		long id = (Long) jwt.decodeToken(token);
+		Long id =  jwt.decodeToken(token);
 		long quantity = 1;
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 
@@ -83,24 +93,26 @@ public class CartImplementation implements CartService {
 
 	@Transactional
 	@Override
-	public List<CartDetails> addBooksQuantityToCart(String token, long bookId, long quantity) {
+	public List<CartDetails> addBooksQuantityToCart(String token, long bookId,long cartId, long quantity) {
 
-		long id = (Long) jwt.decodeToken(token);
+		Long id = jwt.decodeToken(token);
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 
-	    Book bookdetails = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("104")));
+	    //Book bookdetails = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("104")));
 			for(CartDetails cartt:user.getCartBooks()) {
 				/**
 				 * checking the number of books available
 				 */
+				if(cartt.getCartId()==cartId) {
 				boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId);
 				
 				if (!notExist) {
-					if(quantity <= bookdetails.getNoOfBooks()) {
+					//if(quantity <= bookdetails.getNoOfBooks()) {
 					cartt.setQuantityOfBooks(quantity);
 					return userRepository.save(user).getCartBooks();
-					}
+				//}
+				}
 				} 
 			}
 			
@@ -108,21 +120,12 @@ public class CartImplementation implements CartService {
 
 	}
 
-	@Transactional
-	@Override
-	public List<CartDetails> getBooksfromCart(String token) {
-		long id = (Long) jwt.decodeToken(token);
-
-		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
-		List<CartDetails> cartBooks = user.getCartBooks();
-		return cartBooks;
-	}
-
+	
 	@Transactional
 	@Override
 	public List<CartDetails> removeBooksToCart(String token, long bookId) {
 
-		long id = (Long) jwt.decodeToken(token);
+		Long id =  jwt.decodeToken(token);
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(201, env.getProperty("104")));
 

@@ -12,10 +12,12 @@ public interface CartService {
 
 	List<CartDetails> getBooksfromCart(String token);
 
-	List<CartDetails> addBooksQuantityToCart(String token, long noteId, long quantity);
+	//List<CartDetails> addBooksQuantityToCart(String token, long noteId, long quantity);
 
 	List<CartDetails> removeBooksToCart(String token, long bookId);
 
 	boolean verifyBookInCart(String token, long bookId);
+
+	List<CartDetails> addBooksQuantityToCart(String token, long bookId, long cartId, long quantity);
 
 }
