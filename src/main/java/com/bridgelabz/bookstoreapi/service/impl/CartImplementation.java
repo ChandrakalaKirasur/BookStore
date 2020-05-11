@@ -152,8 +152,7 @@ public class CartImplementation implements CartService {
 				
 			} 
 		}
-
-		return null;
+		return false;
 	}
 
 	@Transactional
