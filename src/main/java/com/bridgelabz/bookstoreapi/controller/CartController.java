@@ -66,7 +66,7 @@ public class CartController {
 	@ApiOperation(value = "Removing the books to the Cartlist",response = Iterable.class)
 	@PostMapping(value="/remove_books_cart/{token}")
 	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
-		List<CartDetails> cartdetails = cartService.removeBooksToCart(token,bookId);
+		boolean cartdetails = cartService.removeBooksToCart(token,bookId);
 		return ResponseEntity.status(200)
 				.body(new UserResponse(env.getProperty("504"),  cartdetails,HttpStatus.OK));    
 					

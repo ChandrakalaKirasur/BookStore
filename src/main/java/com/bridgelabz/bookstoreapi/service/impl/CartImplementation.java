@@ -1,3 +1,6 @@
+/**
+ * @author Saikiran(Msk)
+ */
 package com.bridgelabz.bookstoreapi.service.impl;
 
 import java.time.LocalDateTime;
@@ -99,13 +102,12 @@ public class CartImplementation implements CartService {
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 
-	    //Book bookdetails = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("104")));
 			for(CartDetails cartt:user.getCartBooks()) {
 				/**
 				 * checking the number of books available
 				 */
 				if(cartt.getCartId()==cartId) {
-				boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId);
+				boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId && quantity <= books.getNoOfBooks());
 				
 				if (!notExist) {
 					//if(quantity <= bookdetails.getNoOfBooks()) {
@@ -123,7 +125,7 @@ public class CartImplementation implements CartService {
 	
 	@Transactional
 	@Override
-	public List<CartDetails> removeBooksToCart(String token, long bookId) {
+	public boolean removeBooksToCart(String token, long bookId) {
 
 		Long id =  jwt.decodeToken(token);
 
@@ -140,7 +142,13 @@ public class CartImplementation implements CartService {
 			
 			if (!notExist) {
 				cartt.getBooksList().remove(book);
-				return userRepository.save(user).getCartBooks();
+				//return userRepository.save(user).getCartBooks();
+				boolean users = userRepository.save(user).getCartBooks() != null ? true : false;
+				if(users) {
+					return users;
+				}else {
+					throw new UserException(401, env.getProperty("506"));
+				}
 				
 			} 
 		}

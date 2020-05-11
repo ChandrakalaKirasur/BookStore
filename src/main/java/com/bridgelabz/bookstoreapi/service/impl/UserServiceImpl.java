@@ -129,7 +129,10 @@ public class UserServiceImpl implements UserService {
 
 		user.setVerified(true);
 		boolean users = userRepository.save(user) != null ? true : false;
-
+		
+        if(!users)
+        	throw new UserException(208, env.getProperty("105"));
+        
 		return users;
 	}
 

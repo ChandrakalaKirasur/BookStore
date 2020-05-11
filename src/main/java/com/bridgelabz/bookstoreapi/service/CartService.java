@@ -14,7 +14,7 @@ public interface CartService {
 
 	//List<CartDetails> addBooksQuantityToCart(String token, long noteId, long quantity);
 
-	List<CartDetails> removeBooksToCart(String token, long bookId);
+	boolean removeBooksToCart(String token, long bookId);
 
 	boolean verifyBookInCart(String token, long bookId);
 
