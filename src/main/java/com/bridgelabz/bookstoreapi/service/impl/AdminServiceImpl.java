@@ -1,5 +1,7 @@
 package com.bridgelabz.bookstoreapi.service.impl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -53,6 +55,8 @@ public class AdminServiceImpl implements AdminService{
 		Admin newAdmin = new Admin();
 		BeanUtils.copyProperties(adminDto, newAdmin);
 		newAdmin.setPassword(encoder.encode(newAdmin.getPassword()));
+		newAdmin.setCreatedTime(LocalDateTime.now());
+		newAdmin.setUpdatedTime(LocalDateTime.now());
 		adminRepo.save(newAdmin);
 		sendNotification(newAdmin);
 		return true;

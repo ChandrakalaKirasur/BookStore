@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiOperation;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
 @Api(value="bookStore", description="Operations pertaining to user in Book Store")
@@ -60,7 +60,7 @@ public class UserController {
 		 String token = userService.loginByEmailOrMobile(user);
 		
 		 return ResponseEntity.status(200)
-					.body(new UserResponse(token, env.getProperty("200"),HttpStatus.OK));
+					.body(new UserResponse(token, env.getProperty("202"),HttpStatus.OK));
 		
 	}
 	
@@ -70,7 +70,7 @@ public class UserController {
 	 */
 
 	@ApiOperation(value = "register",response = Iterable.class)
-	@PostMapping(value = "/add-user")
+	@PostMapping(value = "/registration")
 	public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterDto userRecord, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
@@ -78,7 +78,7 @@ public class UserController {
 		User user = userService.userRegistration(userRecord);
 		if (user != null) {
 			return ResponseEntity.status(200)
-					.body(new UserResponse(env.getProperty("202"), userRecord,HttpStatus.OK));
+					.body(new UserResponse(env.getProperty("200"), userRecord,HttpStatus.OK));
 		}
 		return ResponseEntity.status(401)
 				.body(new UserResponse(env.getProperty("102"),  userRecord,HttpStatus.NOT_FOUND));
