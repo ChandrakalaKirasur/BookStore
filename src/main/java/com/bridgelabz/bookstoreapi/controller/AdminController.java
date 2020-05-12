@@ -47,7 +47,7 @@ public class AdminController {
 	 * @param RequestBody register
 	 */
 	@ApiOperation(value = "Admin Registerartion",response = Iterable.class)
-	@PostMapping("/register")
+	@PostMapping("/registration")
 	public ResponseEntity<AdminResponse> register(@Valid @RequestBody AdminDto register, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
@@ -90,7 +90,7 @@ public class AdminController {
 			Admin admin = service.login(adminLoginDto);
 			if (admin != null) {
 				String token=util.generateToken(admin.getAdminId(),Token.WITH_EXPIRE_TIME);
-				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("login successful", 200, token));
+				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("login successful", 202, token));
 			}
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new AdminResponse("Admin name or password is invalid ", 208,""));
