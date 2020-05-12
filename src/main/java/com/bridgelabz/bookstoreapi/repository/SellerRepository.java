@@ -10,9 +10,9 @@ import com.bridgelabz.bookstoreapi.entity.Seller;
 
 public interface SellerRepository extends JpaRepository<Seller, Long>{
 
-	Optional<Seller> findByEmailAddress(String emailAddress);
+	Optional<Seller> findByEmail(String email);
 	Optional<Seller> findByMobile(Long mobile);
-	@Query(value=" select * from seller where email_address=?",nativeQuery=true)
+	@Query(value=" select * from seller where email=?",nativeQuery=true)
 	Seller getUser(String email);
 	@Query(value=" select * from seller",nativeQuery=true)
 	List<Seller> getSellers();

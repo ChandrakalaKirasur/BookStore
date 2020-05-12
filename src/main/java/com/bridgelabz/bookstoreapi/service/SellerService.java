@@ -18,7 +18,7 @@ public interface SellerService {
 	 * @param register
 	 * @return
 	 */
-	public boolean sellerRegistration(RegisterDto register);
+	public Seller sellerRegistration(RegisterDto register);
 	/**
 	 * 
 	 * @param login
@@ -30,7 +30,7 @@ public interface SellerService {
 	 * @param emailAddress
 	 * @return
 	 */
-	public String forgotpassword(@Valid String emailAddress);
+	public String forgotpassword(@Valid String email);
 	/**
 	 * 
 	 * @param token

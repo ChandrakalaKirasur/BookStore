@@ -74,7 +74,7 @@ public class User {
 
 	public User(RegisterDto register) {
 		this.name = register.getName();
-		this.email = register.getEmailAddress();
+		this.email = register.getEmail();
 		this.mobileNum = register.getMobile();
 		this.password = register.getPassword();
 		this.createTime = LocalDateTime.now();

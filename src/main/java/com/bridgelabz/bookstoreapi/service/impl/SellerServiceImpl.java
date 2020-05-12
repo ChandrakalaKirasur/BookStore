@@ -60,9 +60,9 @@ public class SellerServiceImpl implements SellerService{
 	 */
 	@Transactional
 	@Override
-	public boolean sellerRegistration(RegisterDto register) {
+	public Seller sellerRegistration(RegisterDto register) {
 
-		if (sellerRepository.findByEmailAddress(register.getEmailAddress()).isPresent())
+		if (sellerRepository.findByEmail(register.getEmail()).isPresent())
 			//throw new SellerException(HttpStatus.FOUND.value(), env.getProperty("103"));
 
 		register.setPassword(encoder.encode(register.getPassword()));
@@ -72,20 +72,19 @@ public class SellerServiceImpl implements SellerService{
 		try {
 			String password=encoder.encode(register.getPassword());
 			seller.setPassword(password);
-			seller.setVerificationStatus(true);
 			Seller sellr = sellerRepository.save(seller);
 			if (sellr != null) {
-				mail.setTo(seller.getEmailAddress());
+				mail.setTo(seller.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
 				mail.setContext("Hi " + seller.getSellerName() + " " + Constants.REGISTRATION_MESSAGE
-						+ Constants.VERIFICATION_LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));
+						+ Constants.SELLER_VERIFICATION_LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));
 				producer.sendToQueue(mail);
 				consumer.receiveMail(mail);
 			}
 		} catch (SellerException e) {
 			throw new SellerException(400, env.getProperty("102"));
 		}
-		return false;
+		return seller;
 	}
 
 
@@ -106,7 +105,7 @@ public class SellerServiceImpl implements SellerService{
 //		 String password=encoder.encode(login.getPassword());
 //		 System.out.println("password--->"+password);
 		if (seller != null) {
-			if ( (encoder.matches(login.getPassword(), seller.getPassword()))) {
+			if ( seller.isVerificationStatus()&&(encoder.matches(login.getPassword(), seller.getPassword()))) {
 				String token=jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME);
 				System.out.println(token);
 				return token;
@@ -121,13 +120,13 @@ public class SellerServiceImpl implements SellerService{
 	 */
 	@Transactional
 	@Override
-	public String forgotpassword(@Valid String emailAddress) {
+	public String forgotpassword(@Valid String email) {
 		Mail mail = new Mail();
-		Optional<Seller> optionalSeller = sellerRepository.findByEmailAddress(emailAddress);
+		Optional<Seller> optionalSeller = sellerRepository.findByEmail(email);
 		return optionalSeller.filter(seller -> {	
 			return seller != null;
 		}).map(seller -> {
-			mail.setTo(seller.getEmailAddress());
+			mail.setTo(seller.getEmail());
 			mail.setSubject(Constants.RESET_PASSWORD_LINK);
 			mail.setContext("Hi " + seller.getSellerName() + " " + Constants.RESET_PASSWORD_LINK
 					+ Constants.RESET_PASSWORD_LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));

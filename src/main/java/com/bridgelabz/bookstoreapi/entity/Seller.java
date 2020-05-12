@@ -35,8 +35,8 @@ public class Seller {
 	@Column(name = "seller_name", nullable = false)
 	private String sellerName;
 
-	@Column(name = "email_address", nullable = false, unique = true)
-	private String emailAddress;
+	@Column(name = "email", nullable = false, unique = true)
+	private String email;
 
 	@Column(name = "mobile", nullable = false, unique = true)
 	private Long mobile;
@@ -59,7 +59,7 @@ public class Seller {
 	
 	public Seller(RegisterDto register) {
 		this.sellerName = register.getName();
-		this.emailAddress = register.getEmailAddress();
+		this.email = register.getEmail();
 		this.mobile = register.getMobile();
 		this.password = register.getPassword();
 		this.createdtTime = LocalDateTime.now();
@@ -86,12 +86,12 @@ public class Seller {
 		this.sellerName = sellerName;
 	}
 
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Long getMobile() {
