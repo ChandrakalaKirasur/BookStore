@@ -78,16 +78,8 @@ public class BookServiceImpl implements BookService{
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
 		seller.getSellerBooks().add(book);
-		Book bookSave = bookRepository.save(book);
+		bookRepository.save(book);
 		sellerRepository.save(seller);
-		Map<String, Object> documentMapper = objectMapper.convertValue(bookSave, Map.class);
-		IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(bookSave.getBookId()))
-				.source(documentMapper);
-		try {
-			client.index(indexRequest, RequestOptions.DEFAULT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		}
 		else {
 			throw new BookException(500, env.getProperty("5001"));
@@ -109,7 +101,8 @@ public class BookServiceImpl implements BookService{
 		filteredBook.setBookUpdatedTime(LocalDateTime.now());
 		Book bookUpdate = bookRepository.save(filteredBook);
 		sellerRepository.save(seller);
-		updateBookInES(bookUpdate);
+		if(bookUpdate.isBookVerified())
+			updateBookInES(bookUpdate);
 	}
 	
 	@Transactional
@@ -140,14 +133,18 @@ public class BookServiceImpl implements BookService{
 			rr.setUser(user);
 			book.getReviewRating().add(rr);
 			rrRepository.save(rr);
-			bookRepository.save(book);
+			Book bookUpdate = bookRepository.save(book);
+			if(bookUpdate.isBookVerified())
+				updateBookInES(bookUpdate);
 		}
 		else {
 			ReviewAndRating rr = book.getReviewRating().stream().filter(r -> r.getUser().getUserId()==uId).findFirst().orElseThrow(() -> new BookException(500, env.getProperty("104")));
 			rr.setRating(rrDTO.getRating());
 			rr.setReview(rrDTO.getReview());
 			rrRepository.save(rr);
-			bookRepository.save(book);
+			Book bookUpdate = bookRepository.save(book);
+			if(bookUpdate.isBookVerified())
+				updateBookInES(bookUpdate);
 		}
 	}
 	

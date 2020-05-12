@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
@@ -19,9 +20,6 @@ import lombok.ToString;
 
 @Entity
 @Table(name="cart_details")
-@Data
-@NoArgsConstructor
-@ToString
 public class CartDetails {
 
 	
@@ -31,16 +29,26 @@ public class CartDetails {
 	
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
-	
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = QuantityOfBooks.class)
-	@JoinColumn(name = "bookquantity")
-	private QuantityOfBooks QuantityOfBooks;
+
+	@Column(name = "bookquantity")
+	private Long QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
 
 	
 	
+	public CartDetails() {
+		super();
+	}
+	
+	public CartDetails(LocalDateTime placeTime, Long quantityOfBooks, List<Book> booksList) {
+		super();
+		this.placeTime = placeTime;
+		QuantityOfBooks = quantityOfBooks;
+		BooksList = booksList;
+	}
+
 	public Long getCartId() {
 		return cartId;
 	}
@@ -57,12 +65,12 @@ public class CartDetails {
 		this.placeTime = placeTime;
 	}
 
-	
-	public QuantityOfBooks getQuantityOfBooks() {
+
+	public Long getQuantityOfBooks() {
 		return QuantityOfBooks;
 	}
 
-	public void setQuantityOfBooks(QuantityOfBooks quantityOfBooks) {
+	public void setQuantityOfBooks(Long quantityOfBooks) {
 		QuantityOfBooks = quantityOfBooks;
 	}
 
