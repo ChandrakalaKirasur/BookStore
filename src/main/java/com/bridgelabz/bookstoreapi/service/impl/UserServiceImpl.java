@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User userRegistration(RegisterDto register) {
 
-		Optional<User> useremail = userRepository.findUserByEmail(register.getEmailAddress());
+		Optional<User> useremail = userRepository.findUserByEmail(register.getEmail());
 
 		if (useremail.isPresent())
 			throw new UserException(208, env.getProperty("103"));

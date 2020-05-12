@@ -21,7 +21,7 @@ public class RegisterDto {
 
 	@NotNull(message = "Email address field can't be empty!!!")
 	@Email(message = "Enter valid mail address!!!")
-	private String emailAddress;
+	private String email;
 
 	@NotNull(message = "Moblie number field can't be empty!!!")
 	private Long mobile;
@@ -38,12 +38,12 @@ public class RegisterDto {
 		this.name = name;
 	}
 
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
+	public void setEmail(String emailAddress) {
+		this.email = emailAddress;
 	}
 
 	public Long getMobile() {
