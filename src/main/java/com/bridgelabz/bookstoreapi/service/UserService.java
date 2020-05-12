@@ -19,7 +19,7 @@ public interface UserService {
 
 	boolean updateVerificationStatus(String token);
 
-	String forgotpassword(@Valid String emailAddress);
+	String forgotpassword(@Valid String email);
 
 	String resetpassword(@Valid String token, sellerForgetPasswordDto forgetPasswordDto);
 

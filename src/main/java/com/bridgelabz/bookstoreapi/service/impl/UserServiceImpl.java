@@ -132,9 +132,9 @@ public class UserServiceImpl implements UserService{
 
 	@Transactional
 	@Override
-	public String forgotpassword(@Valid String emailAddress) {
+	public String forgotpassword(@Valid String email) {
 		Mail mail = new Mail();
-		Optional<User> optionalUser = userRepository.findUserByEmail(emailAddress);
+		Optional<User> optionalUser = userRepository.findUserByEmail(email);
 		return optionalUser.filter(user -> {	
 			return user != null;
 		}).map(user -> {
