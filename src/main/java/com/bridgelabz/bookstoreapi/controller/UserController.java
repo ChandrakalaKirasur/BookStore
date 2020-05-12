@@ -132,7 +132,6 @@ public class UserController {
 	public ResponseEntity<UserResponse> gettingUser(@RequestHeader String token) throws Exception {
 		
 		User userdetails = userService.getUser(token);
-		
 			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"),userdetails,HttpStatus.OK));
 		
 	}
