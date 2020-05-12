@@ -105,8 +105,8 @@ public class UserController {
 	 * @param RequestParam emailId
 	 */
 	@PostMapping("/forgetPassword")
-	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String emailAddress) {
-		String message = userService.forgotpassword(emailAddress);
+	public ResponseEntity<UserResponse> forgetPassword(@Valid @RequestParam String email) {
+		String message = userService.forgotpassword(email);
 		return ResponseEntity.status(200)
 				.body(new UserResponse(env.getProperty("107"),message,HttpStatus.OK));
 	}
@@ -118,7 +118,7 @@ public class UserController {
 	 * @param RequestParam newpassword
 	 */
 
-	@PutMapping("/restPassword/{token}")
+	@PutMapping("/resetPassword/{token}")
 	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);

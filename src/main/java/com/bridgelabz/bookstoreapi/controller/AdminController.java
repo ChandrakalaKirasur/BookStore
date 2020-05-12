@@ -101,7 +101,7 @@ public class AdminController {
 	 * @param RequestParam email
 	 */
 	@ApiOperation(value = "Admin forgot password",response = Iterable.class)
-	@PostMapping("/forgotpassword")
+	@PostMapping("/forgetPassword")
 	public ResponseEntity<AdminResponse> sendLinkToResetPassword(@RequestParam String email) {
 		boolean resultStatus = service.sendLinkForPassword(email);
 		if (resultStatus) {
@@ -115,7 +115,7 @@ public class AdminController {
 	 * @param RequestBody resetDetails
 	 */
 	@ApiOperation(value = "Admin reset password",response = Iterable.class)
-	@PutMapping("/resetpassword")
+	@PutMapping("/resetPassword/{token}")
 	public ResponseEntity<AdminResponse> resetAdminPassword(@RequestBody AdminPasswordResetDto resetDetails){
 		boolean resultStatus = service.resetAdminPassword(resetDetails);
 		if (resultStatus) {
