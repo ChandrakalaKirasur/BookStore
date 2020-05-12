@@ -3,6 +3,7 @@ package com.bridgelabz.bookstoreapi.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,7 +37,8 @@ public class AdminController {
 	private AdminService service;
 	@Autowired
 	private JWTUtil util;
-
+	@Autowired
+	private Environment env;
 	@GetMapping("/")
 	public String welcome() {
 		return "welcome ";
@@ -55,7 +57,7 @@ public class AdminController {
 		boolean resultStatus = service.register(register);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new AdminResponse("registered successfully", 200, resultStatus));
+					.body(new AdminResponse(env.getProperty("2001"), 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new AdminResponse("Admin already exist please login", 208, resultStatus));

@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/cart")
 @PropertySource("classpath:message.properties")
-@CrossOrigin("*")
+@CrossOrigin
 @Api(value="bookStore", description="Operations pertaining to Cart in Book Store")
 public class CartController {
 
@@ -39,8 +39,8 @@ public class CartController {
 	private Environment env;
 	
 	@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
-	@PostMapping(value="/add_books_cart/{token}")
-	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
+	@PostMapping(value="/add_books_cart/{token}/{bookId}")
+	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {
 		    List<CartDetails> cart = cartService.addBooksToCart(token,bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));
@@ -64,8 +64,8 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Removing the books to the Cartlist",response = Iterable.class)
-	@PostMapping(value="/remove_books_cart/{token}")
-	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
+	@PostMapping(value="/remove_books_cart/{token}/{bookId}")
+	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {
 		boolean cartdetails = cartService.removeBooksToCart(token,bookId);
 		return ResponseEntity.status(200)
 				.body(new UserResponse(env.getProperty("504"),  cartdetails,HttpStatus.OK));    
