@@ -182,7 +182,7 @@ public class CartImplementation implements CartService {
 			if(!cartt.getBooksList().isEmpty()) {
 				
 			boolean notExist = cartt.getBooksList().stream()
-					.noneMatch(books -> books.getBookId().equals(bookId) && books.getNoOfBooks() > quantity);
+					.noneMatch(books -> books.getBookId().equals(bookId));
 			
 			ArrayList<Quantity> qt = new ArrayList<Quantity>();
 			if (!notExist) {
