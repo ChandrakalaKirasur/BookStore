@@ -38,7 +38,7 @@ public class CartDetails {
 	private List<Book> BooksList;
 
 	
-	
+
 	public CartDetails() {
 		super();
 	}

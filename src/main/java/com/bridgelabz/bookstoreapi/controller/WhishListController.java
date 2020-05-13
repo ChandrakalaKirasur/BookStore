@@ -39,9 +39,9 @@ public class WhishListController {
 	
 	@ApiOperation(value = "Adding the books to the Whishlist",response = Iterable.class)
 	@PostMapping(value="/add_books_WhishList/{token}/{bookId}")
-	public ResponseEntity<UserResponse> addBooksToWhilist(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {
+	public ResponseEntity<UserResponse> addBooksToWhilist(@PathVariable("token") String token,@PathVariable("bookId") Long bookId) throws Exception {
 		    User whishlist = whishlistService.addBooksToWhishList(token,bookId);
-		    return ResponseEntity.status(HttpStatus.CREATED)
+   	    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("600"), whishlist,HttpStatus.OK));  	
 	}
 	
@@ -54,7 +54,6 @@ public class WhishListController {
 	}
 	
 	@ApiOperation(value = "Removing the books to the Whishlist",response = Iterable.class)
-
 	@PostMapping(value="/remove_books_WhishList/{token}/{bookId}")
 	public ResponseEntity<UserResponse> removeBooksToWhilist(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {
 		    User whishlist = whishlistService.removeBooksToWhishList(token,bookId);
