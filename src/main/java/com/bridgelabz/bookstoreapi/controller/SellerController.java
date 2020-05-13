@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,8 +97,8 @@ public class SellerController {
 	 * @param forgetPasswordDto
 	 * @return message
 	 */
-	@PostMapping("/restPassword/{token}")
-	public ResponseEntity<SellerResponse> restpassword(@Valid @RequestHeader String token,
+	@PutMapping("/resetPassword/{token}")
+	public ResponseEntity<SellerResponse> restpassword(@Valid @PathVariable String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String messege = sellerService.resetpassword(token, forgetPasswordDto);
 		return ResponseEntity.status(HttpStatus.CREATED)
