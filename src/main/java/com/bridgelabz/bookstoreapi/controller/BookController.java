@@ -115,6 +115,10 @@ public class BookController {
 		awsService.uploadFileToS3Bucket(file,token, bookId ,ImageType.BOOK);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
-	
+	@ApiOperation(value = "Get verified Book Details")
+	@GetMapping("/getBooksCount")
+	public ResponseEntity<Response> getBooksCount(@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
+	}
 	
 }

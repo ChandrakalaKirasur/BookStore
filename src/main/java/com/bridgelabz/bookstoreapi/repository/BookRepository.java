@@ -27,4 +27,8 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 	@Query(value = "select * from books as b where b.book_verified=true order by b.book_added_time limit :start,10", 
 			nativeQuery = true)
 	public List<Book> findBookSortedByArrival(@Param("start") Integer start);
+	
+	@Query(value = "select * from books as b where b.book_verified=true", 
+			nativeQuery = true)
+	public List<Book> findAllBook();
 }
