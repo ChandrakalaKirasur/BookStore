@@ -141,8 +141,8 @@ public class UserServiceImpl implements UserService{
 		}).map(user -> {
 			mail.setTo(user.getEmail());
 			mail.setSubject(Constants.RESET_PASSWORD_LINK);
-			mail.setContext("Hi " + user.getName() + " " + Constants.USER_RESET_PASSWORD_LINK
-					+ Constants.RESET_PASSWORD_LINK + jwt.generateToken(user.getUserId(), Token.WITH_EXPIRE_TIME));
+			mail.setContext("Hi " + user.getName() + " " + Constants.RESET_PASSWORD_MESSAGE
+					+ Constants.USER_RESET_PASSWORD_LINK + jwt.generateToken(user.getUserId(), Token.WITH_EXPIRE_TIME));
 			producer.sendToQueue(mail);
 			consumer.receiveMail(mail);
 			return env.getProperty("403");
@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService{
 	 * Api for reset password
 	 * @param token
 	 * @RequestBody forgetPasswordDto
-	 * @Return 
+	 * @Return  
 	 */
 	@Transactional
 	@Override

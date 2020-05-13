@@ -13,14 +13,14 @@ public interface CartService {
 
 	List<CartDetails> getBooksfromCart(String token);
 
-	//List<CartDetails> addBooksQuantityToCart(String token, long noteId, long quantity);
+	boolean removeBooksToCart(String token, Long bookId);
+	
+	boolean verifyBookInCart(String token, Long bookId);
 
-	boolean removeBooksToCart(String token, long bookId);
+	List<CartDetails> addBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
+	
+	int getCountOfBooks(String token);
 
-	boolean verifyBookInCart(String token, long bookId);
-
-	List<CartDetails> addBooksQuantityInCart(String token, long bookId, CartdetailsDto bookQuantityDetails);
-
-
+	List<CartDetails> descBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
 
 }
