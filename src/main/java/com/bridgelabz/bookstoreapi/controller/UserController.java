@@ -119,7 +119,7 @@ public class UserController {
 	 */
 
 	@PutMapping("/resetPassword/{token}")
-	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
+	public ResponseEntity<UserResponse> restpassword(@Valid @PathVariable String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);
 		return ResponseEntity.status(200)

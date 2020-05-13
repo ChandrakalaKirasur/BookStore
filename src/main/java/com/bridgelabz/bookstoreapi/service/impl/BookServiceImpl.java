@@ -226,4 +226,9 @@ public class BookServiceImpl implements BookService{
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public int getBooksCount() {
+		return bookRepository.findAllBook().size();
+	}
 }
