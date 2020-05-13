@@ -14,9 +14,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
+import com.bridgelabz.bookstoreapi.entity.Quantity;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
+import com.bridgelabz.bookstoreapi.repository.QuantityRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.CartService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -33,6 +35,9 @@ public class CartImplementation implements CartService {
 
 	@Autowired
 	private BookRepository bookRepository;
+	
+	@Autowired
+	private QuantityRepository quantityRepository;
 
 	@Autowired
 	private Environment env;
@@ -44,6 +49,7 @@ public class CartImplementation implements CartService {
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		List<CartDetails> cartBooks = user.getCartBooks();
+         
 		return cartBooks;
 	}
 	
@@ -67,11 +73,14 @@ public class CartImplementation implements CartService {
 		 */
 		CartDetails cart = new CartDetails();
 		ArrayList<Book> booklist = new ArrayList<>();
+		ArrayList<Quantity> qt=new ArrayList<Quantity>();
+		Quantity qunatityofbook=new Quantity(quantity);
 		if (books == null) {
 			booklist.add(book);
 			cart.setPlaceTime(LocalDateTime.now());
 			cart.setBooksList(booklist);
-			cart.setQuantityOfBooks(quantity);
+			qt.add(qunatityofbook);
+			cart.setQuantityOfBooks(qt);
 			user.getCartBooks().add(cart);
 			return userRepository.save(user).getCartBooks();
 		}
@@ -84,9 +93,12 @@ public class CartImplementation implements CartService {
 			throw new UserException(401, env.getProperty("505"));
 		} else {
 			booklist.add(book);
+			//cart.setCartId(cartId);
 			cart.setPlaceTime(LocalDateTime.now());
 			cart.setBooksList(booklist);
-			cart.setQuantityOfBooks(quantity);
+//			cart.getQuantityOfBooks().add(qunatityofbook);
+			qt.add(qunatityofbook);
+			cart.setQuantityOfBooks(qt);
 			user.getCartBooks().add(cart);
 		}
 
@@ -108,10 +120,13 @@ public class CartImplementation implements CartService {
 				 */
 				if(cartt.getCartId()==cartId) {
 				boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId && quantity <= books.getNoOfBooks());
-				
+				ArrayList<Quantity> qt=new ArrayList<Quantity>();
 				if (!notExist) {
 					//if(quantity <= bookdetails.getNoOfBooks()) {
-					cartt.setQuantityOfBooks(quantity);
+					Quantity qunatityofbook=new Quantity(quantity);
+					//cartt.getQuantityOfBooks().add(qunatityofbook);
+					qt.add(qunatityofbook);
+					cartt.setQuantityOfBooks(qt);
 					return userRepository.save(user).getCartBooks();
 				//}
 				}
@@ -133,7 +148,8 @@ public class CartImplementation implements CartService {
 
 		Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		
-
+	    Quantity quantity = quantityRepository.findById(id).orElseThrow(() -> new UserException(201, env.getProperty("104")));
+		
 		for(CartDetails cartt:user.getCartBooks()) {
 			/**
 			 * checking the number of books available
@@ -141,6 +157,8 @@ public class CartImplementation implements CartService {
 			boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId() == bookId);
 			
 			if (!notExist) {
+				
+				 cartt.getQuantityOfBooks().remove(quantity);
 				cartt.getBooksList().remove(book);
 				//return userRepository.save(user).getCartBooks();
 				boolean users = userRepository.save(user).getCartBooks() != null ? true : false;

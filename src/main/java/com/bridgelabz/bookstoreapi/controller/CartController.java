@@ -50,6 +50,7 @@ public class CartController {
 	@GetMapping(value="/get_cart/{token}")
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<CartDetails> cartdetails = cartService.getBooksfromCart(token);
+		    //return cartdetails.get;
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("503"), cartdetails,HttpStatus.OK));
 	}

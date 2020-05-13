@@ -80,11 +80,10 @@ public class AddressServiceImpl implements AddressService{
 			add.setType(addressupdate.getType());
 			add.setCity(addressupdate.getCity());
 			add.setCountry(addressupdate.getCountry());
-			add.setHouseNo(addressupdate.getHouseNo());
 			add.setLandmark(addressupdate.getLandmark());
 			add.setPincode(addressupdate.getPincode());
 			add.setState(addressupdate.getState());
-			add.setStreet(addressupdate.getStreet());
+			
 			addressRepository.save(add);
 			userdetails.getAddress().add(add);
 			return ad;

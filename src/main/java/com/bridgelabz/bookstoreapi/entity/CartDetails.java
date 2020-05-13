@@ -30,8 +30,9 @@ public class CartDetails {
 	@Column(name = "placed_timed", nullable = false)
 	private LocalDateTime placeTime;
 
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Quantity.class)
 	@Column(name = "bookquantity")
-	private Long QuantityOfBooks;
+	private List<Quantity> QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
@@ -41,46 +42,53 @@ public class CartDetails {
 	public CartDetails() {
 		super();
 	}
-	
-	public CartDetails(LocalDateTime placeTime, Long quantityOfBooks, List<Book> booksList) {
-		super();
-		this.placeTime = placeTime;
-		QuantityOfBooks = quantityOfBooks;
-		BooksList = booksList;
-	}
+
+
 
 	public Long getCartId() {
 		return cartId;
 	}
 
+
+
 	public void setCartId(Long cartId) {
 		this.cartId = cartId;
 	}
 
+
+
 	public LocalDateTime getPlaceTime() {
 		return placeTime;
 	}
+
+
 
 	public void setPlaceTime(LocalDateTime placeTime) {
 		this.placeTime = placeTime;
 	}
 
 
-	public Long getQuantityOfBooks() {
+
+	public List<Quantity> getQuantityOfBooks() {
 		return QuantityOfBooks;
 	}
 
-	public void setQuantityOfBooks(Long quantityOfBooks) {
+
+
+	public void setQuantityOfBooks(List<Quantity> quantityOfBooks) {
 		QuantityOfBooks = quantityOfBooks;
 	}
+
+
 
 	public List<Book> getBooksList() {
 		return BooksList;
 	}
 
+
+
 	public void setBooksList(List<Book> booksList) {
 		BooksList = booksList;
 	}
-	
 	
 }
