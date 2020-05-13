@@ -57,10 +57,10 @@ public class AdminController {
 		boolean resultStatus = service.register(register);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new AdminResponse(env.getProperty("2001"), 200, resultStatus));
+					.body(new AdminResponse(env.getProperty("800"), 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new AdminResponse("Admin already exist please login", 208, resultStatus));
+				.body(new AdminResponse(env.getProperty("802"), 208, resultStatus));
 	}
 	
 	/**
@@ -72,10 +72,10 @@ public class AdminController {
 	public ResponseEntity<AdminResponse> verifyMail(@PathVariable String token) {
 		boolean resultStatus = service.verifyEmail(token);
 		if (resultStatus) {
-			return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("verified ", 200, resultStatus));
+			return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("805", 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse("your mail is already verified", 208, resultStatus));
+				.body(new AdminResponse(env.getProperty("806"), 208, resultStatus));
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class AdminController {
 			Admin admin = service.login(adminLoginDto);
 			if (admin != null) {
 				String token=util.generateToken(admin.getAdminId(),Token.WITH_EXPIRE_TIME);
-				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("login successful", 202, token));
+				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse(env.getProperty("801"), 202, token));
 			}
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new AdminResponse("Admin name or password is invalid ", 208,""));
@@ -107,10 +107,10 @@ public class AdminController {
 	public ResponseEntity<AdminResponse> sendLinkToResetPassword(@RequestParam String email) {
 		boolean resultStatus = service.sendLinkForPassword(email);
 		if (resultStatus) {
-			return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("kindly check your mail", 200, resultStatus));
+			return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse(env.getProperty("403"), 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse("please enter valid mail ID", 208, resultStatus));
+				.body(new AdminResponse(env.getProperty("806"), 208, resultStatus));
 	}
 	/**
 	 * API for admin to reset password 
@@ -122,10 +122,10 @@ public class AdminController {
 		boolean resultStatus = service.resetAdminPassword(resetDetails);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new AdminResponse("reset password successful", 200, resultStatus));
+					.body(new AdminResponse(env.getProperty("203"), 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse("Admin not found kindly try again", 208, resultStatus));
+				.body(new AdminResponse(env.getProperty("701"), 208, resultStatus));
 	}
 	/**
 	 * API for verifying book
