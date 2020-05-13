@@ -89,7 +89,6 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public boolean verifyEmail(String token) {
-		System.out.println(util.decodeToken(token));
 		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
 		if (!fetchedAdmin.isVerified()) {
 			fetchedAdmin.setVerified(true);
@@ -126,8 +125,13 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public boolean resetAdminPassword(AdminPasswordResetDto resetDto) {
-		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(resetDto.getToken())).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
+	public boolean resetAdminPassword(AdminPasswordResetDto resetDto,String token) {
+		try {
+			Long id=util.decodeToken(token);
+		}catch(Throwable e) {
+			throw new AdminException(400,"timed out");
+		}
+		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
 		fetchedAdmin.setPassword(encoder.encode(resetDto.getPassword()));
 		adminRepo.save(fetchedAdmin);
 		return true;

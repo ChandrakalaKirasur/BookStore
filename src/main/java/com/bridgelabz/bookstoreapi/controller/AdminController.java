@@ -118,8 +118,8 @@ public class AdminController {
 	 */
 	@ApiOperation(value = "Admin reset password",response = Iterable.class)
 	@PutMapping("/resetPassword/{token}")
-	public ResponseEntity<AdminResponse> resetAdminPassword(@RequestBody AdminPasswordResetDto resetDetails){
-		boolean resultStatus = service.resetAdminPassword(resetDetails);
+	public ResponseEntity<AdminResponse> resetAdminPassword(@RequestBody AdminPasswordResetDto resetDetails,@PathVariable String token){
+		boolean resultStatus = service.resetAdminPassword(resetDetails,token);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse(env.getProperty("203"), 200, resultStatus));
