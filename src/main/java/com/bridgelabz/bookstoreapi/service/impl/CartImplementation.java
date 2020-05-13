@@ -90,14 +90,15 @@ public class CartImplementation implements CartService {
 		 */
 		CartDetails cart = new CartDetails();
 		ArrayList<Book> booklist = new ArrayList<>();
-		ArrayList<Quantity> qt = new ArrayList<Quantity>();
+		ArrayList<Quantity> quantitydetails = new ArrayList<Quantity>();
 		Quantity qunatityofbook = new Quantity(quantity);
+		
 		if (books == null) {
 			booklist.add(book);
 			cart.setPlaceTime(LocalDateTime.now());
 			cart.setBooksList(booklist);
-			qt.add(qunatityofbook);
-			cart.setQuantityOfBooks(qt);
+			quantitydetails.add(qunatityofbook);
+			cart.setQuantityOfBooks(quantitydetails);
 			user.getCartBooks().add(cart);
 			return userRepository.save(user).getCartBooks();
 		}
@@ -112,8 +113,8 @@ public class CartImplementation implements CartService {
 			booklist.add(book);
 			cart.setPlaceTime(LocalDateTime.now());
 			cart.setBooksList(booklist);
-			qt.add(qunatityofbook);
-			cart.setQuantityOfBooks(qt);
+			quantitydetails.add(qunatityofbook);
+			cart.setQuantityOfBooks(quantitydetails);
 			user.getCartBooks().add(cart);
 		}
 
