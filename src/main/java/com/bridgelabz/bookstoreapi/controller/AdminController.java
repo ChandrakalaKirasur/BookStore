@@ -3,6 +3,7 @@ package com.bridgelabz.bookstoreapi.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,7 +37,8 @@ public class AdminController {
 	private AdminService service;
 	@Autowired
 	private JWTUtil util;
-
+	@Autowired
+	private Environment env;
 	@GetMapping("/")
 	public String welcome() {
 		return "welcome ";
@@ -47,7 +49,7 @@ public class AdminController {
 	 * @param RequestBody register
 	 */
 	@ApiOperation(value = "Admin Registerartion",response = Iterable.class)
-	@PostMapping("/register")
+	@PostMapping("/registration")
 	public ResponseEntity<AdminResponse> register(@Valid @RequestBody AdminDto register, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.status(401)
@@ -55,7 +57,7 @@ public class AdminController {
 		boolean resultStatus = service.register(register);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new AdminResponse("registered successfully", 200, resultStatus));
+					.body(new AdminResponse(env.getProperty("2001"), 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new AdminResponse("Admin already exist please login", 208, resultStatus));
@@ -90,7 +92,7 @@ public class AdminController {
 			Admin admin = service.login(adminLoginDto);
 			if (admin != null) {
 				String token=util.generateToken(admin.getAdminId(),Token.WITH_EXPIRE_TIME);
-				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("login successful", 200, token));
+				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("login successful", 202, token));
 			}
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new AdminResponse("Admin name or password is invalid ", 208,""));
@@ -101,7 +103,7 @@ public class AdminController {
 	 * @param RequestParam email
 	 */
 	@ApiOperation(value = "Admin forgot password",response = Iterable.class)
-	@PostMapping("/forgotpassword")
+	@PostMapping("/forgetPassword")
 	public ResponseEntity<AdminResponse> sendLinkToResetPassword(@RequestParam String email) {
 		boolean resultStatus = service.sendLinkForPassword(email);
 		if (resultStatus) {
@@ -115,7 +117,7 @@ public class AdminController {
 	 * @param RequestBody resetDetails
 	 */
 	@ApiOperation(value = "Admin reset password",response = Iterable.class)
-	@PutMapping("/resetpassword")
+	@PutMapping("/resetPassword/{token}")
 	public ResponseEntity<AdminResponse> resetAdminPassword(@RequestBody AdminPasswordResetDto resetDetails){
 		boolean resultStatus = service.resetAdminPassword(resetDetails);
 		if (resultStatus) {

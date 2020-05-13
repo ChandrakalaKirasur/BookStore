@@ -54,7 +54,7 @@ public class SellerController {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/Registration")
+	@PostMapping("/registration")
 	public ResponseEntity<SellerResponse> registration(@RequestBody RegisterDto sellerRegistrationDto) throws Exception {
 		Seller seller = sellerService.sellerRegistration(sellerRegistrationDto);
 		if (seller!=null) {
@@ -69,7 +69,7 @@ public class SellerController {
 	 * @param sellerLoginDto
 	 * @return token
 	 */
-	@PostMapping("/Login")
+	@PostMapping("/login")
 	public ResponseEntity<SellerResponse> sellerLogin(@RequestBody LoginDTO sellerLoginDto) {
 		String token = sellerService.loginByEmailOrMobile(sellerLoginDto);
 		if (token!= null) {
@@ -118,7 +118,6 @@ public class SellerController {
 	 * @return
 	 * @throws Exception
 	 */
-
 	@GetMapping("/singleSeller")
 	public ResponseEntity<SellerResponse> singleUser(@RequestHeader("token") String token) throws Exception {
 		Seller user = sellerService.getSingleUser(token);
