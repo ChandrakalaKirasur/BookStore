@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstoreapi.response;
 
+import org.springframework.http.HttpStatus;
 
 public class Response {
 
@@ -19,6 +20,8 @@ public class Response {
 	
 	public Response() {
 	}
+
+	
 
 	public int getStatus() {
 		return status;

@@ -1,6 +1,7 @@
 package com.bridgelabz.bookstoreapi.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -11,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
-
+@Repository
 public interface UserRepository extends CrudRepository<User, Long>{
 
 	@Query(value = "select * from user where user_id=?", nativeQuery = true)
@@ -34,6 +35,8 @@ public interface UserRepository extends CrudRepository<User, Long>{
 
 	@Query(value = "select * from user where user_number=?", nativeQuery = true)
 	Optional<User> findByMobile(Long mbl);
+	@Query(value = "select * from user where email=?", nativeQuery = true)
+	Optional<User> findByEmail(@Valid String email);
 
 	
 

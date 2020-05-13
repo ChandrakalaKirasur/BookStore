@@ -70,15 +70,15 @@ public class SellerController {
 	 * @return token
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<SellerResponse> sellerLogin(@RequestBody LoginDTO sellerLoginDto) {
+	public ResponseEntity<Response> sellerLogin(@RequestBody LoginDTO sellerLoginDto) {
 		String token = sellerService.loginByEmailOrMobile(sellerLoginDto);
 		if (token!= null) {
-			SellerResponse sellr = new SellerResponse( environment.getProperty("202"),200,token);
-			return new ResponseEntity<>(sellr,HttpStatus.OK);
-
+			Response response = new Response(HttpStatus.OK.value(),"User loggedin successfully", token);
+			System.out.println("token"+response.getStatus());
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SellerResponse(environment.getProperty("104"), 404, token));
-	}
+		return null;
+		}
 	/**
 	 * 
 	 * @param email

@@ -25,6 +25,7 @@ import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
+import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
 import com.bridgelabz.bookstoreapi.service.UserService;
 import io.swagger.annotations.Api;
@@ -52,15 +53,16 @@ public class UserController {
 
 	@ApiOperation(value = "User Login",response = Iterable.class)
 	@PostMapping(value = "/login")
-	public ResponseEntity<UserResponse> loginUser(@Valid @RequestBody LoginDTO user, BindingResult result) {
-		if (result.hasErrors())
-			return ResponseEntity.status(401)
-					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.OK));
-		
+	public ResponseEntity<Response> loginUser(@Valid @RequestBody LoginDTO user, BindingResult result) {
+//		if (result.hasErrors())
+//			return ResponseEntity.status(401)
+//					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.OK));
+//		
 		 String token = userService.loginByEmailOrMobile(user);
 		
-		 return ResponseEntity.status(200)
-					.body(new UserResponse(token, env.getProperty("202"),HttpStatus.OK));
+		 Response response = new Response(HttpStatus.OK.value(),"User loggedin successfully", token);
+			System.out.println("token"+response.getStatus());
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		
 	}
 	
