@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.bookstoreapi.dto.CartdetailsDto;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
@@ -57,8 +59,10 @@ public class CartController {
 	
 	@ApiOperation(value = "Adding the quantityofbooks to the Cartlist",response = Iterable.class)
 	@PostMapping(value="/add_booksquantity_cart/{token}")
-	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId,@RequestParam("cartId") long cartId,@RequestParam("quantity") long quantity) throws Exception {
-		   List<CartDetails> cartdetails = cartService.addBooksQuantityToCart(token, bookId,cartId,quantity);
+	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") long bookId,@RequestBody CartdetailsDto bookQuantityDetails) throws Exception {
+		System.out.println(bookQuantityDetails.getQuantityId()+"**********************");
+		System.out.println(bookQuantityDetails.getQuantityOfBook()+"**************");
+		List<CartDetails> cartdetails = cartService.addBooksQuantityInCart(token, bookId,bookQuantityDetails);
 		   return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("502"), cartdetails,HttpStatus.OK));  	
 		

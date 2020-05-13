@@ -106,7 +106,8 @@ public class UserServiceImpl implements UserService{
 				
 				String token = jwt.generateToken(user.getUserId(),Token.WITHOUT_EXPIRE_TIME);
 				return token;
-			}
+			}	
+		}else {
 			throw new UserException(208, env.getProperty("404"));
 		}
 		return null;
