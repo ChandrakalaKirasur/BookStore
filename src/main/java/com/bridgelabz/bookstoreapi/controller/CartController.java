@@ -43,7 +43,7 @@ public class CartController {
 	private Environment env;
 	
 	@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
-	@PostMapping(value="/add_books_cart/{token}/{bookId}")
+	@PostMapping(value="/bookdetails/{token}/{bookId}")
 	public ResponseEntity<UserResponse> addBooksToCart(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {
 		    List<CartDetails> cart = cartService.addBooksToCart(token,bookId);
 		    return ResponseEntity.status(200)
@@ -51,7 +51,7 @@ public class CartController {
 		  	}
 
 	@ApiOperation(value = "Getting the books from the Cartlist",response = Iterable.class)
-	@GetMapping(value="/get_cart/{token}")
+	@GetMapping(value="/cartdetials/{token}")
 	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
 		    List<CartDetails> cartdetails = cartService.getBooksfromCart(token);
 		    return ResponseEntity.status(200)
@@ -67,7 +67,7 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Adding the quantityofbooks in the Cartlist",response = Iterable.class)
-	@PutMapping(value="/add_booksquantity_cart/{token}")
+	@PutMapping(value="/incr_booksquantity/{token}")
 	public ResponseEntity<UserResponse> addBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") Long bookId,@RequestBody CartdetailsDto bookQuantityDetails) throws Exception {
 		List<CartDetails> cartdetails = cartService.addBooksQuantityInCart(token, bookId,bookQuantityDetails);
 		   return ResponseEntity.status(200)
@@ -76,7 +76,7 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Descing the quantityofbooks in the Cartlist",response = Iterable.class)
-	@PutMapping(value="/desc_booksquantity_cart/{token}")
+	@PutMapping(value="/desc_booksquantity/{token}")
 	public ResponseEntity<UserResponse> descBooksQuantityToCart(@PathVariable("token") String token,@RequestParam("bookId") Long bookId,@RequestBody CartdetailsDto bookQuantityDetails) throws Exception {
 		List<CartDetails> cartdetails = cartService.descBooksQuantityInCart(token, bookId,bookQuantityDetails);
 		   return ResponseEntity.status(200)
@@ -85,7 +85,7 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Removing the books in the Cartlist",response = Iterable.class)
-	@DeleteMapping(value="/remove_books_cart/{token}/{bookId}")
+	@DeleteMapping(value="/book/{token}/{bookId}")
 	public ResponseEntity<UserResponse> removeBooksToCart(@PathVariable("token") String token,@PathVariable("bookId") Long bookId) throws Exception {
 		boolean cartdetails = cartService.removeBooksToCart(token,bookId);
 		return ResponseEntity.status(200)
@@ -94,7 +94,7 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Verify the books in the Cartlist",response = Iterable.class)
-	@GetMapping(value="/verify_books_cart/{token}")
+	@GetMapping(value="/verify_books/{token}")
 	public ResponseEntity<UserResponse> verifyBookInCart(@PathVariable("token") String token,@RequestParam("bookId") Long bookId) throws Exception {
 		    boolean cart = cartService.verifyBookInCart(token, bookId);
 		    return ResponseEntity.status(200)

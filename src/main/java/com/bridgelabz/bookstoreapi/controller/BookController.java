@@ -45,7 +45,7 @@ public class BookController {
 	private Environment env;
 	
 	@ApiOperation(value = "Add a Book Details")
-	@PostMapping("/add")
+	@PostMapping("/addbook")
 	public ResponseEntity<Response> addBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token){
 		bookService.addBook(bookDTO, token);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2001")));
