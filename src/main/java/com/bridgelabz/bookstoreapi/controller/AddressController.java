@@ -45,8 +45,8 @@ public class AddressController {
 	 * @return Address
 	 * @throws Exception
 	 */
-	@PostMapping("/add")
-	public  ResponseEntity<AddressResponse> addAddress(@RequestBody AddressDto address,@RequestHeader String token) throws Exception {
+	@PostMapping("/add/{token}")
+	public  ResponseEntity<AddressResponse> addAddress(@RequestBody AddressDto address,@PathVariable String token) throws Exception {
 
 
 		Address addres= addressService.addAddress(address,token);
@@ -118,6 +118,16 @@ public class AddressController {
 	@GetMapping(value = "/getAddress/{id}")
 	public ResponseEntity<AddressResponse> getAddress(@PathVariable Long id) {
 		Address add = addressService.getAddress(id);
+		if (add != null) {
+			return ResponseEntity.status(200)
+					.body(new AddressResponse(environment.getProperty("304"), "304", add));
+		}
+		return ResponseEntity.status(401)
+				.body(new AddressResponse(environment.getProperty("305"), "", add));		
+	}
+	@GetMapping(value = "/getAddress/{home}")
+	public ResponseEntity<AddressResponse> getAddress(@PathVariable String home,@RequestHeader String token) {
+		Address add = addressService.getAddress(home,token);
 		if (add != null) {
 			return ResponseEntity.status(200)
 					.body(new AddressResponse(environment.getProperty("304"), "304", add));

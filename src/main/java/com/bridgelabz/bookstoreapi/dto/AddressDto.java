@@ -5,7 +5,6 @@ package com.bridgelabz.bookstoreapi.dto;
 public class AddressDto {
 
 	
-	    private long addressId;
 		
 		private String address;
 		
@@ -25,15 +24,8 @@ public class AddressDto {
 
 		private String type;
 		
-		private long phoneNumber;
+		private String phoneNumber;
 
-		public long getAddressId() {
-			return addressId;
-		}
-
-		public void setAddressId(long addressId) {
-			this.addressId = addressId;
-		}
 
 		public String getAddress() {
 			return address;
@@ -107,11 +99,11 @@ public class AddressDto {
 			this.type = type;
 		}
 
-		public long getPhoneNumber() {
+		public String getPhoneNumber() {
 			return phoneNumber;
 		}
 
-		public void setPhoneNumber(long phoneNumber) {
+		public void setPhoneNumber(String phoneNumber) {
 			this.phoneNumber = phoneNumber;
 		}
 

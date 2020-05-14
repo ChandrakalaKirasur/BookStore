@@ -48,6 +48,13 @@ public interface AddressService {
 	 * @return Address
 	 */
 	List<Address> getAddressByUserId(String token);
+	/**
+	 * 
+	 * @param home
+	 * @param token 
+	 * @return
+	 */
+	Address getAddress(String home, String token);
 
 
 }
