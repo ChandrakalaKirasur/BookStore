@@ -120,11 +120,11 @@ public class AddressServiceImpl implements AddressService{
 		return null;
 	}
 	@Override
-	public Address getAddress(String home,String token) {
+	public Address getAddress(String type,String token) {
 		Long uId = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(uId)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-		Address add=addressRepository.findAddressBytext(uId,home);
+		Address add=addressRepository.findAddressBytext(uId,type);
 		return add;
 	}
 }

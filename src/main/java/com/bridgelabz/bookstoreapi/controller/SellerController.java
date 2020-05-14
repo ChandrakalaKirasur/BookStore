@@ -125,7 +125,7 @@ public class SellerController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SellerResponse(environment.getProperty("201"), 202, user));
 	}
 
-	@ApiOperation(value = "Verifing the user",response = Iterable.class)
+	@ApiOperation(value = "Verifing the seller",response = Iterable.class)
 	@GetMapping(value = "/registration/verify/{token}")
 	public ResponseEntity<SellerResponse> sellerVerify(@PathVariable("token") String token) throws Exception {
 

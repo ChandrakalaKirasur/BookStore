@@ -125,9 +125,9 @@ public class AddressController {
 		return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("305"), "", add));		
 	}
-	@GetMapping(value = "/getAddress/{home}")
-	public ResponseEntity<AddressResponse> getAddress(@PathVariable String home,@RequestHeader String token) {
-		Address add = addressService.getAddress(home,token);
+	@GetMapping(value = "/getAddress/{type}")
+	public ResponseEntity<AddressResponse> getAddress(@PathVariable String type,@RequestHeader String token) {
+		Address add = addressService.getAddress(type,token);
 		if (add != null) {
 			return ResponseEntity.status(200)
 					.body(new AddressResponse(environment.getProperty("304"), "304", add));
