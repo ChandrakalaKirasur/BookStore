@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/book")
-@CrossOrigin
+@CrossOrigin("*")
 @Api(value="Book_Details", description="Operations pertaining to store book details")
 @PropertySource("classpath:message.properties")
 public class BookController {

@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.bridgelabz.bookstoreapi.dto.AddressDto;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -16,10 +18,10 @@ import lombok.ToString;
 @Entity
 @Table(name = "address")
 @Data
-@NoArgsConstructor
 @ToString
 public class Address {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long addressId;
@@ -42,35 +44,24 @@ public class Address {
 	@Column
 	private String type;
 	@Column
-	private long phoneNumber;
-
-//	@Column(name = "address", nullable = false)
-//	private String address;
-//	
-//	@Column(name = "house_no", nullable = false)
-//	private String houseNo;
-//	
-//	@Column(name = "street", nullable = false)
-//	private String street;
-//	
-//	@Column(name = "city", nullable = false)
-//	private String city;
-//	
-//	@Column(name = "landmark", nullable = false)
-//	private String landmark;
-//	
-//	@Column(name = "state", nullable = false)
-//	private String state;
-//	
-//	@Column(name = "pincode", nullable = false)
-//	private String pincode;
-//	
-//	@Column(name = "country", nullable = false)
-//	private String country;
-//
-//	@Column(name = "type")
-//	private String type;
+	private String phoneNumber;
 	
+	public Address() {
+		super();
+	}
+
+	public Address(AddressDto address2) {
+	this.name=address2.getName();
+	this.phoneNumber=address2.getPhoneNumber();
+	this.landmark=address2.getLandmark();
+	this.type=address2.getType();
+	this.pincode=address2.getPincode();
+	this.state=address2.getState();
+	this.country=address2.getCountry();
+	this.address=address2.getAddress();
+	this.locality=address2.getLocality();
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -151,11 +142,11 @@ public class Address {
 		this.type = type;
 	}
 
-	public long getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(long phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

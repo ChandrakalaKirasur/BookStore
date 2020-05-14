@@ -21,13 +21,13 @@ public interface UserRepository extends CrudRepository<User, Long>{
 //	@Query(value = "insert into user (user_id,user_name,user_email, password, create_time, user_number) values (?, ?, ?, ?, ?, ?, ?)", nativeQuery = true)
 //	User register(User user);
 
-	@Query(value = "update user set password=? where user_email=?", nativeQuery = true)
+	@Query(value = "update user set password=? where email=?", nativeQuery = true)
 	User forgotPassword(String password, String email);
 
 	@Query(value = "select * from user where user_id=?", nativeQuery = true)
 	Optional<User> findUserById(Long id);
 
-	@Query(value = "select * from user where user_email=?", nativeQuery = true)
+	@Query(value = "select * from user where email=?", nativeQuery = true)
     Optional<User> findUserByEmail(String email);
 
 	@Query(value = "update user set verify_status=true where user_id=?", nativeQuery = true)
