@@ -2,7 +2,7 @@ package com.bridgelabz.bookstoreapi.constants;
 
 public class Constants {
 	
-	private Constants() {}
+private Constants() {}
 	
 	public static final String EXCHANGE_NAME = "mail-exchange";
 	public static final String QUEUE_NAME = "mail-queue";

@@ -26,7 +26,7 @@ public class Admin {
 	@Column(name = "admin_name", nullable = false)
 	private String name;
 	
-	@Column(name = "admin_email", nullable = false)
+	@Column(name = "email", nullable = false)
 	private String email;
 	
 	@Column(name = "password", nullable = false)
