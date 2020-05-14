@@ -15,5 +15,5 @@ public interface WhishListService {
 
 	int getcountBooksfromWhishList(String token);
     
-	
+	boolean verifyBookInWishlist(String token, Long bookId);
 }

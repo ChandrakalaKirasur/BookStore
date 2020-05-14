@@ -3,13 +3,15 @@ package com.bridgelabz.bookstoreapi.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapi.entity.Book;
-
+import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
@@ -108,5 +110,22 @@ public class WhishListImplementation implements WhishListService{
 	  	return noOfBooks;
 	}
 
+	@Transactional
+	@Override
+	public boolean verifyBookInWishlist(String token, Long bookId) {
+		List<Book> bookdetails = this.getBooksfromWhishList(token);
+		boolean notExist=false;
+		for(Book whish:bookdetails) {
+			if (whish.getBookId().equals(bookId)) {
+				return true;
+			}
+		
+		}
+		if(notExist==false) {
+			throw new UserException(401, env.getProperty("506"));
+		}
+
+		return false;
+	}
 	
 }
