@@ -37,7 +37,7 @@ public class OrderController {
 	private Environment env;
 	
 	@ApiOperation(value = "Getting the confrim order of user")
-	@PutMapping(value = "/getOrderConfrim/{token}")
+	@PutMapping(value = "/OrderConfrim/{token}")
 	public ResponseEntity<UserResponse> OrderConfrim(@PathVariable("token") String token) throws Exception {
 		
 		 List<OrderDetails> userdetails = orderService.getOrderConfrim(token);

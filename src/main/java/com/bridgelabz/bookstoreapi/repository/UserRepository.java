@@ -39,6 +39,6 @@ public interface UserRepository extends CrudRepository<User, Long>{
 	@Query(value = "select * from user where email=?", nativeQuery = true)
 	Optional<User> findByEmail(@Valid String email);
 
-	
+
 
 }
