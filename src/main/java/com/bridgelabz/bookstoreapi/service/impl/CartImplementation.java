@@ -74,7 +74,7 @@ public class CartImplementation implements CartService {
 	@Override
 	public List<CartDetails> addBooksToCart(String token, long bookId) {
 		Long id = jwt.decodeToken(token);
-		long quantity = 1;
+		
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 
 		Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(201, env.getProperty("4041")));
@@ -88,19 +88,10 @@ public class CartImplementation implements CartService {
 		/**
 		 * For the first time adding the book the cartList
 		 */
-		CartDetails cart = new CartDetails();
-		ArrayList<Book> booklist = new ArrayList<>();
-		ArrayList<Quantity> quantitydetails = new ArrayList<Quantity>();
-		Quantity qunatityofbook = new Quantity(quantity);
 		
 		if (books == null) {
-			booklist.add(book);
-			cart.setPlaceTime(LocalDateTime.now());
-			cart.setBooksList(booklist);
-			quantitydetails.add(qunatityofbook);
-			cart.setQuantityOfBooks(quantitydetails);
-			user.getCartBooks().add(cart);
-			return userRepository.save(user).getCartBooks();
+			User userdetails = this.cartbooks(book,user);
+			return userRepository.save(userdetails).getCartBooks();
 		}
 		/**
 		 * Checking whether book is already present r not
@@ -110,18 +101,38 @@ public class CartImplementation implements CartService {
 		if (cartbook.isPresent()) {
 			throw new UserException(401, env.getProperty("505"));
 		} else {
-			booklist.add(book);
-			cart.setPlaceTime(LocalDateTime.now());
-			cart.setBooksList(booklist);
-			quantitydetails.add(qunatityofbook);
-			cart.setQuantityOfBooks(quantitydetails);
-			user.getCartBooks().add(cart);
+			User userdetails = this.cartbooks(book,user);
+			return userRepository.save(userdetails).getCartBooks();
 		}
-
-		return userRepository.save(user).getCartBooks();
 
 	}
 
+	public User cartbooks(Book book,User user) {
+		long quantity=1;
+        CartDetails cart = new CartDetails();
+		Quantity qunatityofbook = new Quantity();
+		
+		ArrayList<Book> booklist = new ArrayList<>();
+		ArrayList<Quantity> quantitydetails = new ArrayList<Quantity>();
+		/**
+		 * adding the book details
+		 */
+		booklist.add(book);
+		cart.setPlaceTime(LocalDateTime.now());
+		cart.setBooksList(booklist);
+		/**
+		 * adding the quantity to the book
+		 */
+		qunatityofbook.setQuantityOfBook(quantity);
+		quantitydetails.add(qunatityofbook);
+		cart.setQuantityOfBooks(quantitydetails);
+		/**
+		 * saving the complete cart in user
+		 */
+		user.getCartBooks().add(cart);
+		return user;
+	}
+	
 	@Transactional
 	@Override
 	public List<CartDetails> addBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails) {
