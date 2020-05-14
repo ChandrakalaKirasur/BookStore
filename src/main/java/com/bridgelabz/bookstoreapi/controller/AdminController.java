@@ -27,10 +27,12 @@ import com.bridgelabz.bookstoreapi.service.AdminService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 import com.bridgelabz.bookstoreapi.utility.Token;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/admin")
+@Api(value="Book_Details", description="Operations pertaining to admin book store")
 @CrossOrigin("*")
 public class AdminController {
 	@Autowired
