@@ -27,7 +27,7 @@ public class Swagger {
 		  Contact contact=new Contact("Amruth Sagar",
 		           "https://github.com/ChandrakalaKirasur/BookStoreApis.git","amrutha.sagar@bridgelabz.com");
 
-		   return new ApiInfoBuilder()
+ 		   return new ApiInfoBuilder()
 		           .title("Book Store Application")
 		           .description("Spring boot application for Book store application")
 		           .contact(contact)          
