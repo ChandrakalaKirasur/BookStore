@@ -19,6 +19,6 @@ public interface BookService {
 	public List<Book> getBookByNameAndAuthor(String text) ;
 	public void writeReviewAndRating(String token, RatingReviewDTO rrDTO, Long bookId);
 	public List<ReviewAndRating> getRatingsOfBook(Long bookId);
-	public int getBooksCount();
+	public Integer getBooksCount();
 	
 }
