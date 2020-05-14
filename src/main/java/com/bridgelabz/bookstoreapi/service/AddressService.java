@@ -54,7 +54,7 @@ public interface AddressService {
 	 * @param token 
 	 * @return
 	 */
-	Address getAddress(String home, String token);
+	Address getAddress(String type, String token);
 
 
 }

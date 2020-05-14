@@ -78,7 +78,7 @@ public class AdminServiceImpl implements AdminService{
 				mail.setTo(admin.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
 				mail.setContext("Hi " + admin.getName() + " " + Constants.REGISTRATION_MESSAGE
-						+ Constants.ADMIN_VERIFICATION_LINK + util.generateToken(admin.getAdminId(), Token.WITH_EXPIRE_TIME));
+						+ Constants.VERIFY_ADMIN__LINK + util.generateToken(admin.getAdminId(), Token.WITH_EXPIRE_TIME));
 				producer.sendToQueue(mail);
 				consumer.receiveMail(mail);
 		} catch (AdminException e) {

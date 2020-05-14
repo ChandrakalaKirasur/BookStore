@@ -92,7 +92,7 @@ public class UserController {
 	 */
 
 	@ApiOperation(value = "verifing the user",response = Iterable.class)
-	@GetMapping(value = "/verify/{token}")
+	@GetMapping(value = "/registration/verify/{token}")
 	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
 		
 		boolean verification = userService.updateVerificationStatus(token);

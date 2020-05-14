@@ -76,8 +76,10 @@ public class SellerServiceImpl implements SellerService{
 			if (sellr != null) {
 				mail.setTo(seller.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
-				mail.setContext("Hi " + seller.getSellerName() + " " + Constants.REGISTRATION_MESSAGE
-						+ Constants.SELLER_VERIFICATION_LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));
+//				mail.setContext("Hi " + seller.getSellerName() + " " + Constants.REGISTRATION_MESSAGE
+//						+ Constants.SELLER_VERIFICATION_LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));
+				mail.setContext("Hi " + seller.getSellerName() + " " + Constants.VERIFY__LINK
+						+ Constants.VERIFY__LINK + jwt.generateToken(seller.getSellerId(), Token.WITH_EXPIRE_TIME));
 				producer.sendToQueue(mail);
 				consumer.receiveMail(mail);
 			}

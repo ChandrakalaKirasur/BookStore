@@ -14,7 +14,10 @@ private Constants() {}
 	public static final String RESET_MSG = "Click On the below link to reset your password";
 	public static final String SELLER_VERIFICATION_LINK = "http://localhost:8080/seller/registration/verify/";
 
+	public static final String VERIFY_USER__LINK = "Using below link reset your password\nhttp://localhost:4200/user/registration/verify/";
+	public static final String VERIFY_ADMIN__LINK = "Using below link reset your password\nhttp://localhost:4200/user/registration/verify/";
 	public static final String RESET_PASSWORD_LINK = "Using below link reset your password\nhttp://localhost:4200/seller/resetpassword/";
+	public static final String VERIFY__LINK = "Using below link reset your password\nhttp://localhost:4200/seller/registration/verify/";
 	public static final String ADMIN_RESET_PASSWORD_LINK = "Using below link reset your password\nhttp://localhost:4200/admin/resetpassword/";
 	public static final String ADMIN_VERIFICATION_LINK = "http://localhost:8080/admin/registration/verify/" ;
 
