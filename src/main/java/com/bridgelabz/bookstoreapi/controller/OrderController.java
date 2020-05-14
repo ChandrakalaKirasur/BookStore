@@ -45,11 +45,22 @@ public class OrderController {
 		
 	}
 	
+	
+	
 	@ApiOperation(value = "Getting the OrderList")
 	@GetMapping(value = "/books/{token}")
 	public ResponseEntity<UserResponse> getOrderlist(@PathVariable("token") String token) throws Exception {
 		
 		List<OrderDetails> userdetails = orderService.getOrderList(token);
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"),userdetails,HttpStatus.OK));
+		
+	}
+	
+	@ApiOperation(value = "Getting the booksCount")
+	@GetMapping(value = "/books_count/{token}")
+	public ResponseEntity<UserResponse> getBooksCount(@PathVariable("token") String token) throws Exception {
+		
+		int userdetails = orderService.getCountOfBooks(token);
 			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"),userdetails,HttpStatus.OK));
 		
 	}

@@ -92,13 +92,20 @@ public class WhishListImplementation implements WhishListService{
 	  	return whishList;
 	}
 	
-	public List<Book> getcountBooksfromWhishList(String token) {
+	@Override
+	public int getcountBooksfromWhishList(String token) {
 		long id = (Long) jwt.decodeToken(token);
 		
+		int noOfBooks = 0;
 		User user = userRepository.findUserById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 	    List<Book> whishList = user.getWhilistBooks();
-	  	return whishList;
+	    for(Book books:whishList) {
+	    	if(books.getBookId()!=null) {
+	    		noOfBooks++;
+	    	}
+	    }
+	  	return noOfBooks;
 	}
 
 	

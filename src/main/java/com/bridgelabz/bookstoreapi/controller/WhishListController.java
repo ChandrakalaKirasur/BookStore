@@ -53,6 +53,14 @@ public class WhishListController {
 					.body(new UserResponse(env.getProperty("603"),  whishlist,HttpStatus.OK));  
 	}
 	
+	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
+	@GetMapping(value="/book_count/{token}")
+	public ResponseEntity<UserResponse> getBooksCountfromCart(@PathVariable("token") String token) throws Exception {
+		    int whishlist = whishlistService.getcountBooksfromWhishList(token);
+		    return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new UserResponse(env.getProperty("603"),  whishlist,HttpStatus.OK));  
+	}
+	
 	@ApiOperation(value = "Removing the books to the Whishlist",response = Iterable.class)
 	@DeleteMapping(value="/book/{token}/{bookId}")
 	public ResponseEntity<UserResponse> removeBooksToWhilist(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {

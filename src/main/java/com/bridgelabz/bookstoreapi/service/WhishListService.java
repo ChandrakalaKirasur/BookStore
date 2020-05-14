@@ -12,6 +12,8 @@ public interface WhishListService {
     List<Book> getBooksfromWhishList(String token);
 
     List<Book> removeBooksToWhishList(String token, long bookId);
+
+	int getcountBooksfromWhishList(String token);
     
 	
 }

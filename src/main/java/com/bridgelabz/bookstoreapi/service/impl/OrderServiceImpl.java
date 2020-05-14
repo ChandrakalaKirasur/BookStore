@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.bridgelabz.bookstoreapi.entity.Book;
+import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
@@ -41,6 +42,24 @@ public class OrderServiceImpl implements OrderService {
 
 		return userdetails.getOrderBookDetails();
 
+	}
+	
+	@Transactional
+	@Override
+	public int getCountOfBooks(String token) {
+		Long id = jwt.decodeToken(token);
+		int countOfBooks=0;
+		User userdetails = userRepository.findById(id)
+				.orElseThrow(() -> new UserException(400, env.getProperty("104")));
+
+		List<OrderDetails> books = userdetails.getOrderBookDetails();
+		 for(OrderDetails cart:books) {
+        	 if(!cart.getBooksList().isEmpty()) {
+        		 
+				countOfBooks++;
+        	 }
+         }
+        return countOfBooks;
 	}
 
 	@Override
