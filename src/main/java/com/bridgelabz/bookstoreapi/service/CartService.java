@@ -2,6 +2,7 @@ package com.bridgelabz.bookstoreapi.service;
 
 import java.util.List;
 
+import com.bridgelabz.bookstoreapi.dto.CartdetailsDto;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
 
@@ -12,12 +13,14 @@ public interface CartService {
 
 	List<CartDetails> getBooksfromCart(String token);
 
-	//List<CartDetails> addBooksQuantityToCart(String token, long noteId, long quantity);
+	boolean removeBooksToCart(String token, Long bookId);
+	
+	boolean verifyBookInCart(String token, Long bookId);
 
-	boolean removeBooksToCart(String token, long bookId);
+	List<CartDetails> addBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
+	
+	int getCountOfBooks(String token);
 
-	boolean verifyBookInCart(String token, long bookId);
-
-	List<CartDetails> addBooksQuantityToCart(String token, long bookId, long cartId, long quantity);
+	List<CartDetails> descBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
 
 }

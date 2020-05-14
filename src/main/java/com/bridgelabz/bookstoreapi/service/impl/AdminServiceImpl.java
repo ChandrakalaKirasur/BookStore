@@ -53,8 +53,6 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private Environment env;
 	@Autowired
-	private MailService mailService;
-	@Autowired
 	private RestHighLevelClient client;
 
 	@Autowired
@@ -81,9 +79,8 @@ public class AdminServiceImpl implements AdminService{
 				mail.setSubject(Constants.REGISTRATION_STATUS);
 				mail.setContext("Hi " + admin.getName() + " " + Constants.REGISTRATION_MESSAGE
 						+ Constants.ADMIN_VERIFICATION_LINK + util.generateToken(admin.getAdminId(), Token.WITH_EXPIRE_TIME));
-				//producer.sendToQueue(mail);
-				//consumer.receiveMail(mail);
-				mailService.sendMail(mail);
+				producer.sendToQueue(mail);
+				consumer.receiveMail(mail);
 		} catch (AdminException e) {
 			throw new AdminException(400, env.getProperty("102"));
 		}
@@ -92,8 +89,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public boolean verifyEmail(String token) {
-		System.out.println(util.decodeToken(token));
-		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, "Admin not found"));
+		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
 		if (!fetchedAdmin.isVerified()) {
 			fetchedAdmin.setVerified(true);
 			adminRepo.save(fetchedAdmin);
@@ -104,7 +100,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public Admin login(LoginDTO adminLoginDto) {
-		Admin fetchedAdmin = adminRepo.findByEmail(adminLoginDto.getMailOrMobile()).orElseThrow(() -> new AdminException(400, "Admin not found"));
+		Admin fetchedAdmin = adminRepo.findByEmail(adminLoginDto.getMailOrMobile()).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
 		if(encoder.matches(adminLoginDto.getPassword(), fetchedAdmin.getPassword())) {
 			return fetchedAdmin;
 		}
@@ -113,16 +109,15 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public boolean sendLinkForPassword(String email) {
-		Admin fetchedAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new AdminException(400, "Admin not found"));
+		Admin fetchedAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
 		Mail mail = new Mail();
 		try {     
 				mail.setTo(fetchedAdmin.getEmail());
 				mail.setSubject("Reset password");
 				mail.setContext("Hi " + fetchedAdmin.getName() + " " + Constants.RESET_MSG
 						+ Constants.ADMIN_RESET_PASSWORD_LINK + util.generateToken(fetchedAdmin.getAdminId(), Token.WITH_EXPIRE_TIME));
-				//producer.sendToQueue(mail);
-				//consumer.receiveMail(mail);
-				mailService.sendMail(mail);
+				producer.sendToQueue(mail);
+				consumer.receiveMail(mail);
 		} catch (AdminException e) {
 			throw new AdminException(400, env.getProperty("102"));
 		}
@@ -130,8 +125,13 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public boolean resetAdminPassword(AdminPasswordResetDto resetDto) {
-		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(resetDto.getToken())).orElseThrow(() -> new AdminException(400, "Admin not found"));
+	public boolean resetAdminPassword(AdminPasswordResetDto resetDto,String token) {
+		try {
+			Long id=util.decodeToken(token);
+		}catch(Throwable e) {
+			throw new AdminException(400,"timed out");
+		}
+		Admin fetchedAdmin = adminRepo.findByAdminId(util.decodeToken(token)).orElseThrow(() -> new AdminException(400, env.getProperty("804")));
 		fetchedAdmin.setPassword(encoder.encode(resetDto.getPassword()));
 		adminRepo.save(fetchedAdmin);
 		return true;

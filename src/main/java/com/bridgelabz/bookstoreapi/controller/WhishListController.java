@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,10 +38,10 @@ public class WhishListController {
 	private Environment env;
 	
 	@ApiOperation(value = "Adding the books to the Whishlist",response = Iterable.class)
-	@PostMapping(value="/add_books_WhishList/{token}")
-	public ResponseEntity<UserResponse> addBooksToWhilist(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
+	@PostMapping(value="/add_books_WhishList/{token}/{bookId}")
+	public ResponseEntity<UserResponse> addBooksToWhilist(@PathVariable("token") String token,@PathVariable("bookId") Long bookId) throws Exception {
 		    User whishlist = whishlistService.addBooksToWhishList(token,bookId);
-		    return ResponseEntity.status(HttpStatus.CREATED)
+   	    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("600"), whishlist,HttpStatus.OK));  	
 	}
 	
@@ -53,8 +54,8 @@ public class WhishListController {
 	}
 	
 	@ApiOperation(value = "Removing the books to the Whishlist",response = Iterable.class)
-	@PostMapping(value="/remove_books_WhishList/{token}")
-	public ResponseEntity<UserResponse> removeBooksToWhilist(@PathVariable("token") String token,@RequestParam("bookId") long bookId) throws Exception {
+	@PostMapping(value="/remove_books_WhishList/{token}/{bookId}")
+	public ResponseEntity<UserResponse> removeBooksToWhilist(@PathVariable("token") String token,@PathVariable("bookId") long bookId) throws Exception {
 		    User whishlist = whishlistService.removeBooksToWhishList(token,bookId);
 		    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("604"), whishlist,HttpStatus.OK));  	

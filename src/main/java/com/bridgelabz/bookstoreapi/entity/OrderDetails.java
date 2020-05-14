@@ -34,11 +34,9 @@ public class OrderDetails {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
 
-
 	public OrderDetails() {
 		super();
 	}
-
 	public OrderDetails(Long orderId, LocalDateTime orderPlaceTime, Long quantityOfBooks, List<Book> booksList) {
 		super();
 		this.orderId = orderId;

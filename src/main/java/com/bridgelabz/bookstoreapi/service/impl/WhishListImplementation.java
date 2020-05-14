@@ -36,10 +36,10 @@ public class WhishListImplementation implements WhishListService{
 	
 	@Override
 	public User addBooksToWhishList(String token, long bookId) {
-		long id = (Long) jwt.decodeToken(token);
+		Long id = jwt.decodeToken(token);
 		
 		
-		User user = userRepository.findUserById(id)
+		User user = userRepository.findById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new UserException(201, env.getProperty("4041")));
@@ -53,7 +53,7 @@ public class WhishListImplementation implements WhishListService{
 		/**
 		 * Checking whether book is already present r not
 		 */
-		Optional<Book> cartbook = user.getWhilistBooks().stream().filter(t -> t.getBookId() == bookId).findFirst();
+		Optional<Book> cartbook = user.getWhilistBooks().stream().filter(t -> t.getBookId()==bookId).findFirst();
 		
 		if(cartbook.isPresent()) {
 			throw new UserException(201, env.getProperty("605"));

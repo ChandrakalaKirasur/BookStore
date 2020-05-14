@@ -10,7 +10,7 @@ public interface AdminService {
 
 	boolean sendLinkForPassword(String email);
 
-	boolean resetAdminPassword(AdminPasswordResetDto resetDto);
+	boolean resetAdminPassword(AdminPasswordResetDto resetDto,String token);
 
 	boolean verifyEmail(String token);
 

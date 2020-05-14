@@ -92,7 +92,7 @@ public class UserController {
 	 */
 
 	@ApiOperation(value = "verifing the user",response = Iterable.class)
-	@GetMapping(value = "/registration/verify/{token}")
+	@GetMapping(value = "/verify/{token}")
 	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
 		
 		boolean verification = userService.updateVerificationStatus(token);
@@ -121,7 +121,7 @@ public class UserController {
 	 */
 
 	@PutMapping("/resetPassword/{token}")
-	public ResponseEntity<UserResponse> restpassword(@Valid @RequestHeader String token,
+	public ResponseEntity<UserResponse> restpassword(@Valid @PathVariable String token,
 			@RequestBody sellerForgetPasswordDto forgetPasswordDto) {
 		String message = userService.resetpassword(token, forgetPasswordDto);
 		return ResponseEntity.status(200)
