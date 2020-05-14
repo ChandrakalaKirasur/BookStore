@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +60,7 @@ public class BookController {
 	}
 	
 	@ApiOperation(value = "Write Review of the book")
-	@PutMapping("/ratingReview")
+	@PutMapping("/ratingreview")
 	public ResponseEntity<Response> writeReview(@RequestBody RatingReviewDTO rrDto,@RequestHeader(name="token") String token, @RequestParam Long bookId){
 		bookService.writeReviewAndRating(token, rrDto, bookId);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2004")));
@@ -73,52 +74,52 @@ public class BookController {
 	}
 	
 	@ApiOperation(value = "Get verified Book Details")
-	@GetMapping("/getBooks")
+	@GetMapping("/bookdetails")
 	public ResponseEntity<Response> getBooks(@RequestParam Integer pageNo){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
 	}
 	
 	@ApiOperation(value = "Get Book Details sorted by price in Low-High order")
-	@GetMapping("/getBooksSortedByPriceLow")
+	@GetMapping("/sortbylowprice")
 	public ResponseEntity<Response> getBooksSortedByPriceLow(@RequestParam Integer pageNo){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPriceLow(pageNo)));
 	}
 	
 	@ApiOperation(value = "Get Book Details sorted by price in High-Low order")
-	@GetMapping("/getBooksSortedByPriceHigh")
+	@GetMapping("/sortbyhighprice")
 	public ResponseEntity<Response> getBooksSortedByPriceHigh(@RequestParam Integer pageNo){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByPriceHigh(pageNo)));
 	}
 	
 	@ApiOperation(value = "Get Book Details sorted by arrival time")
-	@GetMapping("/getBooksSortedByArrival")
+	@GetMapping("/sortbyarrival")
 	public ResponseEntity<Response> getBooksSortedByArrival(@RequestParam Integer pageNo){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksSortedByArrival(pageNo)));
 	}
 	
 	@ApiOperation(value = "Get Book Details Name and Author")
-	@GetMapping("/getBookByNameAndAuthor")
+	@GetMapping("/bookorauthorname")
 	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam String text){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBookByNameAndAuthor(text)));
 	}
 	
 	@ApiOperation(value = "Get Book rating and review")
-	@GetMapping("/getBookRatingAndReview")
+	@GetMapping("/ratingreviews")
 	public ResponseEntity<Response> getBookRatingAndReview(@RequestParam Long bookId){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3002"), bookService.getRatingsOfBook(bookId)));
 	}
 	
 	@ApiOperation(value = "Upload book image")
-	@PutMapping("/upload")
+	@PutMapping("/uploadbookimage")
     public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
     {
 		awsService.uploadFileToS3Bucket(file,token, bookId ,ImageType.BOOK);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
-	@ApiOperation(value = "Get verified Book Details")
-	@GetMapping("/getBooksCount")
-	public ResponseEntity<Response> getBooksCount(@RequestParam Integer pageNo){
-		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
+	@ApiOperation(value = "Get verified Book Count")
+	@GetMapping("/bookscount/{get}")
+	public ResponseEntity<Response> getBooksCount(@PathVariable String get){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksCount()));
 	}
 	
 }
