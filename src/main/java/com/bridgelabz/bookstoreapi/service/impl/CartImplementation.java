@@ -249,8 +249,9 @@ public class CartImplementation implements CartService {
 				cartt.getBooksList().remove(book);
 				cartt.getQuantityOfBooks().clear();
 				boolean users = userRepository.save(user).getCartBooks() != null ? true : false;
-				if (users) {
+				if (user!=null) {
 					return users;
+					//return cartt;
 				} else {
 					throw new UserException(401, env.getProperty("4041"));
 				}
