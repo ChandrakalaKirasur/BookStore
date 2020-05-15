@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,16 +47,16 @@ public class WhishListController {
 	}
 	
 	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
-	@GetMapping(value="/book/{token}")
-	public ResponseEntity<UserResponse> getBooksfromCart(@PathVariable("token") String token) throws Exception {
+	@GetMapping(value="/book")
+	public ResponseEntity<UserResponse> getBooksfromCart(@RequestHeader(name="token")  String token) throws Exception {
 		    List<Book> whishlist = whishlistService.getBooksfromWhishList(token);
 		    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("603"),  whishlist,HttpStatus.OK));  
 	}
 	
 	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
-	@GetMapping(value="/book_count/{token}")
-	public ResponseEntity<UserResponse> getBooksCountfromCart(@PathVariable("token") String token) throws Exception {
+	@GetMapping(value="/book_count")
+	public ResponseEntity<UserResponse> getBooksCountfromCart(@RequestHeader(name="token")  String token) throws Exception {
 		    int whishlist = whishlistService.getcountBooksfromWhishList(token);
 		    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("603"),  whishlist,HttpStatus.OK));  
