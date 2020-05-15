@@ -17,10 +17,10 @@ public interface CartService {
 	
 	boolean verifyBookInCart(String token, Long bookId);
 
-	List<CartDetails> addBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
+	CartDetails addBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
 	
 	int getCountOfBooks(String token);
 
-	List<CartDetails> descBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
+	CartDetails descBooksQuantityInCart(String token, Long bookId, CartdetailsDto bookQuantityDetails);
 
 }
