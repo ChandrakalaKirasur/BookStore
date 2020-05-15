@@ -139,9 +139,9 @@ public class AdminController {
 		boolean resultStatus = service.verifyBook(booktoken,token);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new AdminResponse("book verification successful", 200, resultStatus));
+					.body(new AdminResponse(env.getProperty("201"), 200, resultStatus));
 		}
 		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse("Got error while verifying book!! try again", 208, resultStatus));
+				.body(new AdminResponse(env.getProperty("701"), 208, resultStatus));
 	}
 }
