@@ -119,13 +119,13 @@ public class AddressController {
 	public ResponseEntity<AddressResponse> getAddress(@PathVariable Long id) {
 		Address add = addressService.getAddress(id);
 		if (add != null) {
-			return ResponseEntity.status(200)
+		return ResponseEntity.status(200)
 					.body(new AddressResponse(environment.getProperty("304"), "304", add));
-		}
+	    }
 		return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("305"), "", add));		
 	}
-	@GetMapping(value = "/getAddress/{type}")
+	@GetMapping(value = "/getAddresstype/{type}")
 	public ResponseEntity<AddressResponse> getAddress(@PathVariable String type,@RequestHeader String token) {
 		Address add = addressService.getAddress(type,token);
 		if (add != null) {

@@ -92,19 +92,6 @@ public class OrderServiceImpl implements OrderService {
 					throw new UserException(401, env.getProperty("701"));
 				}
 
-				/**
-				 * If order is confrim decreasing the numberOfBooks in BookList
-				 */
-//				if (cart.getBooksList() != null) {
-//					long quantity = cart.getQuantityOfBooks();
-//					for (OrderDetails orderedBooks : userdetails.getOrderBookDetails()) {
-//						if (orderedBooks.getOrderId().equals(orderId))
-//							orderedBooks.setQuantityOfBooks(quantity);
-//					}
-//					Long noOfBooks = book.getNoOfBooks() - quantity;
-//					book.setNoOfBooks(noOfBooks);
-//					bookRepository.save(book);
-//				}
 			});
 
 		});

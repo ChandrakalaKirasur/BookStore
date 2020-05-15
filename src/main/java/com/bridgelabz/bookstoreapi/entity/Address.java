@@ -25,25 +25,25 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long addressId;
-	@Column
+	@Column(name = "address", nullable = false)
 	private String address;
-	@Column
+	@Column(name = "locality", nullable = false)
 	private String locality;
-	@Column
+	@Column(name = "name", nullable = false)
 	private String name;
-	@Column
+	@Column(name = "city", nullable = false)
 	private String city;
-	@Column
+	@Column(name = "landmark", nullable = false)
 	private String landmark;
-	@Column
+	@Column(name = "state", nullable = false)
 	private String state;
-	@Column
+	@Column(name = "pincode", nullable = false)
 	private String pincode;
-	@Column
+	@Column(name = "country", nullable = false)
 	private String country;
-	@Column
+	@Column(name = "type", nullable = false)
 	private String type;
-	@Column
+	@Column(name = "phoneNumber", nullable = false)
 	private String phoneNumber;
 	
 	public Address() {

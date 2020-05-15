@@ -96,6 +96,7 @@ public class CartImplementation implements CartService {
 		/**
 		 * Checking whether book is already present r not
 	     */
+		
 		Optional<Book> cartbook = books.stream().filter(t -> t.getBookId() == bookId).findFirst();
 
 		if (cartbook.isPresent()) {
@@ -143,6 +144,7 @@ public class CartImplementation implements CartService {
 		Long quantity = bookQuantityDetails.getQuantityOfBook();
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+		
 		boolean notExist = false;
 		for (CartDetails cartt : user.getCartBooks()) {
 			/**

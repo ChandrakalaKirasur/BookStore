@@ -39,12 +39,51 @@ public class AddressServiceImpl implements AddressService{
 	public Address addAddress(AddressDto address,String token) {
 		Long uId = jwt.decodeToken(token);
 		Address add=new Address( address);
-		System.out.println(add.getAddress()+"->"+add.getCity());
 		User userdetails = userRepository.findById(uId)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-//		BeanUtils.copyProperties(address,Address.class);
-		userdetails.getAddress().add(add);
-		return   addressRepository.save(add);
+
+		Address addre=new Address();
+		boolean notExist = userdetails.getAddress().stream().noneMatch(adrss -> adrss.getType().equalsIgnoreCase(address.getType()));
+		if(notExist) {
+			userdetails.getAddress().add(add);
+			try {
+			addressRepository.save(add);
+			userRepository.save(userdetails);
+			return add;
+			}catch(Exception ae) {
+				throw new UserException(401, env.getProperty("106"));
+			}
+		}
+		else {
+			
+			Address existingAddress = userdetails.getAddress().stream().filter(adrss -> adrss.getType().equalsIgnoreCase(address.getType())).findFirst().orElseThrow(() -> new AddressException(404, env.getProperty("4041")));
+			existingAddress.setAddress(address.getAddress());
+			existingAddress.setType(address.getType());
+			existingAddress.setCity(address.getCity());
+			existingAddress.setCountry(address.getCountry());
+			existingAddress.setLandmark(address.getLandmark());
+			existingAddress.setPincode(address.getPincode());
+			existingAddress.setState(address.getState());
+			existingAddress.setName(address.getName());
+			existingAddress.setPhoneNumber(address.getPhoneNumber());
+			try {
+			addressRepository.save(existingAddress);
+			userRepository.save(userdetails);
+			
+             }catch(Exception ae) {
+            	 throw new UserException(401, env.getProperty("106"));
+             }
+			return existingAddress;
+		}
+		
+//		Long uId = jwt.decodeToken(token);
+//		Address add=new Address( address);
+//		System.out.println(add.getAddress()+"->"+add.getCity());
+//		User userdetails = userRepository.findById(uId)
+//				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+////		BeanUtils.copyProperties(address,Address.class);
+//		userdetails.getAddress().add(add);
+//		return   addressRepository.save(add);
 
 	}
 	@Transactional
@@ -124,8 +163,13 @@ public class AddressServiceImpl implements AddressService{
 		Long uId = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(uId)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-		Address add=addressRepository.findAddressBytext(uId,type);
-		return add;
+		Address address = userdetails.getAddress().stream().filter(adrss -> adrss.getType().equalsIgnoreCase(type)).findFirst().orElse(null);
+		return address;
+//		Long uId = jwt.decodeToken(token);
+//		User userdetails = userRepository.findById(uId)
+//				.orElseThrow(()->new UserException(400, env.getProperty("104")));
+//		Address add=addressRepository.findAddressBytext(uId,type);
+//		return add;
 	}
 }
 
