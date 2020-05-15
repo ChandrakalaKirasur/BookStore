@@ -45,7 +45,7 @@ public class CartController {
 	
 	@ApiOperation(value = "Adding the books to the Cartlist",response = Iterable.class)
 	@PostMapping(value="/bookdetails/{bookId}")
-	public ResponseEntity<UserResponse> addBooksToCart(@RequestHeader("token") String token,@PathVariable("bookId") long bookId) throws Exception {
+	public ResponseEntity<UserResponse> addBooksToCart(@RequestHeader(name= "token") String token,@PathVariable("bookId") long bookId) throws Exception {
 		    List<CartDetails> cart = cartService.addBooksToCart(token,bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));
