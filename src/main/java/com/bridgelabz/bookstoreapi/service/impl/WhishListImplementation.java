@@ -114,17 +114,11 @@ public class WhishListImplementation implements WhishListService{
 	@Override
 	public boolean verifyBookInWishlist(String token, Long bookId) {
 		List<Book> bookdetails = this.getBooksfromWhishList(token);
-		boolean notExist=false;
 		for(Book whish:bookdetails) {
 			if (whish.getBookId().equals(bookId)) {
 				return true;
 			}
-		
 		}
-		if(notExist==false) {
-			throw new UserException(401, env.getProperty("506"));
-		}
-
 		return false;
 	}
 	
