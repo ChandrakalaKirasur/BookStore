@@ -25,41 +25,49 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long addressId;
+	
 	@Column(name = "address", nullable = false)
 	private String address;
-	@Column(name = "locality", nullable = false)
-	private String locality;
-	@Column(name = "name", nullable = false)
-	private String name;
+	
 	@Column(name = "city", nullable = false)
 	private String city;
+	
 	@Column(name = "landmark", nullable = false)
 	private String landmark;
-	@Column(name = "state", nullable = false)
-	private String state;
-	@Column(name = "pincode", nullable = false)
-	private String pincode;
-	@Column(name = "country", nullable = false)
-	private String country;
-	@Column(name = "type", nullable = false)
-	private String type;
+	
+	@Column(name = "locality", nullable = false)
+	private String locality;
+	
+	@Column(name = "name", nullable = false)
+	private String name;
+	
 	@Column(name = "phoneNumber", nullable = false)
 	private String phoneNumber;
+	
+//	@Column(name = "state", nullable = false)
+//	private String state;
+	@Column(name = "pincode", nullable = false)
+	private String pincode;
+//	@Column(name = "country", nullable = false)
+//	private String country;
+	@Column(name = "type", nullable = false)
+	private String type;
+	
 	
 	public Address() {
 		super();
 	}
 
 	public Address(AddressDto address2) {
-	this.name=address2.getName();
-	this.phoneNumber=address2.getPhoneNumber();
-	this.landmark=address2.getLandmark();
-	this.type=address2.getType();
-	this.pincode=address2.getPincode();
-	this.state=address2.getState();
-	this.country=address2.getCountry();
-	this.address=address2.getAddress();
-	this.locality=address2.getLocality();
+		this.address=address2.getAddress();
+		this.city=address2.getCity();
+		this.landmark=address2.getLandmark();
+		this.locality=address2.getName();
+		this.name=address2.getName();
+		this.phoneNumber=address2.getPhoneNumber();
+		this.pincode=address2.getPincode();
+		this.type=address2.getType();
+	
 	}
 
 	public String getAddress() {
@@ -110,14 +118,7 @@ public class Address {
 		this.landmark = landmark;
 	}
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
+	
 	public String getPincode() {
 		return pincode;
 	}
@@ -126,14 +127,7 @@ public class Address {
 		this.pincode = pincode;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
+	
 	public String getType() {
 		return type;
 	}

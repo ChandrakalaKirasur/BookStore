@@ -78,7 +78,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 	public void uploadFileToS3Bucket(MultipartFile multipartFile, String token, Long bookId, ImageType type) {
 		String fileName = multipartFile.getOriginalFilename();
 		String fullName = fileName(type, fileName);
-
+        //bookId=0;
 		try {
 			// creating the file in the server (temporarily)
 			File file = new File(fileName);

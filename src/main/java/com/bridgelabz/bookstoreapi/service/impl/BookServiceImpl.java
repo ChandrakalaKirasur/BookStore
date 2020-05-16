@@ -77,10 +77,20 @@ public class BookServiceImpl implements BookService{
 		List<Book> books =  seller.getSellerBooks();
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
-			book.setBookVerified(true);
+		book.setBookVerified(true);
 		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 		sellerRepository.save(seller);
+		
+		Map<String, Object> documentMapper = objectMapper.convertValue(book, Map.class);
+		IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(book.getBookId()))
+				.source(documentMapper);
+		try {
+			client.index(indexRequest, RequestOptions.DEFAULT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		}
 		else {
 			throw new BookException(500, env.getProperty("5001"));

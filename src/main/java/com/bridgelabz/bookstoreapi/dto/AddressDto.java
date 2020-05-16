@@ -8,24 +8,22 @@ public class AddressDto {
 		
 		private String address;
 		
-		private String locality;
-		
-		private String name;
-		
 		private String city;
 		
 		private String landmark;
 		
-		private String state;
+		private String locality;
+		
+		private String name;
+		
+		private String phoneNumber;
+		//private String state;
 		
 		private String pincode;
 		
-		private String country;
+		//private String country;
 
 		private String type;
-		
-		private String phoneNumber;
-
 
 		public String getAddress() {
 			return address;
@@ -33,22 +31,6 @@ public class AddressDto {
 
 		public void setAddress(String address) {
 			this.address = address;
-		}
-
-		public String getLocality() {
-			return locality;
-		}
-
-		public void setLocality(String locality) {
-			this.locality = locality;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
 		}
 
 		public String getCity() {
@@ -67,36 +49,20 @@ public class AddressDto {
 			this.landmark = landmark;
 		}
 
-		public String getState() {
-			return state;
+		public String getLocality() {
+			return locality;
 		}
 
-		public void setState(String state) {
-			this.state = state;
+		public void setLocality(String locality) {
+			this.locality = locality;
 		}
 
-		public String getPincode() {
-			return pincode;
+		public String getName() {
+			return name;
 		}
 
-		public void setPincode(String pincode) {
-			this.pincode = pincode;
-		}
-
-		public String getCountry() {
-			return country;
-		}
-
-		public void setCountry(String country) {
-			this.country = country;
-		}
-
-		public String getType() {
-			return type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		public String getPhoneNumber() {
@@ -107,5 +73,23 @@ public class AddressDto {
 			this.phoneNumber = phoneNumber;
 		}
 
+		public String getPincode() {
+			return pincode;
+		}
+
+		public void setPincode(String pincode) {
+			this.pincode = pincode;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+		
+		
+      
 	
 }

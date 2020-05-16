@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
@@ -27,7 +30,10 @@ import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.response.UserResponse;
+import com.bridgelabz.bookstoreapi.service.AwsS3Service;
 import com.bridgelabz.bookstoreapi.service.UserService;
+import com.bridgelabz.bookstoreapi.utility.ImageType;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -45,6 +51,8 @@ public class UserController {
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private AwsS3Service awsService;
 	
 	/**
 	 * API for user login
@@ -138,5 +146,12 @@ public class UserController {
 		
 	}
 	
-	
+	@ApiOperation(value = "Upload book image")
+	@PutMapping("/uploadbookimage")
+    public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
+    {
+		Long book=(long) 201;
+		awsService.uploadFileToS3Bucket(file,token, book ,ImageType.USER);
+        return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
+    }
 }

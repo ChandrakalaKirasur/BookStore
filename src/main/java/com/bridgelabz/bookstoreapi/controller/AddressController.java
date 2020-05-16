@@ -125,6 +125,7 @@ public class AddressController {
 		return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("305"), "", add));		
 	}
+	
 	@GetMapping(value = "/getAddresstype/{type}")
 	public ResponseEntity<AddressResponse> getAddress(@PathVariable String type,@RequestHeader String token) {
 		Address add = addressService.getAddress(type,token);
@@ -135,6 +136,7 @@ public class AddressController {
 		return ResponseEntity.status(401)
 				.body(new AddressResponse(environment.getProperty("305"), "", add));		
 	}
+	
 	@GetMapping(value = "/users/{token}")
 	public List<Address> getAddressByUserId(@PathVariable String token) {
 		List<Address> result = addressService.getAddressByUserId(token);

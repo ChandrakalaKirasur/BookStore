@@ -42,7 +42,7 @@ public class AddressServiceImpl implements AddressService{
 		User userdetails = userRepository.findById(uId)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 
-		Address addre=new Address();
+		//Address addre=new Address();
 		boolean notExist = userdetails.getAddress().stream().noneMatch(adrss -> adrss.getType().equalsIgnoreCase(address.getType()));
 		if(notExist) {
 			userdetails.getAddress().add(add);
@@ -60,10 +60,10 @@ public class AddressServiceImpl implements AddressService{
 			existingAddress.setAddress(address.getAddress());
 			existingAddress.setType(address.getType());
 			existingAddress.setCity(address.getCity());
-			existingAddress.setCountry(address.getCountry());
+			//existingAddress.setCountry(address.getCountry());
 			existingAddress.setLandmark(address.getLandmark());
 			existingAddress.setPincode(address.getPincode());
-			existingAddress.setState(address.getState());
+			//.setState(address.getState());
 			existingAddress.setName(address.getName());
 			existingAddress.setPhoneNumber(address.getPhoneNumber());
 			try {
@@ -119,10 +119,10 @@ public class AddressServiceImpl implements AddressService{
 			add.setAddress(addressupdate.getAddress());
 			add.setType(addressupdate.getType());
 			add.setCity(addressupdate.getCity());
-			add.setCountry(addressupdate.getCountry());
+			//add.setCountry(addressupdate.getCountry());
 			add.setLandmark(addressupdate.getLandmark());
 			add.setPincode(addressupdate.getPincode());
-			add.setState(addressupdate.getState());
+			//add.setState(addressupdate.getState());
 			
 			addressRepository.save(add);
 			userdetails.getAddress().add(add);
