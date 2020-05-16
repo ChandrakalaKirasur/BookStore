@@ -25,6 +25,8 @@ public interface UserService {
 
 	User getUser(String token);
 
+	String getUserProfile(String token);
+
 	
 	
 }

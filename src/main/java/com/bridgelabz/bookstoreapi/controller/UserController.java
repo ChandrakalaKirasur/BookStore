@@ -138,7 +138,7 @@ public class UserController {
 	
 
 	@ApiOperation(value = "getting the user")
-	@GetMapping(value = "/get/{token}")
+	@GetMapping(value = "/get")
 	public ResponseEntity<UserResponse> gettingUser(@RequestHeader String token) throws Exception {
 		
 		User userdetails = userService.getUser(token);
@@ -154,4 +154,13 @@ public class UserController {
 		awsService.uploadFileToS3Bucket(file,token, book ,ImageType.USER);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
+	
+	@ApiOperation(value = "getting the user")
+	@GetMapping(value = "/profileUrl")
+	public ResponseEntity<UserResponse> gettingUserProfile(@RequestHeader(name="token") String token) throws Exception {
+		
+		String userdetails = userService.getUserProfile(token);
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"),userdetails,HttpStatus.OK));
+		
+	}
 }

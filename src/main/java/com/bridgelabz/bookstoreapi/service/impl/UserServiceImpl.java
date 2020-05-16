@@ -187,4 +187,14 @@ public class UserServiceImpl implements UserService {
 		return userdetails;
 	}
 
+	@Transactional
+	@Override
+	public String getUserProfile(String token) {
+
+		Long id = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(id)
+				.orElseThrow(() -> new UserException(400, env.getProperty("104")));
+		
+		return userdetails.getProfile();
+	}
 }
