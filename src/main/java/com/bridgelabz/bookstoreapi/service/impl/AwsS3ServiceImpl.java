@@ -100,6 +100,60 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 			// fileName + "] ");
 		}
 	}
+	@Async
+	public String uploadFileForUser(MultipartFile multipartFile, String token,ImageType type) {
+		String fileName = multipartFile.getOriginalFilename();
+		String fullName = fileName(type, fileName);
+		try {
+			// creating the file in the server (temporarily)
+			File file = new File(fileName);
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(multipartFile.getBytes());
+			fos.close();
+			PutObjectRequest putObjectRequest = null;
+
+			putObjectRequest = new PutObjectRequest(this.bucketName, fullName, file);
+
+			putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+
+			this.amazonS3Client.putObject(putObjectRequest);
+			file.delete();
+			return fetchObjectURL(token, fullName, type);
+		} catch (IOException | AmazonServiceException ex) {
+			return fileName;
+		}
+		
+	}
+	@Transactional
+	private String fetchObjectURL(String token, String key, ImageType type) {
+		Long id = jwt.decodeToken(token);
+		String url="";
+		if(type.equals(ImageType.SELLER)) {
+			Seller seller = sellerRepository.findById(id)
+					.orElseThrow(() -> new SellerException(404, env.getProperty("104")));
+//			seller.setSellerProfilePic(getImageUrl(key));
+			url=getImageUrl(key);
+			sellerRepository.save(seller);
+			return url;
+		}
+		else if (type.equals(ImageType.USER)) {
+			User user = userRepository.findById(id)
+					.orElseThrow(() -> new UserException(404, env.getProperty("104")));
+			url=getImageUrl(key);
+			user.setProfile(url);
+			userRepository.save(user);
+			return url;
+		}
+		else if (type.equals(ImageType.ADMIN)) {
+//			Admin admin = adminRepository.findById(id)
+//					.orElseThrow(() -> new AdminException(404, env.getProperty("104")));
+			url=getImageUrl(key);
+//			admin.setProfile(url);
+//			adminRepository.save(user);
+			return url;
+		}
+		return url;
+	}
 
 	@Transactional
 	private void fetchObjectURL(String token, Long bookId, String key, ImageType type) {
@@ -118,24 +172,6 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 			sellerRepository.save(seller);
 			if(updatedBook.isBookVerified())
 				updateBookInES(updatedBook);
-		}
-		else if(type.equals(ImageType.SELLER)) {
-			Seller seller = sellerRepository.findById(id)
-					.orElseThrow(() -> new SellerException(404, env.getProperty("104")));
-//			seller.setSellerProfilePic(getImageUrl(key));
-			sellerRepository.save(seller);
-		}
-		else if (type.equals(ImageType.USER)) {
-			User user = userRepository.findById(id)
-					.orElseThrow(() -> new UserException(404, env.getProperty("104")));
-			user.setProfile(getImageUrl(key));
-			userRepository.save(user);
-		}
-		else if (type.equals(ImageType.ADMIN)) {
-//			Admin admin = adminRepository.findById(id)
-//					.orElseThrow(() -> new AdminException(404, env.getProperty("104")));
-//			admin.setProfile(getImageUrl(key));
-//			adminRepository.save(user);
 		}
 	}
 

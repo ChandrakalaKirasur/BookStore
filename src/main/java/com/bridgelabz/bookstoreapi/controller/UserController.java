@@ -148,11 +148,11 @@ public class UserController {
 	
 	@ApiOperation(value = "Upload book image")
 	@PutMapping("/uploadbookimage")
-    public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
+    public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token)
     {
 		Long book=(long) 201;
-		awsService.uploadFileToS3Bucket(file,token, book ,ImageType.USER);
-        return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
+		String imageUrl = awsService.uploadFileForUser(file,token,ImageType.USER);
+        return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),imageUrl));
     }
 	
 	@ApiOperation(value = "getting the user")
