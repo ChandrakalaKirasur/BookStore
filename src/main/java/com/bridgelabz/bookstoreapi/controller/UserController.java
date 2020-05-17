@@ -147,10 +147,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "Upload book image")
-	@PutMapping("/uploadbookimage")
-    public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token)
+	@PostMapping("/uploaduserimage/{token}")
+    public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@PathVariable(name = "token") String token)
     {
-		Long book=(long) 201;
 		String imageUrl = awsService.uploadFileForUser(file,token,ImageType.USER);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),imageUrl));
     }
