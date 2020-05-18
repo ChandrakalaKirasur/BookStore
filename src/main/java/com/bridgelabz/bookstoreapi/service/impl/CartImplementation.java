@@ -126,7 +126,9 @@ public class CartImplementation implements CartService {
 		 * adding the quantity to the book
 		 */
 		qunatityofbook.setQuantityOfBook(quantity);
+		qunatityofbook.setTotalprice(book.getBookPrice());
 		quantitydetails.add(qunatityofbook);
+		
 		cart.setQuantityOfBooks(quantitydetails);
 		/**
 		 * saving the complete cart in user
@@ -144,7 +146,8 @@ public class CartImplementation implements CartService {
 		Long quantity = bookQuantityDetails.getQuantityOfBook();
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
-		
+		 Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+		 double totalprice=book.getBookPrice()*quantity;
 		boolean notExist = false;
 		for (CartDetails cartt : user.getCartBooks()) {
 			/**
@@ -161,7 +164,7 @@ public class CartImplementation implements CartService {
 				for (Quantity qant : cartt.getQuantityOfBooks()) {
 					if (qant.getQuantityId().equals(quantityId)) {
 
-						Quantity qunatityofbook = new Quantity(quantity + 1);
+						Quantity qunatityofbook = new Quantity(quantity+1,totalprice);
 
 						qt.add(qunatityofbook);
 						cartt.setQuantityOfBooks(qt);
@@ -191,6 +194,8 @@ public class CartImplementation implements CartService {
 		Long quantity = bookQuantityDetails.getQuantityOfBook();
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+		double totalprice=book.getBookPrice()*quantity;
 		boolean notExist = false;
 		for (CartDetails cartt : user.getCartBooks()) {
 			/**
@@ -207,7 +212,7 @@ public class CartImplementation implements CartService {
 				for (Quantity qant : cartt.getQuantityOfBooks()) {
 					if (qant.getQuantityId().equals(quantityId)) {
 
-						Quantity qunatityofbook = new Quantity(quantity - 1);
+						Quantity qunatityofbook = new Quantity(quantity-1,totalprice);
 
 						qt.add(qunatityofbook);
 						cartt.setQuantityOfBooks(qt);

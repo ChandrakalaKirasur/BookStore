@@ -14,6 +14,8 @@ public class Quantity {
 	private Long quantityId;
 	@Column
 	private Long quantityOfBook;
+	@Column
+    private Double totalprice;
 
 	
 	public Quantity() {
@@ -23,6 +25,12 @@ public class Quantity {
 	public Quantity(Long quantityOfBook) {
 		super();
 		this.quantityOfBook = quantityOfBook;
+	}
+
+	public Quantity(Long quantityOfBook, Double totalprice) {
+		super();
+		this.quantityOfBook = quantityOfBook;
+		this.totalprice = totalprice;
 	}
 
 	public Long getQuantityId() {
@@ -39,6 +47,14 @@ public class Quantity {
 
 	public void setQuantityOfBook(Long quantityOfBook) {
 		this.quantityOfBook = quantityOfBook;
+	}
+
+	public Double getTotalprice() {
+		return totalprice;
+	}
+
+	public void setTotalprice(Double totalprice) {
+		this.totalprice = totalprice;
 	}
 	
 	
