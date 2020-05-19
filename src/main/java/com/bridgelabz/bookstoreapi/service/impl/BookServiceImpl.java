@@ -242,4 +242,9 @@ public class BookServiceImpl implements BookService{
 	public Integer getBooksCount() {
 		return bookRepository.findAllBook().size();
 	}
+
+	@Override
+	public List<Book> getAllBooks() {
+		return bookRepository.findAllBook();
+	}
 }

@@ -54,14 +54,14 @@ public class AdminController {
 	@PostMapping("/registration")
 	public ResponseEntity<AdminResponse> register(@Valid @RequestBody AdminDto register, BindingResult result) {
 		if (result.hasErrors())
-			return ResponseEntity.status(401)
+			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse(result.getAllErrors().get(0).getDefaultMessage(), 401,""));
 		boolean resultStatus = service.register(register);
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse(env.getProperty("800"), 200, resultStatus));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		return ResponseEntity.status(HttpStatus.OK)
 				.body(new AdminResponse(env.getProperty("802"), 208, resultStatus));
 	}
 	
@@ -76,8 +76,8 @@ public class AdminController {
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse("805", 200, resultStatus));
 		}
-		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse(env.getProperty("806"), 208, resultStatus));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new AdminResponse(env.getProperty("806"), 408, resultStatus));
 	}
 	
 	/**
@@ -88,16 +88,16 @@ public class AdminController {
 	@PostMapping("/login")
 	public ResponseEntity<AdminResponse> login(@Valid @RequestBody LoginDTO adminLoginDto,BindingResult result) {
 		if (result.hasErrors())
-			return ResponseEntity.status(401)
-					.body(new AdminResponse(result.getAllErrors().get(0).getDefaultMessage(), 401,""));
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new AdminResponse(result.getAllErrors().get(0).getDefaultMessage(), 400,""));
 		else {
 			Admin admin = service.login(adminLoginDto);
 			if (admin != null) {
 				String token=util.generateToken(admin.getAdminId(),Token.WITH_EXPIRE_TIME);
 				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse(env.getProperty("801"), 202, token));
 			}
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new AdminResponse("Admin name or password is invalid ", 208,""));
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new AdminResponse("Admin name or password is invalid ", 400,""));
 		}
 	}
 	/**
@@ -111,8 +111,8 @@ public class AdminController {
 		if (resultStatus) {
 			return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse(env.getProperty("403"), 200, resultStatus));
 		}
-		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse(env.getProperty("806"), 208, resultStatus));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new AdminResponse(env.getProperty("806"), 408, resultStatus));
 	}
 	/**
 	 * API for admin to reset password 
@@ -126,8 +126,8 @@ public class AdminController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse(env.getProperty("203"), 200, resultStatus));
 		}
-		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse(env.getProperty("701"), 208, resultStatus));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new AdminResponse(env.getProperty("701"), 408, resultStatus));
 	}
 	/**
 	 * API for verifying book
@@ -141,7 +141,7 @@ public class AdminController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse(env.getProperty("201"), 200, resultStatus));
 		}
-		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-				.body(new AdminResponse(env.getProperty("701"), 208, resultStatus));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new AdminResponse(env.getProperty("701"), 400, resultStatus));
 	}
 }
