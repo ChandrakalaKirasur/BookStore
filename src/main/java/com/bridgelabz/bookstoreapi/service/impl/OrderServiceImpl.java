@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
 					orderDetails.setOrderId(orderId);
 					orderDetails.setOrderPlaceTime(LocalDateTime.now());
 					orderDetails.setBooksList(list);
-		
+		           
 				} catch (Exception e) {
 					throw new UserException(401, env.getProperty("701"));
 				}
@@ -100,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
 		 * clearing the cart after added to the orderlist
 		 */
 		userdetails.getCartBooks().clear();
+		
 		try {
 			userRepository.save(userdetails);
 		} catch (Exception e) {
