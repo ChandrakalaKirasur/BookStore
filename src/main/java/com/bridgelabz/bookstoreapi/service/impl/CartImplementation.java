@@ -279,9 +279,6 @@ public class CartImplementation implements CartService {
 				return true;
 		
 		}
-		if(notExist==false) {
-			throw new UserException(401, env.getProperty("506"));
-		}
 
 		return false;
 	}
