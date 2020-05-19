@@ -144,43 +144,34 @@ public class CartImplementation implements CartService {
 		Long id = jwt.decodeToken(token);
 		Long quantityId = bookQuantityDetails.getQuantityId();
 		Long quantity = bookQuantityDetails.getQuantityOfBook();
-
+        
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		 Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(401, env.getProperty("104")));
-		 double totalprice=book.getBookPrice()*quantity;
+		 double totalprice=book.getBookPrice()*(quantity+1);
 		boolean notExist = false;
 		for (CartDetails cartt : user.getCartBooks()) {
-			/**
-			 * checking the number of books available
-			 */
+			
 			if(!cartt.getBooksList().isEmpty()) {
 				
+				/**
+				 * checking the weither number of books available
+				 */
 			notExist = cartt.getBooksList().stream()
 					.noneMatch(books -> books.getBookId().equals(bookId) && books.getNoOfBooks() > quantity);
 			
-			ArrayList<Quantity> qt = new ArrayList<Quantity>();
 			if (!notExist) {
 
-				for (Quantity qant : cartt.getQuantityOfBooks()) {
-					if (qant.getQuantityId().equals(quantityId)) {
-
-						Quantity qunatityofbook = new Quantity(quantity+1,totalprice);
-
-						qt.add(qunatityofbook);
-						cartt.setQuantityOfBooks(qt);
-						userRepository.save(user).getCartBooks();
-						
-						return cartt;
-
-					}
+				Quantity quantityDetails = quantityRepository.findById(quantityId).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+				quantityDetails.setQuantityOfBook(quantity+1);
+				quantityDetails.setTotalprice(totalprice);
+				quantityRepository.save(quantityDetails);
+				return cartt;
+		
 				}
 
 			}
 		}
-		}
-		if(notExist==false) {
-	    	   throw new UserException(401, env.getProperty("506"));
-	       }
+
 		return null;
 
 	}
@@ -195,7 +186,7 @@ public class CartImplementation implements CartService {
 
 		User user = userRepository.findUserById(id).orElseThrow(() -> new UserException(401, env.getProperty("104")));
 		Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(401, env.getProperty("104")));
-		double totalprice=book.getBookPrice()*quantity;
+		double totalprice=book.getBookPrice()*(quantity-1);
 		boolean notExist = false;
 		for (CartDetails cartt : user.getCartBooks()) {
 			/**
@@ -205,28 +196,20 @@ public class CartImplementation implements CartService {
 				
 			 notExist = cartt.getBooksList().stream()
 					.noneMatch(books -> books.getBookId().equals(bookId) && quantity>1 );
+			 
+			 if (!notExist) {
+
+					Quantity quantityDetails = quantityRepository.findById(quantityId).orElseThrow(() -> new UserException(401, env.getProperty("104")));
+					quantityDetails.setQuantityOfBook(quantity-1);
+					quantityDetails.setTotalprice(totalprice);
+					quantityRepository.save(quantityDetails);
+					return cartt;
 			
-			ArrayList<Quantity> qt = new ArrayList<Quantity>();
-			if (!notExist) {
-
-				for (Quantity qant : cartt.getQuantityOfBooks()) {
-					if (qant.getQuantityId().equals(quantityId)) {
-
-						Quantity qunatityofbook = new Quantity(quantity-1,totalprice);
-
-						qt.add(qunatityofbook);
-						cartt.setQuantityOfBooks(qt);
-					    userRepository.save(user).getCartBooks();
-                         return cartt;
 					}
-				}
 
-			}
+		       }
 		}
-		}
-       if(notExist==false) {
-    	   throw new UserException(401, env.getProperty("506"));
-       }
+
 		return null;
 
 	}
@@ -258,10 +241,7 @@ public class CartImplementation implements CartService {
 				boolean users = userRepository.save(user).getCartBooks() != null ? true : false;
 				if (user!=null) {
 					return users;
-					//return cartt;
-				} else {
-					throw new UserException(401, env.getProperty("4041"));
-				}
+				} 
 
 			}
 		}
@@ -278,9 +258,6 @@ public class CartImplementation implements CartService {
 			if (!notExist)
 				return true;
 		
-		}
-		if(notExist==false) {
-			throw new UserException(401, env.getProperty("506"));
 		}
 
 		return false;
