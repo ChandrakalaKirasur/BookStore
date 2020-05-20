@@ -157,7 +157,7 @@ public class CartImplementation implements CartService {
 				 * checking the weither number of books available
 				 */
 			notExist = cartt.getBooksList().stream()
-					.noneMatch(books -> books.getBookId().equals(bookId) && books.getNoOfBooks() > quantity);
+					.noneMatch(books -> books.getBookId().equals(bookId));
 			
 			if (!notExist) {
 
@@ -195,7 +195,7 @@ public class CartImplementation implements CartService {
 			if(!cartt.getBooksList().isEmpty()) {
 				
 			 notExist = cartt.getBooksList().stream()
-					.noneMatch(books -> books.getBookId().equals(bookId) && quantity>1 );
+					.noneMatch(books -> books.getBookId().equals(bookId));
 			 
 			 if (!notExist) {
 

@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderDetails> getOrderConfrim(String token) {
+	public OrderDetails getOrderConfrim(String token) {
 		Long id = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(id)
 				.orElseThrow(() -> new UserException(400, env.getProperty("104")));
@@ -119,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
 		} catch (Exception e) {
 			throw new UserException(401, env.getProperty("701"));
 		}
-		return userdetails.getOrderBookDetails();
+		return orderDetails;
 
 	}
 	
