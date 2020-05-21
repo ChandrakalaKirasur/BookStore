@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +15,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.bridgelabz.bookstoreapi.dto.AddressDto;
 import com.bridgelabz.bookstoreapi.dto.UpdateAddressDto;
 import com.bridgelabz.bookstoreapi.entity.Address;
-import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.response.AddressResponse;
 import com.bridgelabz.bookstoreapi.service.AddressService;
-
 import io.swagger.annotations.Api;
 
 @RestController
@@ -79,52 +74,6 @@ public class AddressController {
 				.body(new AddressResponse(environment.getProperty("102"), "", addres));
 
 	}
-	/**
-	 * 
-	 * @param id
-	 * @param token	
-	 *
-	 */
-	/*Api for  delete*/
-	@PutMapping("/delete")
-	public ResponseEntity<AddressResponse> deleteAddress(@RequestParam Long addressId,@RequestHeader String token )
-	{
-		System.out.println("####");
-		User message= addressService.deleteAddress(token, addressId);
-		System.out.println("==="+message);
-		if (message != null) {
-			return ResponseEntity.status(200)
-					.body(new AddressResponse(environment.getProperty("302"), "302", message));
-		}
-		return ResponseEntity.status(401)
-				.body(new AddressResponse(environment.getProperty("102"), "", message));		
-	}
-	/**
-	 * 
-	 * @return List<Address>
-	 */
-	/*Api for fetching all address*/
-	@GetMapping("/getAllAddress")
-	public List<Address> getAllAddress()
-	{
-		return addressService.getAllAddress();
-
-	}
-	/**
-	 * 
-	 * @param id
-	 * @return address
-	 */
-	@GetMapping(value = "/getAddress/{id}")
-	public ResponseEntity<AddressResponse> getAddress(@PathVariable Long id) {
-		Address add = addressService.getAddress(id);
-		if (add != null) {
-		return ResponseEntity.status(200)
-					.body(new AddressResponse(environment.getProperty("304"), "304", add));
-	    }
-		return ResponseEntity.status(401)
-				.body(new AddressResponse(environment.getProperty("305"), "", add));		
-	}
 	
 	@GetMapping(value = "/getAddresstype/{type}")
 	public ResponseEntity<AddressResponse> getAddress(@PathVariable String type,@RequestHeader String token) {
@@ -133,18 +82,19 @@ public class AddressController {
 			return ResponseEntity.status(200)
 					.body(new AddressResponse(environment.getProperty("304"), "304", add));
 		}
-		return ResponseEntity.status(401)
+		return ResponseEntity.status(400)
 				.body(new AddressResponse(environment.getProperty("305"), "", add));		
 	}
 	
 	@GetMapping(value = "/users/{token}")
 	public List<Address> getAddressByUserId(@PathVariable String token) {
 		List<Address> result = addressService.getAddressByUserId(token);
-		System.out.println("-----------result"+result);
 		if (result != null) {
 			 return result;
 		}
 		return null;
 	}
+	
+	
 }
 

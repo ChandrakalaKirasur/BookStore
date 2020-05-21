@@ -164,7 +164,7 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	public List<Book> getBooks(Integer pageNo){
-		Integer start = (pageNo-1)*8;
+		Integer start = (pageNo-1)*12;
 //		bookRepository.findBook(start).forEach(book -> {
 //			Map<String, Object> documentMapper = objectMapper.convertValue(book, Map.class);
 //			IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(book.getBookId()))
@@ -179,17 +179,17 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	public List<Book> getBooksSortedByPriceLow(Integer pageNo){
-		Integer start = (pageNo-1)*8;
+		Integer start = (pageNo-1)*12;
 		return bookRepository.findBookSortedByPriceLow(start);
 	}
 	
 	public List<Book> getBooksSortedByPriceHigh(Integer pageNo){
-		Integer start = (pageNo-1)*8;
+		Integer start = (pageNo-1)*12;
 		return bookRepository.findBookSortedByPriceHigh(start);
 	}
 	
 	public List<Book> getBooksSortedByArrival(Integer pageNo){
-		Integer start = (pageNo-1)*8;
+		Integer start = (pageNo-1)*12;
 		return bookRepository.findBookSortedByArrival(start);
 	}
 	
@@ -240,5 +240,10 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public Integer getBooksCount() {
 		return bookRepository.findAllBook().size();
+	}
+
+	@Override
+	public List<Book> getAllBooks() {
+		return bookRepository.findAllBook();
 	}
 }

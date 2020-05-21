@@ -51,7 +51,7 @@ public class AddressServiceImpl implements AddressService{
 			userRepository.save(userdetails);
 			return add;
 			}catch(Exception ae) {
-				throw new UserException(401, env.getProperty("106"));
+				throw new UserException(400, env.getProperty("106"));
 			}
 		}
 		else {
@@ -60,10 +60,8 @@ public class AddressServiceImpl implements AddressService{
 			existingAddress.setAddress(address.getAddress());
 			existingAddress.setType(address.getType());
 			existingAddress.setCity(address.getCity());
-			//existingAddress.setCountry(address.getCountry());
 			existingAddress.setLandmark(address.getLandmark());
 			existingAddress.setPincode(address.getPincode());
-			//.setState(address.getState());
 			existingAddress.setName(address.getName());
 			existingAddress.setPhoneNumber(address.getPhoneNumber());
 			try {
@@ -71,20 +69,11 @@ public class AddressServiceImpl implements AddressService{
 			userRepository.save(userdetails);
 			
              }catch(Exception ae) {
-            	 throw new UserException(401, env.getProperty("106"));
+            	 throw new UserException(400, env.getProperty("106"));
              }
 			return existingAddress;
 		}
 		
-//		Long uId = jwt.decodeToken(token);
-//		Address add=new Address( address);
-//		System.out.println(add.getAddress()+"->"+add.getCity());
-//		User userdetails = userRepository.findById(uId)
-//				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-////		BeanUtils.copyProperties(address,Address.class);
-//		userdetails.getAddress().add(add);
-//		return   addressRepository.save(add);
-
 	}
 	@Transactional
 	@Override
@@ -106,7 +95,6 @@ public class AddressServiceImpl implements AddressService{
 	@Transactional
 	@Override
 	public Optional<Address> updateAddress(UpdateAddressDto addressupdate, String token) {
-		List<Address> list=new ArrayList<>();
 
 		Long uId = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(uId)

@@ -121,5 +121,9 @@ public class BookController {
 	public ResponseEntity<Response> getBooksCount(@PathVariable String get){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksCount()));
 	}
+	@GetMapping("/bookdetails/all")
+	public ResponseEntity<Response> getAllBooks(){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getAllBooks()));
+	}
 	
 }
