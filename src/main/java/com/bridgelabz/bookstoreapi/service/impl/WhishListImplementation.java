@@ -113,11 +113,13 @@ public class WhishListImplementation implements WhishListService{
 	@Transactional
 	@Override
 	public boolean verifyBookInWishlist(String token, Long bookId) {
+		if(token != null) {
 		List<Book> bookdetails = this.getBooksfromWhishList(token);
 		for(Book whish:bookdetails) {
 			if (whish.getBookId().equals(bookId)) {
 				return true;
 			}
+		}
 		}
 		return false;
 	}
