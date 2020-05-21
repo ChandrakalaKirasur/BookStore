@@ -60,7 +60,7 @@ public class SellerController {
 		Seller seller = sellerService.sellerRegistration(sellerRegistrationDto);
 		if (seller!=null) {
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new SellerResponse(environment.getProperty("200"), 201, sellerRegistrationDto));
+					.body(new SellerResponse(environment.getProperty("200"), 200, sellerRegistrationDto));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new SellerResponse(environment.getProperty("400"), 400, sellerRegistrationDto));

@@ -25,7 +25,6 @@ public class OrderDetails {
 
 	@Id
 	private Long orderId;
-	
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	

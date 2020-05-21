@@ -83,8 +83,7 @@ public class BookServiceImpl implements BookService{
 		sellerRepository.save(seller);
 		
 		Map<String, Object> documentMapper = objectMapper.convertValue(book, Map.class);
-		IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(book.getBookId()))
-				.source(documentMapper);
+		IndexRequest indexRequest = new IndexRequest(Constants.INDEX, Constants.TYPE, String.valueOf(book.getBookId())).source(documentMapper);
 		try {
 			client.index(indexRequest, RequestOptions.DEFAULT);
 		} catch (IOException e) {

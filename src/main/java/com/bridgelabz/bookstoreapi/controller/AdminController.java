@@ -94,7 +94,7 @@ public class AdminController {
 			Admin admin = service.login(adminLoginDto);
 			if (admin != null) {
 				String token=util.generateToken(admin.getAdminId(),Token.WITH_EXPIRE_TIME);
-				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse(env.getProperty("801"), 202, token));
+				return ResponseEntity.status(HttpStatus.OK).body(new AdminResponse(env.getProperty("801"), 200, token));
 			}
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new AdminResponse("Admin name or password is invalid ", 400,""));

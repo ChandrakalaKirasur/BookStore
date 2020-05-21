@@ -67,18 +67,21 @@ public class UserController {
 //					.body(new UserResponse(result.getAllErrors().get(0).getDefaultMessage(), "",HttpStatus.OK));
 //		
 		 String token = userService.loginByEmailOrMobile(user);
-		
-		 Response response = new Response(HttpStatus.OK.value(),"User loggedin successfully", token);
+		 
+		 if(token!=null)
+		 {
+			Response response = new Response(HttpStatus.OK.value(),"User loggedin successfully", token);
 			System.out.println("token"+response.getStatus());
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		
-	}
+		 }
+		 Response response = new Response(HttpStatus.NOT_FOUND.value(),"User not found");
+		 return new ResponseEntity<>(response, HttpStatus.OK);
+		 }
 	
 	/**
 	 * API for user registeration
 	 * @param RequestBody register
 	 */
-
 	@ApiOperation(value = "register",response = Iterable.class)
 	@PostMapping(value = "/registration")
 	public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterDto userRecord, BindingResult result) {
@@ -98,7 +101,7 @@ public class UserController {
 	 * API for verifying the token User
 	 * @param pathVaraiable token
 	 */
-
+	
 	@ApiOperation(value = "verifing the user",response = Iterable.class)
 	@GetMapping(value = "/registration/verify/{token}")
 	public ResponseEntity<UserResponse> userVerify(@PathVariable("token") String token) throws Exception {
@@ -140,7 +143,6 @@ public class UserController {
 	@ApiOperation(value = "getting the user")
 	@GetMapping(value = "/get")
 	public ResponseEntity<UserResponse> gettingUser(@RequestHeader String token) throws Exception {
-		
 		User userdetails = userService.getUser(token);
 			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("201"),userdetails,HttpStatus.OK));
 		

@@ -21,7 +21,6 @@ public class Quantity {
 	public Quantity() {
 		super();
 	}
-
 	public Quantity(Long quantityOfBook) {
 		super();
 		this.quantityOfBook = quantityOfBook;
