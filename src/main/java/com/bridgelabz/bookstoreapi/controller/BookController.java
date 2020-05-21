@@ -116,14 +116,10 @@ public class BookController {
 		awsService.uploadFileToS3Bucket(file,token, bookId ,ImageType.BOOK);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
-	@ApiOperation(value = "Get verified Book Count")
-	@GetMapping("/bookscount/{get}")
-	public ResponseEntity<Response> getBooksCount(@PathVariable String get){
+	@ApiOperation(value = "Get verified Books Count")
+	@GetMapping("/count")
+	public ResponseEntity<Response> getBooksCount(){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksCount()));
-	}
-	@GetMapping("/bookdetails/all")
-	public ResponseEntity<Response> getAllBooks(){
-		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getAllBooks()));
 	}
 	
 }

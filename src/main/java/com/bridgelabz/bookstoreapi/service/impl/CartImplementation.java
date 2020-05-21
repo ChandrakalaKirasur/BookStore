@@ -251,13 +251,14 @@ public class CartImplementation implements CartService {
 	@Transactional
 	@Override
 	public boolean verifyBookInCart(String token, Long bookId) {
+		if(token != null) {
 		List<CartDetails> bookdetails = this.getBooksfromCart(token);
 		boolean notExist=false;
 		for(CartDetails cart:bookdetails) {
 		     notExist = cart.getBooksList().stream().noneMatch(books -> books.getBookId().equals(bookId));
 			if (!notExist)
 				return true;
-		
+		}
 		}
 
 		return false;

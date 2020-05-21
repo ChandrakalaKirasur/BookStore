@@ -70,8 +70,8 @@ public class WhishListController {
 					.body(new UserResponse(env.getProperty("604"), whishlist,HttpStatus.OK));  	
 	}
 	@ApiOperation(value = "Verify the books in the wishlist",response = Iterable.class)
-	@GetMapping(value="/verify_book")
-	public ResponseEntity<UserResponse> verifyBookInWishlist(@RequestHeader(name="token") String token,@RequestParam("bookId") Long bookId) throws Exception {
+	@GetMapping(value="/verify_book/{token}")
+	public ResponseEntity<UserResponse> verifyBookInWishlist(@PathVariable(name="token") String token,@RequestParam("bookId") Long bookId) throws Exception {
 		    boolean cart = whishlistService.verifyBookInWishlist(token, bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));
