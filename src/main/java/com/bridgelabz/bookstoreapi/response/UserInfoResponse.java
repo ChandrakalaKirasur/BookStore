@@ -1,17 +1,17 @@
 package com.bridgelabz.bookstoreapi.response;
 
-public class SellerResponse {
+public class UserInfoResponse {
 	private String message;
 	private int status;
 	private Object obj;
 
-	public SellerResponse(String message, int status, Object obj) {
+	public UserInfoResponse(String message, int status, Object obj) {
 		this.message = message;
 		this.status = status;
 		this.obj = obj;
 	}
 
-	public SellerResponse(String message, int status) {
+	public UserInfoResponse(String message, int status) {
 		this.message = message;
 		this.status = status;
 	}

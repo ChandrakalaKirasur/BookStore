@@ -14,12 +14,9 @@ public class Quantity {
 	private Long quantityId;
 	@Column
 	private Long quantityOfBook;
-
-	
 	public Quantity() {
 		super();
 	}
-
 	public Quantity(Long quantityOfBook) {
 		super();
 		this.quantityOfBook = quantityOfBook;

@@ -99,7 +99,7 @@ public class BookController {
 	
 	@ApiOperation(value = "Get Book Details Name and Author")
 	@GetMapping("/bookorauthorname")
-	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam String text){
+	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam("text") String text){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBookByNameAndAuthor(text)));
 	}
 	
