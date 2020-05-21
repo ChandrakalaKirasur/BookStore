@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
+import com.bridgelabz.bookstoreapi.entity.Quantity;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
@@ -63,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderDetails> getOrderConfrim(String token) {
+	public OrderDetails getOrderConfrim(String token) {
 		Long id = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(id)
 				.orElseThrow(() -> new UserException(400, env.getProperty("104")));
@@ -71,20 +72,31 @@ public class OrderServiceImpl implements OrderService {
 		OrderDetails orderDetails = new OrderDetails();
 		Random random = new Random();
 		ArrayList<Book> list = new ArrayList<>();
-
+		
 		/**
 		 * adding the books from cartlist to orderlist by generating the OrderId
 		 */
 		userdetails.getCartBooks().forEach((cart) -> {
+			
 			cart.getBooksList().forEach(book -> {
 				long orderId;
+				/**
+				 * If order is confrim decreasing the numberOfBooks in BookList
+				 */
+				for(Quantity qt:cart.getQuantityOfBooks()) {
+					
+					Long noOfBooks = book.getNoOfBooks() - qt.getQuantityOfBook();
+					book.setNoOfBooks(noOfBooks);
+					Book bb = bookRepository.save(book);
+				
 				try {
-					list.add(book);
+					list.add(bb);
 					orderId = random.nextInt(1000000);
 					if (orderId < 0) {
 						orderId = orderId * -1;
 					}
 					orderDetails.setOrderId(orderId);
+					orderDetails.setTotalPrice(qt.getTotalprice());
 					orderDetails.setOrderPlaceTime(LocalDateTime.now());
 					orderDetails.setBooksList(list);
 		           
@@ -92,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
 					throw new UserException(401, env.getProperty("701"));
 				}
 
+				}
 			});
 
 		});
@@ -106,8 +119,21 @@ public class OrderServiceImpl implements OrderService {
 		} catch (Exception e) {
 			throw new UserException(401, env.getProperty("701"));
 		}
-		return userdetails.getOrderBookDetails();
+		return orderDetails;
 
 	}
+	
+	/**
+	 * If order is confrim decreasing the numberOfBooks in BookList
+	 */
+//	public void descBook(ArrayList<Book> list) {
+//		for(Book book:list) {
+//			Long noOfBooks = book.getNoOfBooks() - quantity;
+//			book.setNoOfBooks(noOfBooks);
+//			bookRepository.save(book);
+//		}
+//
+//		
+//	}
+	}
 
-}

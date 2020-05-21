@@ -99,7 +99,7 @@ public class BookController {
 	
 	@ApiOperation(value = "Get Book Details Name and Author")
 	@GetMapping("/bookorauthorname")
-	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam String text){
+	public ResponseEntity<Response> getBookByNameAndAuthor(@RequestParam("text") String text){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBookByNameAndAuthor(text)));
 	}
 	
@@ -116,7 +116,7 @@ public class BookController {
 		awsService.uploadFileToS3Bucket(file,token, bookId ,ImageType.BOOK);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
-	@ApiOperation(value = "Get verified Book Count")
+	@ApiOperation(value = "Get verified Books Count")
 	@GetMapping("/count")
 	public ResponseEntity<Response> getBooksCount(){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksCount()));
