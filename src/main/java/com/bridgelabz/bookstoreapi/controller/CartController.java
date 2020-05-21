@@ -95,8 +95,8 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Verify the books in the Cartlist",response = Iterable.class)
-	@GetMapping(value="/verify_book")
-	public ResponseEntity<UserResponse> verifyBookInCart(@RequestHeader(name="token")  String token,@RequestParam("bookId") Long bookId) throws Exception {
+	@GetMapping(value="/verify_book/{token}")
+	public ResponseEntity<UserResponse> verifyBookInCart(@PathVariable(name="token")  String token,@RequestParam("bookId") Long bookId) throws Exception {
 		    boolean cart = cartService.verifyBookInCart(token, bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));
