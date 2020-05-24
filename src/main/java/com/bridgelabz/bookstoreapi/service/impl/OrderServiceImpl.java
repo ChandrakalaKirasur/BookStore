@@ -63,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
         return countOfBooks;
 	}
 
+	@Transactional
 	@Override
 	public OrderDetails getOrderConfrim(String token) {
 		Long id = jwt.decodeToken(token);

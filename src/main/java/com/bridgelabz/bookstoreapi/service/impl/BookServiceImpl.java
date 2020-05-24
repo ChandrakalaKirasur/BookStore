@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -77,7 +78,7 @@ public class BookServiceImpl implements BookService{
 		List<Book> books =  seller.getSellerBooks();
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
-		book.setBookVerified(true);
+		book.setBookVerified(false);
 		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 		sellerRepository.save(seller);
@@ -176,6 +177,21 @@ public class BookServiceImpl implements BookService{
 //			}
 //		});
 		return bookRepository.findBook(start);
+	}
+	
+	@Override
+	public List<Book> getAllBooks(){
+
+		return bookRepository.findUnverifiedBook();
+	}
+	
+	@Override
+	public List<Book> VerifyBook(Long bookId){
+
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+		book.setBookVerified(true);
+		bookRepository.save(book);
+		return bookRepository.findUnverifiedBook();
 	}
 	
 	public List<Book> getBooksSortedByPriceLow(Integer pageNo){

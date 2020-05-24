@@ -32,4 +32,7 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 			nativeQuery = true)
 	public List<Book> findAllBook();
 
+	@Query(value = "select * from books as b where b.book_verified=false", 
+			nativeQuery = true)
+	public List<Book> findUnverifiedBook();
 }
