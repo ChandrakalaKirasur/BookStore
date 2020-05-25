@@ -33,5 +33,13 @@ public class Swagger {
 		           .contact(contact)          
 		           .build();
 		   }
+	
+//	private ApiInfo metaData() {
+//        ApiInfo apiInfo = new ApiInfo(
+//                "Spring Boot REST API",
+//                "Spring Boot REST API for Online Store",
+//                new Contact("John Thompson", "https://springframework.guru/about/", "john@springfrmework.guru"));
+//        return apiInfo;
+//    }
 
 }

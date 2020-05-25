@@ -20,5 +20,7 @@ public interface BookService {
 	public void writeReviewAndRating(String token, RatingReviewDTO rrDTO, Long bookId);
 	public List<ReviewAndRating> getRatingsOfBook(Long bookId);
 	public Integer getBooksCount();
+	List<Book> getAllBooks();
+	List<Book> VerifyBook(Long bookId);
 	
 }

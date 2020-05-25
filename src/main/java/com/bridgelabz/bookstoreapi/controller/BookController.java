@@ -79,6 +79,18 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
 	}
 	
+	@ApiOperation(value = "Get unverified Book Details")
+	@GetMapping("/bookdetails/unverified")
+	public ResponseEntity<Response> getBooksUnVerified(){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getAllBooks()));
+	}
+	
+	@ApiOperation(value = "verifing the Book Details")
+	@PutMapping("/bookdetails/verify")
+	public ResponseEntity<Response> getBooksVerified(@RequestParam(name = "bookId") Long bookId){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.VerifyBook(bookId)));
+	}
+	
 	@ApiOperation(value = "Get Book Details sorted by price in Low-High order")
 	@GetMapping("/sortbylowprice")
 	public ResponseEntity<Response> getBooksSortedByPriceLow(@RequestParam Integer pageNo){
