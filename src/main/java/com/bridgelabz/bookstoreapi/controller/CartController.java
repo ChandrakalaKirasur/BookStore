@@ -52,7 +52,7 @@ public class CartController {
 		  	}
 
 	@ApiOperation(value = "Getting the books from the Cartlist",response = Iterable.class)
-	@GetMapping(value="/cartdetials")
+	@GetMapping(value="/detials")
 	public ResponseEntity<UserResponse> getBooksfromCart(@RequestHeader(name="token")  String token) throws Exception {
 		    List<CartDetails> cartdetails = cartService.getBooksfromCart(token);
 		    return ResponseEntity.status(200)
@@ -68,7 +68,7 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Adding the quantityofbooks in the Cartlist",response = Iterable.class)
-	@PutMapping(value="/incr_booksquantity")
+	@PutMapping(value="/booksquantity")
 	public ResponseEntity<UserResponse> addBooksQuantityToCart(@RequestHeader(name="token") String token,@RequestParam("bookId") Long bookId,@RequestBody CartdetailsDto bookQuantityDetails) throws Exception {
 		CartDetails cartdetails = cartService.addBooksQuantityInCart(token, bookId,bookQuantityDetails);
 		   return ResponseEntity.status(200)
@@ -76,8 +76,8 @@ public class CartController {
 		
 	}
 	
-	@ApiOperation(value = "Descing the quantityofbooks in the Cartlist",response = Iterable.class)
-	@PutMapping(value="/desc_booksquantity")
+	@ApiOperation(value = "getting the quantityofbooks in the Cartlist",response = Iterable.class)
+	@PutMapping(value="/booktotalPrice")
 	public ResponseEntity<UserResponse> descBooksQuantityToCart(@RequestHeader(name="token") String token,@RequestParam("bookId") Long bookId,@RequestBody CartdetailsDto bookQuantityDetails) throws Exception {
 		CartDetails cartdetails = cartService.descBooksQuantityInCart(token, bookId,bookQuantityDetails);
 		   return ResponseEntity.status(200)
@@ -95,8 +95,8 @@ public class CartController {
 	}
 	
 	@ApiOperation(value = "Verify the books in the Cartlist",response = Iterable.class)
-	@GetMapping(value="/verify_book")
-	public ResponseEntity<UserResponse> verifyBookInCart(@RequestHeader(name="token")  String token,@RequestParam("bookId") Long bookId) throws Exception {
+	@GetMapping(value="/verify_book/{token}")
+	public ResponseEntity<UserResponse> verifyBookInCart(@PathVariable(name="token")  String token,@RequestParam("bookId") Long bookId) throws Exception {
 		    boolean cart = cartService.verifyBookInCart(token, bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));

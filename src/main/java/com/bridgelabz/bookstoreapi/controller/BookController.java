@@ -80,6 +80,18 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooks(pageNo)));
 	}
 	
+	@ApiOperation(value = "Get unverified Book Details")
+	@GetMapping("/bookdetails/unverified")
+	public ResponseEntity<Response> getBooksUnVerified(){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getAllBooks()));
+	}
+	
+	@ApiOperation(value = "verifing the Book Details")
+	@PutMapping("/bookdetails/verify")
+	public ResponseEntity<Response> getBooksVerified(@RequestParam(name = "bookId") Long bookId){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.VerifyBook(bookId)));
+	}
+	
 	@ApiOperation(value = "Get Book Details sorted by price in Low-High order")
 	@GetMapping("/sortbylowprice")
 	public ResponseEntity<Response> getBooksSortedByPriceLow(@RequestParam Integer pageNo){
@@ -117,9 +129,9 @@ public class BookController {
 		awsService.uploadFileToS3Bucket(file,token, bookId,ImageType.BOOK);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
-	@ApiOperation(value = "Get verified Book Count")
-	@GetMapping("/bookscount/{get}")
-	public ResponseEntity<Response> getBooksCount(@PathVariable String get){
+	@ApiOperation(value = "Get verified Books Count")
+	@GetMapping("/count")
+	public ResponseEntity<Response> getBooksCount(){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksCount()));
 	}
 

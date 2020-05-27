@@ -38,11 +38,9 @@ public class CartDetails {
 	private List<Book> BooksList;
 
 	
-
 	public CartDetails() {
 		super();
 	}
-
 
 
 	public Long getCartId() {
@@ -50,11 +48,9 @@ public class CartDetails {
 	}
 
 
-
 	public void setCartId(Long cartId) {
 		this.cartId = cartId;
 	}
-
 
 
 	public LocalDateTime getPlaceTime() {

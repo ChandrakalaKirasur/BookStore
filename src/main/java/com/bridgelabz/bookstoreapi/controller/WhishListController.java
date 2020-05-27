@@ -26,7 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/whishList")
+@RequestMapping("/wishList")
 @PropertySource("classpath:message.properties")
 @CrossOrigin("*")
 @Api(value="bookStore", description="Operations pertaining to Whishlist in Book Store")
@@ -55,7 +55,7 @@ public class WhishListController {
 	}
 	
 	@ApiOperation(value = "Getting the books from Whishlist",response = Iterable.class)
-	@GetMapping(value="/book_count")
+	@GetMapping(value="/bookcount")
 	public ResponseEntity<UserResponse> getBooksCountfromCart(@RequestHeader(name="token")  String token) throws Exception {
 		    int whishlist = whishlistService.getcountBooksfromWhishList(token);
      	    return ResponseEntity.status(HttpStatus.CREATED)
@@ -69,9 +69,10 @@ public class WhishListController {
 		    return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new UserResponse(env.getProperty("604"), whishlist,HttpStatus.OK));  	
 	}
+	
 	@ApiOperation(value = "Verify the books in the wishlist",response = Iterable.class)
-	@GetMapping(value="/verify_book")
-	public ResponseEntity<UserResponse> verifyBookInWishlist(@RequestHeader(name="token") String token,@RequestParam("bookId") Long bookId) throws Exception {
+	@GetMapping(value="/verify_book/{token}")
+	public ResponseEntity<UserResponse> verifyBookInWishlist(@PathVariable(name="token") String token,@RequestParam("bookId") Long bookId) throws Exception {
 		    boolean cart = whishlistService.verifyBookInWishlist(token, bookId);
 		    return ResponseEntity.status(200)
 					.body(new UserResponse(env.getProperty("500"), cart,HttpStatus.OK));

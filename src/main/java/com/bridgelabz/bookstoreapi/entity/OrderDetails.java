@@ -28,7 +28,7 @@ public class OrderDetails {
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	
-	private Long quantityOfBooks;
+	private Double totalPrice;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
@@ -36,11 +36,12 @@ public class OrderDetails {
 	public OrderDetails() {
 		super();
 	}
-	public OrderDetails(Long orderId, LocalDateTime orderPlaceTime, Long quantityOfBooks, List<Book> booksList) {
+
+	public OrderDetails(Long orderId, LocalDateTime orderPlaceTime, Double totalPrice, List<Book> booksList) {
 		super();
 		this.orderId = orderId;
 		this.orderPlaceTime = orderPlaceTime;
-		this.quantityOfBooks = quantityOfBooks;
+		this.totalPrice = totalPrice;
 		BooksList = booksList;
 	}
 
@@ -60,12 +61,12 @@ public class OrderDetails {
 		this.orderPlaceTime = orderPlaceTime;
 	}
 
-	public Long getQuantityOfBooks() {
-		return quantityOfBooks;
+	public Double getTotalPrice() {
+		return totalPrice;
 	}
 
-	public void setQuantityOfBooks(Long quantityOfBooks) {
-		this.quantityOfBooks = quantityOfBooks;
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 	public List<Book> getBooksList() {
@@ -75,4 +76,7 @@ public class OrderDetails {
 	public void setBooksList(List<Book> booksList) {
 		BooksList = booksList;
 	}
+
+	
+	
 }
