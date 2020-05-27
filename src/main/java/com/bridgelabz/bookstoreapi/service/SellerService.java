@@ -48,11 +48,12 @@ public interface SellerService {
 	 * @param token
 	 * @return 
 	 */
-	public Seller getSingleUser(String token);
+	public Seller getSingleUser(Long id);
 	/**
 	 * 
 	 * @param token
 	 * @return
 	 */
 	public boolean updateVerificationStatus(String token);
+	
 }

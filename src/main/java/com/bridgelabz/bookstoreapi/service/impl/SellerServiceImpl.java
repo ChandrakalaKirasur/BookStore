@@ -172,9 +172,9 @@ public class SellerServiceImpl implements SellerService{
 
 	@Transactional
 	@Override
-	public Seller getSingleUser(String token) {
+	public Seller getSingleUser(Long id) {
 		try {
-			Long id = jwt.decodeToken(token);
+			
 
 			Seller seller = sellerRepository.findSellerById(id);
 

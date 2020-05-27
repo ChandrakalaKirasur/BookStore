@@ -119,8 +119,8 @@ public class SellerController {
 	 * @return
 	 * @throws Exception
 	 */
-	@GetMapping("/singleSeller")
-	public ResponseEntity<SellerResponse> singleUser(@RequestHeader("token") String token) throws Exception {
+	@GetMapping("/singleSeller/{token}")
+	public ResponseEntity<SellerResponse> singleUser(@PathVariable("token") Long token) throws Exception {
 		Seller user = sellerService.getSingleUser(token);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SellerResponse(environment.getProperty("201"), 202, user));
 	}

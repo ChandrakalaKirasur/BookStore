@@ -79,6 +79,7 @@ public class BookServiceImpl implements BookService{
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
 		book.setBookVerified(false);
+		book.setSellerId(sId);
 		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 		sellerRepository.save(seller);
