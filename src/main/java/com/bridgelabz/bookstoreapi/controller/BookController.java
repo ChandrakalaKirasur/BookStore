@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
 import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
+import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.response.Response;
 import com.bridgelabz.bookstoreapi.service.AwsS3Service;
 import com.bridgelabz.bookstoreapi.service.BookService;
@@ -48,13 +49,13 @@ public class BookController {
 	@ApiOperation(value = "Add a Book Details")
 	@PostMapping("/addbook")
 	public ResponseEntity<Response> addBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token){
-		bookService.addBook(bookDTO, token);
-		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2001")));
+		Book book=bookService.addBook(bookDTO, token);
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2001"),book));
 	}
 	
 	@ApiOperation(value = "Update a Book Details")
-	@PutMapping("/update")
-	public ResponseEntity<Response> updateBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token, @RequestParam Long bookId){
+	@PutMapping("/update/{bookId}")
+	public ResponseEntity<Response> updateBook(@RequestBody BookDTO bookDTO,@RequestHeader(name="token") String token, @PathVariable Long bookId){
 		bookService.updateBook(bookDTO, token, bookId);
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("2002")));
 	}
@@ -122,10 +123,10 @@ public class BookController {
 	}
 	
 	@ApiOperation(value = "Upload book image")
-	@PutMapping("/uploadbookimage")
-    public ResponseEntity<Response> uploadProfile(@RequestPart(value = "file") MultipartFile file,@RequestHeader(name = "token") String token, @RequestParam Long bookId)
+	@PostMapping("/uploadbookimage/{bookId}")
+    public ResponseEntity<Response> uploadProfile(@RequestParam("file") MultipartFile file,@RequestHeader(name = "token") String token, @PathVariable("bookId") Long bookId)
     {
-		awsService.uploadFileToS3Bucket(file,token, bookId ,ImageType.BOOK);
+		awsService.uploadFileToS3Bucket(file,token, bookId,ImageType.BOOK);
         return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"file [" + file.getOriginalFilename() + "] uploading request submitted successfully."));
     }
 	@ApiOperation(value = "Get verified Books Count")
@@ -133,5 +134,10 @@ public class BookController {
 	public ResponseEntity<Response> getBooksCount(){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBooksCount()));
 	}
-	
+
+	@ApiOperation(value = "Get Seller Books")
+	@GetMapping("/sellerbooks")
+	public ResponseEntity<Response> getBooks(@RequestHeader(name="token") String token){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getSellerBooks(token)));
+	}
 }

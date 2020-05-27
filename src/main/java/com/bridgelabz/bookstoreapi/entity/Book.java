@@ -27,22 +27,22 @@ public class Book {
 	@Column(name = "book_id")
 	private Long bookId;
 	
-	@Column(name = "book_name", nullable = false)
+	@Column(name = "bookName", nullable = false)
 	private String bookName;
 	
-	@Column(name = "book_author", nullable = false)
+	@Column(name = "bookAuthor", nullable = false)
 	private String bookAuthor;
 	
-	@Column(name = "book_price", nullable = false)
+	@Column(name = "bookPrice", nullable = false)
 	private Double bookPrice;
 	
-	@Column(name = "no_of_books", nullable = false)
+	@Column(name = "noOfBooks", nullable = false)
 	private Long noOfBooks;
 	
 	@Column(name = "book_image")
 	private String bookImage;
 	
-	@Column(name = "book_description", nullable = false)
+	@Column(name = "bookDescription", nullable = false)
 	private String bookDescription;
 	
 	@Column(name = "book_verified")
