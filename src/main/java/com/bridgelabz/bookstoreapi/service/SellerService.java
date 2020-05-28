@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
-
+import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 
 
@@ -55,5 +55,6 @@ public interface SellerService {
 	 * @return
 	 */
 	public boolean updateVerificationStatus(String token);
+	List<Book> getSellerBooks(String token, Integer page);
 	
 }

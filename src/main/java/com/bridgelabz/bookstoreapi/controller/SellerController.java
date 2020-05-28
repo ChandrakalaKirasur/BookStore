@@ -133,5 +133,11 @@ public class SellerController {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(new SellerResponse(environment.getProperty("308"), 201, verification));
 	}
+	
+	@ApiOperation(value = "Get Seller Books")
+	@GetMapping("/sellerbooks")
+	public ResponseEntity<Response> getBooks(@RequestHeader(name="token") String token,@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"", sellerService.getSellerBooks(token,pageNo)));
+	}
 }
 
