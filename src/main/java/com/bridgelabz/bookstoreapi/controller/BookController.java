@@ -86,6 +86,14 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getAllBooks()));
 	}
 	
+	
+	
+	@ApiOperation(value = "verifing the Book Details")
+	@PutMapping("/bookdetails/unApproved")
+	public ResponseEntity<Response> getBooksunAprove(@RequestParam(name = "bookId") Long bookId){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.unApproveBook(bookId)));
+	}
+	
 	@ApiOperation(value = "verifing the Book Details")
 	@PutMapping("/bookdetails/verify")
 	public ResponseEntity<Response> getBooksVerified(@RequestParam(name = "bookId") Long bookId){

@@ -25,5 +25,7 @@ public interface BookService {
 
 	List<Book> getAllBooks();
 	List<Book> VerifyBook(Long bookId);
+//	List<Book> getunApproveBooks();
+	Book unApproveBook(Long bookId);
 	
 }

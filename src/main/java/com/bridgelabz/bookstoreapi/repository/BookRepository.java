@@ -36,6 +36,10 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 			nativeQuery = true)
 	public List<Book> findUnverifiedBook();
 	
+	@Query(value = "select * from books as b where b.book_unapprove=true", 
+			nativeQuery = true)
+	public List<Book> findUnApproveBook();
+	
 	@Query(value = "select * from books where seller_id=:sellerId limit :start,12", 
 			nativeQuery = true)
 	public List<Book> findSellerBook(@Param("start") Integer start, @Param("sellerId") Long sellerId);
