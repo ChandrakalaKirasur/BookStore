@@ -71,14 +71,18 @@ public class BookServiceImpl implements BookService{
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	public void addBook(BookDTO bookDTO, String token) {
+	public Book addBook(BookDTO bookDTO, String token) {
+		System.out.println("****************");
 		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
 		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
 		List<Book> books =  seller.getSellerBooks();
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
+			System.out.println("book-->"+bookDTO.getBookAuthor());
+		book.setBookVerified(true);
 		book.setBookVerified(false);
+		book.setSellerId(sId);
 		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 		sellerRepository.save(seller);
@@ -95,6 +99,7 @@ public class BookServiceImpl implements BookService{
 		else {
 			throw new BookException(500, env.getProperty("5001"));
 		}
+		return book;
 	}
 	
 	@Transactional
@@ -123,6 +128,7 @@ public class BookServiceImpl implements BookService{
 		List<Book> books = seller.getSellerBooks();
 		Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
 				.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+		
 		books.remove(filteredBook);
 		bookRepository.delete(filteredBook);
 		sellerRepository.save(seller);
@@ -256,5 +262,11 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public Integer getBooksCount() {
 		return bookRepository.findAllBook().size();
+	}
+
+	public List<Book> getSellerBooks(String token){
+		Long sId = jwt.decodeToken(token);
+		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
+		return seller.getSellerBooks();
 	}
 }

@@ -119,8 +119,8 @@ public class SellerController {
 	 * @return
 	 * @throws Exception
 	 */
-	@GetMapping("/singleSeller")
-	public ResponseEntity<SellerResponse> singleUser(@RequestHeader("token") String token) throws Exception {
+	@GetMapping("/singleSeller/{token}")
+	public ResponseEntity<SellerResponse> singleUser(@PathVariable("token") Long token) throws Exception {
 		Seller user = sellerService.getSingleUser(token);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SellerResponse(environment.getProperty("201"), 202, user));
 	}
@@ -132,6 +132,12 @@ public class SellerController {
 		boolean verification = sellerService.updateVerificationStatus(token);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(new SellerResponse(environment.getProperty("308"), 201, verification));
+	}
+	
+	@ApiOperation(value = "Get Seller Books")
+	@GetMapping("/sellerbooks")
+	public ResponseEntity<Response> getBooks(@RequestHeader(name="token") String token,@RequestParam Integer pageNo){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),"", sellerService.getSellerBooks(token,pageNo)));
 	}
 }
 

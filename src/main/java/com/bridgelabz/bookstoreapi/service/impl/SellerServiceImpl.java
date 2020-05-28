@@ -21,10 +21,12 @@ import com.bridgelabz.bookstoreapi.dto.LoginDTO;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RegisterDto;
 import com.bridgelabz.bookstoreapi.dto.sellerForgetPasswordDto;
+import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.SellerException;
 import com.bridgelabz.bookstoreapi.exception.UserException;
+import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.repository.SellerRepository;
 import com.bridgelabz.bookstoreapi.service.SellerService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
@@ -51,6 +53,10 @@ public class SellerServiceImpl implements SellerService{
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private BookRepository bookRepository;
+	
 	Seller seller =new Seller();
 	
 	/**
@@ -172,9 +178,9 @@ public class SellerServiceImpl implements SellerService{
 
 	@Transactional
 	@Override
-	public Seller getSingleUser(String token) {
+	public Seller getSingleUser(Long id) {
 		try {
-			Long id = jwt.decodeToken(token);
+			
 
 			Seller seller = sellerRepository.findSellerById(id);
 
@@ -194,5 +200,13 @@ public class SellerServiceImpl implements SellerService{
 			boolean sellers = sellerRepository.save(seller) != null ? true : false;
 	         return sellers;
 		}
+	
+	@Transactional
+	@Override
+	public List<Book> getSellerBooks(String token, Integer page){
+		Long sId = jwt.decodeToken(token);
+		Integer start = (page-1)*12;
+		return bookRepository.findSellerBook(start, sId);
+	}
 	}
 

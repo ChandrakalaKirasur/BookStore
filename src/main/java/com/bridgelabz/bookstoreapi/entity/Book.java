@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -26,22 +27,22 @@ public class Book {
 	@Column(name = "book_id")
 	private Long bookId;
 	
-	@Column(name = "book_name", nullable = false)
+	@Column(name = "bookName", nullable = false)
 	private String bookName;
 	
-	@Column(name = "book_author", nullable = false)
+	@Column(name = "bookAuthor", nullable = false)
 	private String bookAuthor;
 	
-	@Column(name = "book_price", nullable = false)
+	@Column(name = "bookPrice", nullable = false)
 	private Double bookPrice;
 	
-	@Column(name = "no_of_books", nullable = false)
+	@Column(name = "noOfBooks", nullable = false)
 	private Long noOfBooks;
 	
 	@Column(name = "book_image")
 	private String bookImage;
 	
-	@Column(name = "book_description", nullable = false)
+	@Column(name = "bookDescription", nullable = false)
 	private String bookDescription;
 	
 	@Column(name = "book_verified")
@@ -52,6 +53,10 @@ public class Book {
 
 	@Column(name = "book_updated_time", nullable = false)
 	private LocalDateTime bookUpdatedTime;
+	
+	@Column(name = "seller_id", nullable = false)
+	private Long sellerId;
+	
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_id")
@@ -71,6 +76,17 @@ public class Book {
 	
 	public Book() {
 		super();
+	}
+
+
+	
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
 	}
 
 
