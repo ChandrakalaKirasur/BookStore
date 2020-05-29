@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -53,6 +54,13 @@ public class Book {
 	@Column(name = "book_updated_time", nullable = false)
 	private LocalDateTime bookUpdatedTime;
 	
+	@Column(name = "book_unapprove",nullable = false)
+	private boolean isBookApproveStatus;
+	
+	@Column(name = "seller_id", nullable = false)
+	private Long sellerId;
+	
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_id")
 	private List<ReviewAndRating> reviewRating;
@@ -71,6 +79,26 @@ public class Book {
 	
 	public Book() {
 		super();
+	}
+
+
+	
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public boolean isBookApproveStatus() {
+		return isBookApproveStatus;
+	}
+
+
+	public void setBookApproveStatus(boolean isBookApproveStatus) {
+		this.isBookApproveStatus = isBookApproveStatus;
 	}
 
 

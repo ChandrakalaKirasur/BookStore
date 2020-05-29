@@ -23,5 +23,9 @@ public interface BookService {
 	public List<Book> getSellerBooks(String token);
 	List<Book> getAllBooks();
 	List<Book> VerifyBook(Long bookId);
+
+	
+//	List<Book> getunApproveBooks();
+	Book unApproveBook(Long bookId);
 	
 }
