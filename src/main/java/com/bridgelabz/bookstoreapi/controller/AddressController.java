@@ -78,12 +78,10 @@ public class AddressController {
 	@GetMapping(value = "/getAddresstype/{type}")
 	public ResponseEntity<AddressResponse> getAddress(@PathVariable String type,@RequestHeader String token) {
 		Address add = addressService.getAddress(type,token);
-		if (add != null) {
+		
 			return ResponseEntity.status(200)
 					.body(new AddressResponse(environment.getProperty("304"), "304", add));
-		}
-		return ResponseEntity.status(400)
-				.body(new AddressResponse(environment.getProperty("305"), "", add));		
+		
 	}
 	
 	@GetMapping(value = "/users/{token}")
