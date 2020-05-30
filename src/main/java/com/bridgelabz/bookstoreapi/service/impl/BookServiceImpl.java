@@ -279,4 +279,9 @@ public class BookServiceImpl implements BookService{
 		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
 		return seller.getSellerBooks();
 	}
+
+	@Override
+	public Book getBookById(Long bookId) {
+		return bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+	}
 }
