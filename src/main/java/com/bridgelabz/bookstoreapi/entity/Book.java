@@ -54,6 +54,9 @@ public class Book {
 	@Column(name = "book_updated_time", nullable = false)
 	private LocalDateTime bookUpdatedTime;
 	
+	@Column(name = "book_unapprove",nullable = false)
+	private boolean isBookApproveStatus;
+	
 	@Column(name = "seller_id", nullable = false)
 	private Long sellerId;
 	
@@ -87,6 +90,15 @@ public class Book {
 
 	public void setSellerId(Long sellerId) {
 		this.sellerId = sellerId;
+	}
+
+	public boolean isBookApproveStatus() {
+		return isBookApproveStatus;
+	}
+
+
+	public void setBookApproveStatus(boolean isBookApproveStatus) {
+		this.isBookApproveStatus = isBookApproveStatus;
 	}
 
 

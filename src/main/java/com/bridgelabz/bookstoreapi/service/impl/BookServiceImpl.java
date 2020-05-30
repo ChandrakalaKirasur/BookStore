@@ -72,7 +72,6 @@ public class BookServiceImpl implements BookService{
 	private ObjectMapper objectMapper;
 	
 	public Book addBook(BookDTO bookDTO, String token) {
-		System.out.println("****************");
 		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
 		Seller seller = sellerRepository.findById(sId).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
@@ -80,7 +79,7 @@ public class BookServiceImpl implements BookService{
 		boolean notExist = books.stream().noneMatch(bk -> bk.getBookName().equals(bookDTO.getBookName()));
 		if(notExist) {
 			System.out.println("book-->"+bookDTO.getBookAuthor());
-		book.setBookVerified(true);
+		book.setBookApproveStatus(false);
 		book.setBookVerified(false);
 		book.setSellerId(sId);
 		seller.getSellerBooks().add(book);
@@ -115,6 +114,7 @@ public class BookServiceImpl implements BookService{
 		filteredBook.setBookPrice(bookDTO.getBookPrice());
 		filteredBook.setNoOfBooks(bookDTO.getNoOfBooks());
 		filteredBook.setBookUpdatedTime(LocalDateTime.now());
+		filteredBook.setBookApproveStatus(false);
 		Book bookUpdate = bookRepository.save(filteredBook);
 		sellerRepository.save(seller);
 		if(bookUpdate.isBookVerified())
@@ -189,6 +189,15 @@ public class BookServiceImpl implements BookService{
 	public List<Book> getAllBooks(){
 
 		return bookRepository.findUnverifiedBook();
+	}
+	
+	@Override
+	public Book unApproveBook(Long bookId){
+
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+		book.setBookApproveStatus(true);
+		bookRepository.save(book);
+		return book;
 	}
 	
 	@Override
