@@ -140,4 +140,9 @@ public class BookController {
 	public ResponseEntity<Response> getBooks(@RequestHeader(name="token") String token){
 		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getSellerBooks(token)));
 	}
+	@ApiOperation(value = "verifing the Book Details")
+	@GetMapping("/bookdetails/{bookId}")
+	public ResponseEntity<Response> getBookById(@PathVariable(name = "bookId") Long bookId){
+		return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(),env.getProperty("3001"), bookService.getBookById(bookId)));
+	}
 }
