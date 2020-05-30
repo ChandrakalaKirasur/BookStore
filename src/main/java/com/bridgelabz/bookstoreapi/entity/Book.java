@@ -57,8 +57,8 @@ public class Book {
 	@Column(name = "book_unapprove",nullable = false)
 	private boolean isBookApproveStatus;
 	
-	@Column(name = "seller_id", nullable = false)
-	private Long sellerId;
+	@Column(name = "seller_name", nullable = false)
+	private String sellerName;
 	
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -82,15 +82,16 @@ public class Book {
 	}
 
 
-	
-	public Long getSellerId() {
-		return sellerId;
+
+	public String getSellerName() {
+		return sellerName;
 	}
 
 
-	public void setSellerId(Long sellerId) {
-		this.sellerId = sellerId;
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
 	}
+
 
 	public boolean isBookApproveStatus() {
 		return isBookApproveStatus;

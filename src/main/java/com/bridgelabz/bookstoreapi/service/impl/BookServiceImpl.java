@@ -81,7 +81,7 @@ public class BookServiceImpl implements BookService{
 			System.out.println("book-->"+bookDTO.getBookAuthor());
 		book.setBookApproveStatus(false);
 		book.setBookVerified(false);
-		book.setSellerId(sId);
+		book.setSellerName(seller.getSellerName());
 		seller.getSellerBooks().add(book);
 		bookRepository.save(book);
 		sellerRepository.save(seller);
@@ -115,6 +115,7 @@ public class BookServiceImpl implements BookService{
 		filteredBook.setNoOfBooks(bookDTO.getNoOfBooks());
 		filteredBook.setBookUpdatedTime(LocalDateTime.now());
 		filteredBook.setBookApproveStatus(false);
+		filteredBook.setSellerName(seller.getSellerName());
 		Book bookUpdate = bookRepository.save(filteredBook);
 		sellerRepository.save(seller);
 		if(bookUpdate.isBookVerified())
