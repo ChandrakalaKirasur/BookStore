@@ -44,23 +44,23 @@ public class OrderServiceImpl implements OrderService {
 		return userdetails.getOrderBookDetails();
 
 	}
-	
+
 	@Transactional
 	@Override
 	public int getCountOfBooks(String token) {
 		Long id = jwt.decodeToken(token);
-		int countOfBooks=0;
+		int countOfBooks = 0;
 		User userdetails = userRepository.findById(id)
 				.orElseThrow(() -> new UserException(400, env.getProperty("104")));
 
 		List<OrderDetails> books = userdetails.getOrderBookDetails();
-		 for(OrderDetails cart:books) {
-        	 if(!cart.getBooksList().isEmpty()) {
-        		 
+		for (OrderDetails cart : books) {
+			if (!cart.getBooksList().isEmpty()) {
+
 				countOfBooks++;
-        	 }
-         }
-        return countOfBooks;
+			}
+		}
+		return countOfBooks;
 	}
 
 	@Transactional
@@ -74,38 +74,38 @@ public class OrderServiceImpl implements OrderService {
 		Random random = new Random();
 		ArrayList<Book> list = new ArrayList<>();
 		ArrayList<Quantity> quantitydetails = new ArrayList<>();
-		
+
 		/**
 		 * adding the books from cartlist to orderlist by generating the OrderId
 		 */
 		userdetails.getCartBooks().forEach((cart) -> {
-			
+
 			cart.getBooksList().forEach(book -> {
 				long orderId;
 				/**
 				 * If order is confrim decreasing the numberOfBooks in BookList
 				 */
-				for(Quantity qt:cart.getQuantityOfBooks()) {
-					
+				for (Quantity qt : cart.getQuantityOfBooks()) {
+
 					Long noOfBooks = book.getNoOfBooks() - qt.getQuantityOfBook();
 					book.setNoOfBooks(noOfBooks);
 					Book bb = bookRepository.save(book);
-				
-				try {
-					list.add(bb);
-					orderId = random.nextInt(1000000);
-					if (orderId < 0) {
-						orderId = orderId * -1;
+
+					try {
+						list.add(bb);
+						orderId = random.nextInt(1000000);
+						if (orderId < 0) {
+							orderId = orderId * -1;
+						}
+						quantitydetails.add(qt);
+						orderDetails.setOrderId(orderId);
+						orderDetails.setQuantityOfBooks(quantitydetails);
+						orderDetails.setOrderPlaceTime(LocalDateTime.now());
+						orderDetails.setBooksList(list);
+
+					} catch (Exception e) {
+						throw new UserException(401, env.getProperty("701"));
 					}
-					quantitydetails.add(qt);
-					orderDetails.setOrderId(orderId);
-					orderDetails.setQuantityOfBooks(quantitydetails);
-					orderDetails.setOrderPlaceTime(LocalDateTime.now());
-					orderDetails.setBooksList(list);
-		           
-				} catch (Exception e) {
-					throw new UserException(401, env.getProperty("701"));
-				}
 
 				}
 			});
@@ -116,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
 		 * clearing the cart after added to the orderlist
 		 */
 		userdetails.getCartBooks().clear();
-		
+
 		try {
 			userRepository.save(userdetails);
 		} catch (Exception e) {
@@ -125,18 +125,25 @@ public class OrderServiceImpl implements OrderService {
 		return orderDetails;
 
 	}
-	
-	/**
-	 * If order is confrim decreasing the numberOfBooks in BookList
-	 */
-//	public void descBook(ArrayList<Book> list) {
-//		for(Book book:list) {
-//			Long noOfBooks = book.getNoOfBooks() - quantity;
-//			book.setNoOfBooks(noOfBooks);
-//			bookRepository.save(book);
-//		}
-//
-//		
-//	}
-	}
 
+	
+
+	 @Transactional
+	 @Override
+	public boolean getbookConfrim(String token, Long bookId) {
+		Long id = jwt.decodeToken(token);
+		User userdetails = userRepository.findById(id)
+				.orElseThrow(() -> new UserException(400, env.getProperty("104")));
+
+		for (OrderDetails order : userdetails.getOrderBookDetails()) {
+			boolean notExist = order.getBooksList().stream().noneMatch(books -> books.getBookId().equals(bookId));
+
+			if (!notExist) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+}

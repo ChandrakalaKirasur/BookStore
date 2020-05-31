@@ -25,11 +25,23 @@ public class ReviewAndRating {
 	@Column(name = "review", nullable = false)
 	private String review;
 	
-	@OneToOne
-	@JoinTable(name="rating_review_user", joinColumns = @JoinColumn(name="ratingReviewId"),
-	inverseJoinColumns = @JoinColumn(name="user_id"))
-	private User user;
 	
+//	@OneToOne
+//	@JoinTable(name="rating_review_user", joinColumns = @JoinColumn(name="ratingReviewId"),
+//	inverseJoinColumns = @JoinColumn(name="user_id"))
+	@Column(name = "user_name", nullable = false)
+	private String userName;
+	
+	
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public ReviewAndRating() {
 	}
 
@@ -62,14 +74,7 @@ public class ReviewAndRating {
 		this.review = review;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+	
 	public void setRatingReviewId(Long ratingReviewId) {
 		this.ratingReviewId = ratingReviewId;
 	}

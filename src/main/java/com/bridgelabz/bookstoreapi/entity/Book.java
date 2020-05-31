@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -61,8 +62,8 @@ public class Book {
 	private String sellerName;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "book_id")
+	@ManyToMany(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "book_id")
 	private List<ReviewAndRating> reviewRating;
 	
 	public Book(BookDTO dto) {

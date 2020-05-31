@@ -145,10 +145,10 @@ public class BookServiceImpl implements BookService{
 		Long uId = jwt.decodeToken(token);
 		User user = userRepository.findById(uId).orElseThrow(() -> new UserException(404, env.getProperty("104")));
 		Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException(404, env.getProperty("4041")));
-		boolean notExist = book.getReviewRating().stream().noneMatch(rr -> rr.getUser().getUserId()==uId);
+		boolean notExist = book.getReviewRating().stream().noneMatch(rr -> rr.getUserName().equalsIgnoreCase(user.getName()));
 		if(notExist) {
 			ReviewAndRating rr = new ReviewAndRating(rrDTO);
-			rr.setUser(user);
+			rr.setUserName(user.getName());
 			book.getReviewRating().add(rr);
 			rrRepository.save(rr);
 			Book bookUpdate = bookRepository.save(book);
@@ -156,7 +156,7 @@ public class BookServiceImpl implements BookService{
 				updateBookInES(bookUpdate);
 		}
 		else {
-			ReviewAndRating rr = book.getReviewRating().stream().filter(r -> r.getUser().getUserId()==uId).findFirst().orElseThrow(() -> new BookException(500, env.getProperty("104")));
+			ReviewAndRating rr = book.getReviewRating().stream().filter(r -> r.getUserName().equalsIgnoreCase(user.getName())).findFirst().orElseThrow(() -> new BookException(500, env.getProperty("104")));
 			rr.setRating(rrDTO.getRating());
 			rr.setReview(rrDTO.getReview());
 			rrRepository.save(rr);
