@@ -73,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
 		OrderDetails orderDetails = new OrderDetails();
 		Random random = new Random();
 		ArrayList<Book> list = new ArrayList<>();
+		ArrayList<Quantity> quantitydetails = new ArrayList<>();
 		
 		/**
 		 * adding the books from cartlist to orderlist by generating the OrderId
@@ -96,8 +97,9 @@ public class OrderServiceImpl implements OrderService {
 					if (orderId < 0) {
 						orderId = orderId * -1;
 					}
+					quantitydetails.add(qt);
 					orderDetails.setOrderId(orderId);
-					orderDetails.setTotalPrice(qt.getTotalprice());
+					orderDetails.setQuantityOfBooks(quantitydetails);
 					orderDetails.setOrderPlaceTime(LocalDateTime.now());
 					orderDetails.setBooksList(list);
 		           

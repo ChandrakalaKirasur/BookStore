@@ -31,7 +31,7 @@ public class CartDetails {
 	private LocalDateTime placeTime;
 
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Quantity.class)
-	@Column(name = "bookquantity")
+	@JoinColumn(name = "cartId")
 	private List<Quantity> QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
