@@ -12,7 +12,7 @@ public interface BookService {
 	public Book addBook(BookDTO bookDTO, String token);
 	public void updateBook(BookDTO bookDTO, String token, Long bookId);
 	public void deleteBook(String token, Long bookId);
-	public List<Book> getBooks(Integer pageNo);
+	public Object getBooks(Integer pageNo);
 	public List<Book> getBooksSortedByPriceLow(Integer pageNo);
 	public List<Book> getBooksSortedByPriceHigh(Integer pageNo);
 	public List<Book> getBooksSortedByArrival(Integer pageNo);

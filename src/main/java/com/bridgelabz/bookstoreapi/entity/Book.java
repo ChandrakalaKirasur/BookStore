@@ -19,8 +19,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
 
+import lombok.ToString;
+
 @Entity
 @Table(name="books")
+@ToString
 public class Book {
 	
 	@Id

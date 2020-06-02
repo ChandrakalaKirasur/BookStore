@@ -12,10 +12,11 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,12 +24,6 @@ import com.bridgelabz.bookstoreapi.constants.Constants;
 
 @Configuration
 public class BookstoreConfig {
-
-	@Value("${spring.redis.host}")
-    private String REDIS_HOSTNAME;
-	
-    @Value("${spring.redis.port}")
-    private int REDIS_PORT;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -65,17 +60,17 @@ public class BookstoreConfig {
 	
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
-		RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(REDIS_HOSTNAME, REDIS_PORT);
-        JedisClientConfiguration jedisClientConfiguration = JedisClientConfiguration.builder().usePooling().build();
-        JedisConnectionFactory factory = new JedisConnectionFactory(configuration,jedisClientConfiguration);
-        factory.afterPropertiesSet();
-		return factory;
+		return new JedisConnectionFactory();
 	}
 	
 	@Bean
 	public RedisTemplate<String, Object> redisTemplet() {
 		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(jedisConnectionFactory());
+		redisTemplate.setHashKeySerializer(new GenericToStringSerializer<Object>(Object.class));
+		redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+		redisTemplate.setKeySerializer(new GenericToStringSerializer<Object>(Object.class));
+		redisTemplate.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
 		return redisTemplate;
 	}
 }
