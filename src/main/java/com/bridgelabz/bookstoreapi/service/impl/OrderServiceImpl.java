@@ -8,6 +8,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
+import com.bridgelabz.bookstoreapi.configuration.Consumer;
+import com.bridgelabz.bookstoreapi.configuration.Producer;
+import com.bridgelabz.bookstoreapi.constants.Constants;
+import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
@@ -18,6 +23,7 @@ import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.OrderService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
+import com.bridgelabz.bookstoreapi.utility.Token;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -34,6 +40,13 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private Producer producer;
+
+	@Autowired
+	private Consumer consumer;
+
+	
 	@Transactional
 	@Override
 	public List<OrderDetails> getOrderList(String token) {
@@ -74,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
 		Random random = new Random();
 		ArrayList<Book> list = new ArrayList<>();
 		ArrayList<Quantity> quantitydetails = new ArrayList<>();
-
+		ArrayList<String> details = new ArrayList<>();
 		/**
 		 * adding the books from cartlist to orderlist by generating the OrderId
 		 */
@@ -102,9 +115,9 @@ public class OrderServiceImpl implements OrderService {
 						orderDetails.setQuantityOfBooks(quantitydetails);
 						orderDetails.setOrderPlaceTime(LocalDateTime.now());
 						orderDetails.setBooksList(list);
-
+                        details.add("orderId:"+orderId+"\n"+"BookName:"+book.getBookName()+"\n"+"Quantity:"+qt.getQuantityOfBook()+"\n"+"TotalPrice:"+qt.getTotalprice());
+                        
 					} catch (Exception e) {
-						e.printStackTrace();
 						throw new UserException(401, env.getProperty("701"));
 					}
 
@@ -112,7 +125,17 @@ public class OrderServiceImpl implements OrderService {
 			});
 
 		});
+		
 		userdetails.getOrderBookDetails().add(orderDetails);
+		
+		String data = "";
+		for(String dt:details) {
+			data+=dt+"\n"+"=========>"+"\n";		
+		}
+		/**
+		 * sending the mailto the user
+		 */
+		this.sendMail(userdetails, data);
 		/**
 		 * clearing the cart after added to the orderlist
 		 */
@@ -128,6 +151,14 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	
+	public void sendMail(User userdetails,String data) {
+		Mail mail = new Mail();
+		mail.setTo(userdetails.getEmail());
+		mail.setSubject(Constants.REGISTRATION_STATUS);
+		mail.setContext("Hi " + userdetails.getName() + " " + "UR Order Is Confired Invoice is attached below"+"\n" + data);
+		producer.sendToQueue(mail);
+		consumer.receiveMail(mail);
+	}
 
 	 @Transactional
 	 @Override
