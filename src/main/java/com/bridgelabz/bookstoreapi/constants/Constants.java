@@ -24,6 +24,6 @@ private Constants() {}
 	public static final String RESET_PASSWORD_MESSAGE = ", Please click on below link to Reset Your Password:\n";
 	public static final String USER_RESET_PASSWORD_LINK = "Using below link reset your password\nhttp://localhost:4200/user/resetpassword/";
 	
-	public static final String INDEX = "books";
+	public static final String INDEX = "bookstore";
 	public static final String TYPE = "_doc";
 }

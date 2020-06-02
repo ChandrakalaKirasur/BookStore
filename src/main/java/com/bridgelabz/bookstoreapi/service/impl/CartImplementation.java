@@ -239,7 +239,7 @@ public class CartImplementation implements CartService {
 			boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId().equals(bookId));
 
 			if (!notExist) {
-	            userRepository.save(user);			
+	           //cartRepository.deleteCart(cartt.getCartId());		
 				cartt.getQuantityOfBooks().remove(quantity);
 				cartt.getBooksList().remove(book);
 				cartt.getQuantityOfBooks().clear();

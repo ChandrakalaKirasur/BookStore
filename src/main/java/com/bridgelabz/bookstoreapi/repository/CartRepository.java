@@ -10,5 +10,5 @@ import com.bridgelabz.bookstoreapi.entity.User;
 public interface CartRepository extends JpaRepository<CartDetails,Long> {
 
 	@Query(value = "delete from cart_details where cart_id=?", nativeQuery = true)
-	CartDetails deleteCart(Long cart_id);
+	void deleteCart(Long cart_id);
 }
