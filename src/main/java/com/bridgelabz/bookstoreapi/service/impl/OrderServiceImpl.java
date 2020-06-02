@@ -104,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
 						orderDetails.setBooksList(list);
 
 					} catch (Exception e) {
+						e.printStackTrace();
 						throw new UserException(401, env.getProperty("701"));
 					}
 
