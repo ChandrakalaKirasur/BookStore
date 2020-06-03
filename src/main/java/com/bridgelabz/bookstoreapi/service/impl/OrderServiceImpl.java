@@ -23,6 +23,7 @@ import com.bridgelabz.bookstoreapi.repository.BookRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.OrderService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
+import com.bridgelabz.bookstoreapi.utility.MailService;
 import com.bridgelabz.bookstoreapi.utility.Token;
 
 @Service
@@ -46,6 +47,8 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private Consumer consumer;
 
+	@Autowired
+	private MailService mailSender;
 	
 	@Transactional
 	@Override
@@ -135,7 +138,8 @@ public class OrderServiceImpl implements OrderService {
 		/**
 		 * sending the mailto the user
 		 */
-		this.sendMail(userdetails, data);
+//		this.sendMail(userdetails, data);
+		mailSender.orderSuccessMail(userdetails,orderDetails);
 		/**
 		 * clearing the cart after added to the orderlist
 		 */

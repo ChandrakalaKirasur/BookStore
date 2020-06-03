@@ -16,7 +16,7 @@ public class Consumer {
 	
 	//@RabbitListener(queues = Constants.QUEUE_NAME)
 	public void receiveMail(Mail mail) {
-		mailSender.sendMail(mail);
+		mailSender.send(mail);
 	}
 	
 }
