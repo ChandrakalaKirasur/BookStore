@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.bridgelabz.bookstoreapi.entity.CartDetails;
 import com.bridgelabz.bookstoreapi.entity.Seller;
 import com.bridgelabz.bookstoreapi.entity.User;
+
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>{
 
@@ -39,6 +41,8 @@ public interface UserRepository extends CrudRepository<User, Long>{
 	
 	@Query(value = "select * from user where email=?", nativeQuery = true)
 	Optional<User> findByEmail(@Valid String email);
+	@Query(value = "select user_user_id from user_whilist_books where whilist_books_book_id=?", nativeQuery = true)
+	List<Long> getUserForNotify(Long bookId);
 	
 //   @Query(value="delete from cart_details where cart_id=?;",nativeQuery=true)
 //   CartDetails deleteCart(Long id);

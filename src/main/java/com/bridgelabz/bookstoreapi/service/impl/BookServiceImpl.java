@@ -24,8 +24,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.bookstoreapi.configuration.Consumer;
+import com.bridgelabz.bookstoreapi.configuration.Producer;
 import com.bridgelabz.bookstoreapi.constants.Constants;
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
+import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.dto.RatingReviewDTO;
 import com.bridgelabz.bookstoreapi.entity.Book;
 import com.bridgelabz.bookstoreapi.entity.ReviewAndRating;
@@ -41,7 +44,9 @@ import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.BookService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
 import com.bridgelabz.bookstoreapi.utility.RedisService;
+import com.bridgelabz.bookstoreapi.utility.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 
 @Service
 @PropertySource("classpath:message.properties")
@@ -73,6 +78,12 @@ public class BookServiceImpl implements BookService {
 
 	@Autowired
 	private RedisService redisService;
+	
+	@Autowired
+	private Producer producer;
+
+	@Autowired
+	private Consumer consumer;
 
 	public Book addBook(BookDTO bookDTO, String token) {
 		Long sId = jwt.decodeToken(token);
@@ -113,6 +124,21 @@ public class BookServiceImpl implements BookService {
 		List<Book> books = seller.getSellerBooks();
 		Book filteredBook = books.stream().filter(book -> book.getBookId().equals(bookId)).findFirst()
 				.orElseThrow(() -> new BookException(404, env.getProperty("4041")));
+		if (filteredBook.getNoOfBooks() == 0) {
+			List<Long> userIds = userRepository.getUserForNotify(bookId);
+			for (Long id : userIds) {
+				Optional<User> user = userRepository.findById(id);
+				if (user.isPresent()) {
+					Mail mail = new Mail();
+					mail.setTo(user.get().getEmail());
+					mail.setSubject(filteredBook.getBookName()+" is available");
+					mail.setContext("Hi " + user.get().getName() + " "
+							+ Constants.BOOK_STORE__LINK + bookId);
+					producer.sendToQueue(mail);
+					consumer.receiveMail(mail);
+				}
+			}
+		}
 		filteredBook.setBookName(bookDTO.getBookName());
 		filteredBook.setBookAuthor(bookDTO.getBookAuthor());
 		filteredBook.setBookDescription(bookDTO.getBookDescription());
@@ -187,8 +213,7 @@ public class BookServiceImpl implements BookService {
 			System.out.println("Database");
 			redisService.save(bookRepository.findBook(start), pageNo);
 			return redisService.getBooks(pageNo);
-		}
-		else {
+		} else {
 			System.out.println("Redis");
 			return redisService.getBooks(pageNo);
 		}
