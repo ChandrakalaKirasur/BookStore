@@ -57,10 +57,10 @@
 }
 
 .order-details-container {
-	width: 90%;
-	border: 1px solid #a03037;
-	margin-top: 15px;
-	padding: 20px 0 15px 15px;
+	width: 40%;
+    margin-top: 15px;
+    padding: 20px 0 15px 15px;
+    background-color: whitesmoke
 }
 
 .order-details {
@@ -69,8 +69,8 @@
 }
 
 .book-img {
-	width: 65px;
-	height: 85px;
+	width: 71px;
+    height: 101px;
 }
 
 .book-details {
@@ -133,12 +133,12 @@
 
 		<div class="order-details-container">
 			<div class="order-details"
-				th:each="order : ${userdetails.whilistBooks}">
-				<img alt="bookimage" class="book-img" th:src="@{${order.bookImage}}">
+				th:each="whishlistbook : ${userdetails.whilistBooks}">
+				<img alt="bookimage" class="book-img" th:src="@{${whishlistbook.bookImage}}">
 				<div class="book-details">
-					<div class="book-name" th:text="${order.bookName}"></div>
-					<div class="book-author" th:text="${order.bookAuthor}"></div>
-					<div class="book-price" th:text="${order.bookPrice}"></div>
+					<div class="book-name" th:text="${whishlistbook.bookName}"></div>
+					<div class="book-author" th:text="${whishlistbook.bookAuthor}"></div>
+					<div class="book-price" th:text="${whishlistbook.bookPrice}"></div>
 				</div>
 			</div>
 			
