@@ -43,6 +43,7 @@ import com.bridgelabz.bookstoreapi.repository.SellerRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.BookService;
 import com.bridgelabz.bookstoreapi.utility.JWTUtil;
+import com.bridgelabz.bookstoreapi.utility.MailService;
 import com.bridgelabz.bookstoreapi.utility.RedisService;
 import com.bridgelabz.bookstoreapi.utility.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,6 +86,9 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private Consumer consumer;
 
+	@Autowired
+	private MailService mailSender;
+	
 	public Book addBook(BookDTO bookDTO, String token) {
 		Long sId = jwt.decodeToken(token);
 		Book book = new Book(bookDTO);
@@ -127,16 +131,17 @@ public class BookServiceImpl implements BookService {
 		if (filteredBook.getNoOfBooks() == 0) {
 			List<Long> userIds = userRepository.getUserForNotify(bookId);
 			for (Long id : userIds) {
-				Optional<User> user = userRepository.findById(id);
-				if (user.isPresent()) {
-					Mail mail = new Mail();
-					mail.setTo(user.get().getEmail());
-					mail.setSubject(filteredBook.getBookName()+" is available");
-					mail.setContext("Hi " + user.get().getName() + " "
-							+ Constants.BOOK_STORE__LINK + bookId);
-					producer.sendToQueue(mail);
-					consumer.receiveMail(mail);
-				}
+				User user = userRepository.findById(id).orElseThrow(() -> new SellerException(404, env.getProperty("5002")));
+				//if (user.isPresent()) {
+					mailSender.wishlistNotificationMail(user,bookId);
+//					Mail mail = new Mail();
+//					mail.setTo(user.get().getEmail());
+//					mail.setSubject(filteredBook.getBookName()+" is available");
+//					mail.setContext("Hi " + user.get().getName() + " "
+//							+ Constants.BOOK_STORE__LINK + bookId);
+//					producer.sendToQueue(mail);
+//					consumer.receiveMail(mail);
+				//}
 			}
 		}
 		filteredBook.setBookName(bookDTO.getBookName());

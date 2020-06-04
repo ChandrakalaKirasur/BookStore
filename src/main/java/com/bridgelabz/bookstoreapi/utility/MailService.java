@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
+import com.bridgelabz.bookstoreapi.constants.Constants;
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
 import com.bridgelabz.bookstoreapi.entity.Quantity;
@@ -52,6 +53,16 @@ public class MailService {
 		context.setVariable("totalPrice", totalprice);
 		String body = templateEngine.process("orderdetails", context);
 		sendM(userdetails.getEmail(),"Order Comfirmation Mail",body,true);
+	}
+	
+	public void wishlistNotificationMail(User userdetails,Long bookId) {
+		
+		Context context = new Context();
+		context.setVariable("username", userdetails.getName()+","+ Constants.BOOK_STORE__LINK + bookId);
+		context.setVariable("userdetails", userdetails);
+		
+		String body = templateEngine.process("notification", context);
+		sendM(userdetails.getEmail(),"Book Notification Mail",body,true);
 	}
 	
 	private void sendM(String to, String subject, String text, Boolean isHtml) {

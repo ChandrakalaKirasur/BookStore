@@ -27,5 +27,5 @@ private Constants() {}
 	public static final String INDEX = "bookstore";
 	public static final String TYPE = "_doc";
 	
-	public static final String BOOK_STORE__LINK = "check your wishlist in book store click below link\nhttp://localhost:4200/books/details/";
+	public static final String BOOK_STORE__LINK = "your wishlist book is now available in book store click below link\nhttp://localhost:4200/books/details/";
 }
