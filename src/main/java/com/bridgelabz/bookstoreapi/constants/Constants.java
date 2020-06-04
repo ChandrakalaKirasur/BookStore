@@ -9,7 +9,7 @@ private Constants() {}
 	public static final String ROUTING_KEY = "mail-sender";
 	
 	public static final String REGISTRATION_STATUS = "Registration Confirmation";
-	public static final String REGISTRATION_MESSAGE = ", you have successfully Registrered to our website\nPlease click on below link to verify:\n";
+	public static final String REGISTRATION_MESSAGE = ", you have successfully Registrered to our website\nPlease click on below link to verify:\nhttp://localhost:4200/user/registration/verify/";
 	public static final String VERIFICATION_LINK = "http://localhost:8080/user/verify/";
 	public static final String RESET_MSG = "Click On the below link to reset your password";
 	public static final String SELLER_VERIFICATION_LINK = "http://localhost:8080/seller/registration/verify/";
