@@ -41,7 +41,6 @@
 	color: #878787;
 	font-size: 14px;
 	padding-right: 7px;
-	margin-right: 48%;
 }
 
 .div-order-placed-on {
@@ -97,6 +96,28 @@
 	color: #0a0102;
 	margin-top: 10px;
 }
+
+.book-total-div {
+	display: flex;
+	margin-left: 80%;
+}
+
+.book-total-text {
+	text-align: right;
+	font-size: 14px;
+	font-weight: bold;
+	color: #0a0102;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
+.book-total-price {
+	text-align: right;
+	font-size: 14px;
+	color: #0a0102;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
 </style>
 </head>
 <body>
@@ -130,6 +151,10 @@
 					<div class="book-author" th:text="${order.bookAuthor}"></div>
 					<div class="book-price" th:text="${order.bookPrice}"></div>
 				</div>
+			</div>
+			<div class="book-total-div">
+				<div class="book-total-text">Total Amount:</div>
+				<div class="book-total-price" th:text="${totalPrice}"></div>
 			</div>
 		</div>
 	</div>

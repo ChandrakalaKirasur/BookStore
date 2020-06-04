@@ -12,6 +12,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import com.bridgelabz.bookstoreapi.dto.Mail;
 import com.bridgelabz.bookstoreapi.entity.OrderDetails;
+import com.bridgelabz.bookstoreapi.entity.Quantity;
 import com.bridgelabz.bookstoreapi.entity.User;
 
 
@@ -41,9 +42,14 @@ public class MailService {
 	}
 	
 	public void orderSuccessMail(User userdetails, OrderDetails orderDetails) {
+		Double totalprice= 0.0;
+		for(Quantity quantity: orderDetails.getQuantityOfBooks()) {
+			totalprice = totalprice+quantity.getTotalprice();
+		}
 		Context context = new Context();
 		context.setVariable("username", userdetails.getName()+",");
 		context.setVariable("orderdetails", orderDetails);
+		context.setVariable("totalPrice", totalprice);
 		String body = templateEngine.process("orderdetails", context);
 		sendM(userdetails.getEmail(),"Order Comfirmation Mail",body,true);
 	}
