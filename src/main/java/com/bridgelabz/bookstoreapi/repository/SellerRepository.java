@@ -18,7 +18,8 @@ public interface SellerRepository extends JpaRepository<Seller, Long>{
 	Seller getUser(String email);
 	@Query(value=" select * from seller",nativeQuery=true)
 	List<Seller> getSellers();
-	@Query(value=" select * from seller where seller_id=?",nativeQuery=true)
+	@Query(value=" select * from seller where seller_id=? ",nativeQuery=true)
 	Seller findSellerById(Long id);
+	
 	
 }
