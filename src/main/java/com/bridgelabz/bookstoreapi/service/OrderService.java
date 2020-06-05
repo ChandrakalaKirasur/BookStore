@@ -12,4 +12,6 @@ public interface OrderService {
 	OrderDetails getOrderConfrim(String token);
 
 	int getCountOfBooks(String token);
+
+	boolean getbookConfrim(String token, Long bookId);
 }

@@ -64,4 +64,13 @@ public class OrderController {
 			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"),userdetails,HttpStatus.OK));
 		
 	}
+	
+	@ApiOperation(value = "Confrim the book in the orderList")
+	@GetMapping(value = "/books_confrim/{bookId}")
+	public ResponseEntity<UserResponse> getBookConfrim(@RequestHeader(name= "token") String token,@PathVariable("bookId") long bookId) throws Exception {
+		
+		boolean userdetails = orderService.getbookConfrim(token, bookId);
+			return ResponseEntity.status(200).body(new UserResponse(env.getProperty("700"),userdetails,HttpStatus.OK));
+		
+	}
 }

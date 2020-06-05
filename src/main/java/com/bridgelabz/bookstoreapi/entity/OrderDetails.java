@@ -28,7 +28,11 @@ public class OrderDetails {
 	@Column(name = "order_placed_time", nullable = false)
 	private LocalDateTime orderPlaceTime;
 	
-	private Double totalPrice;
+	//private Double totalPrice;
+	
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Quantity.class)
+	@JoinColumn(name = "orderId")
+	private List<Quantity> QuantityOfBooks;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Book> BooksList;
@@ -37,12 +41,27 @@ public class OrderDetails {
 		super();
 	}
 
-	public OrderDetails(Long orderId, LocalDateTime orderPlaceTime, Double totalPrice, List<Book> booksList) {
+	
+
+	
+	public OrderDetails(Long orderId, LocalDateTime orderPlaceTime, List<Quantity> quantityOfBooks,
+			List<Book> booksList) {
 		super();
 		this.orderId = orderId;
 		this.orderPlaceTime = orderPlaceTime;
-		this.totalPrice = totalPrice;
+		QuantityOfBooks = quantityOfBooks;
 		BooksList = booksList;
+	}
+
+
+
+
+	public List<Quantity> getQuantityOfBooks() {
+		return QuantityOfBooks;
+	}
+
+	public void setQuantityOfBooks(List<Quantity> quantityOfBooks) {
+		QuantityOfBooks = quantityOfBooks;
 	}
 
 	public Long getOrderId() {
@@ -61,13 +80,6 @@ public class OrderDetails {
 		this.orderPlaceTime = orderPlaceTime;
 	}
 
-	public Double getTotalPrice() {
-		return totalPrice;
-	}
-
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
 
 	public List<Book> getBooksList() {
 		return BooksList;

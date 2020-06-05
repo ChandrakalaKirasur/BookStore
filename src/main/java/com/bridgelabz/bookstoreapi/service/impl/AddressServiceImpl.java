@@ -151,13 +151,25 @@ public class AddressServiceImpl implements AddressService{
 		Long uId = jwt.decodeToken(token);
 		User userdetails = userRepository.findById(uId)
 				.orElseThrow(()->new UserException(400, env.getProperty("104")));
-		Address address = userdetails.getAddress().stream().filter(adrss -> adrss.getType().equalsIgnoreCase(type)).findFirst().orElse(null);
-		return address;
+		Address address=null;
+		for(Address add:userdetails.getAddress()) {
+			if(add.getType().equalsIgnoreCase(type)) {
+				return add;
+			}
+		}
+//		try {
+//		address = userdetails.getAddress().stream().filter(adrss -> adrss.getType().equalsIgnoreCase(type)).findFirst()
+//				.orElseThrow(() -> new AddressException(404, env.getProperty("4041")));
+//		}catch(Exception ae) {
+//			throw new AddressException(404, env.getProperty("4041"));
+//		}
+//		return address;
 //		Long uId = jwt.decodeToken(token);
 //		User userdetails = userRepository.findById(uId)
 //				.orElseThrow(()->new UserException(400, env.getProperty("104")));
 //		Address add=addressRepository.findAddressBytext(uId,type);
 //		return add;
+		return address;
 	}
 }
 

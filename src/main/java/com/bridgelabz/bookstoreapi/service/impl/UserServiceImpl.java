@@ -74,8 +74,7 @@ public class UserServiceImpl implements UserService {
 			if (usr!= null) {
 				mail.setTo(user.getEmail());
 				mail.setSubject(Constants.REGISTRATION_STATUS);
-				mail.setContext("Hi " + user.getName() + " " + Constants.REGISTRATION_MESSAGE
-						+ Constants.VERIFY_USER__LINK + jwt.generateToken(user.getUserId(), Token.WITH_EXPIRE_TIME));
+				mail.setContext("Hi " + user.getName() + " " + Constants.REGISTRATION_MESSAGE+jwt.generateToken(user.getUserId(), Token.WITH_EXPIRE_TIME));
 				producer.sendToQueue(mail);
 				consumer.receiveMail(mail);
 			}

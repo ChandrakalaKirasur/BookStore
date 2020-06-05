@@ -20,6 +20,7 @@ import com.bridgelabz.bookstoreapi.entity.Quantity;
 import com.bridgelabz.bookstoreapi.entity.User;
 import com.bridgelabz.bookstoreapi.exception.UserException;
 import com.bridgelabz.bookstoreapi.repository.BookRepository;
+import com.bridgelabz.bookstoreapi.repository.CartRepository;
 import com.bridgelabz.bookstoreapi.repository.QuantityRepository;
 import com.bridgelabz.bookstoreapi.repository.UserRepository;
 import com.bridgelabz.bookstoreapi.service.CartService;
@@ -38,6 +39,9 @@ public class CartImplementation implements CartService {
 	@Autowired
 	private BookRepository bookRepository;
 
+	@Autowired
+	private CartRepository cartRepository;
+	
 	@Autowired
 	private QuantityRepository quantityRepository;
 
@@ -227,6 +231,7 @@ public class CartImplementation implements CartService {
 		Quantity quantity = quantityRepository.findById(id)
 				.orElseThrow(() -> new UserException(201, env.getProperty("104")));
 
+			
 		for (CartDetails cartt : user.getCartBooks()) {
 			/**
 			 * checking the number of books available
@@ -234,7 +239,7 @@ public class CartImplementation implements CartService {
 			boolean notExist = cartt.getBooksList().stream().noneMatch(books -> books.getBookId().equals(bookId));
 
 			if (!notExist) {
-
+	           //cartRepository.deleteCart(cartt.getCartId());		
 				cartt.getQuantityOfBooks().remove(quantity);
 				cartt.getBooksList().remove(book);
 				cartt.getQuantityOfBooks().clear();
@@ -242,7 +247,6 @@ public class CartImplementation implements CartService {
 				if (user!=null) {
 					return users;
 				} 
-
 			}
 		}
 		return false;

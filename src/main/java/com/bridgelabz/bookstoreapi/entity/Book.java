@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -18,8 +19,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.bridgelabz.bookstoreapi.dto.BookDTO;
 
+import lombok.ToString;
+
 @Entity
 @Table(name="books")
+@ToString
 public class Book {
 	
 	@Id
@@ -57,12 +61,12 @@ public class Book {
 	@Column(name = "book_unapprove",nullable = false)
 	private boolean isBookApproveStatus;
 	
-	@Column(name = "seller_id", nullable = false)
-	private Long sellerId;
+	@Column(name = "seller_name", nullable = false)
+	private String sellerName;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "book_id")
+	@ManyToMany(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "book_id")
 	private List<ReviewAndRating> reviewRating;
 	
 	public Book(BookDTO dto) {
@@ -82,15 +86,16 @@ public class Book {
 	}
 
 
-	
-	public Long getSellerId() {
-		return sellerId;
+
+	public String getSellerName() {
+		return sellerName;
 	}
 
 
-	public void setSellerId(Long sellerId) {
-		this.sellerId = sellerId;
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
 	}
+
 
 	public boolean isBookApproveStatus() {
 		return isBookApproveStatus;
