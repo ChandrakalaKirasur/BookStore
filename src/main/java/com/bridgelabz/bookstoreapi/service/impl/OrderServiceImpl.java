@@ -114,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
 							orderId = orderId * -1;
 						}
 						quantitydetails.add(qt);
-						orderDetails.setOrderId(orderId);
+	 					orderDetails.setOrderId(orderId);
 						orderDetails.setQuantityOfBooks(quantitydetails);
 						orderDetails.setOrderPlaceTime(LocalDateTime.now());
 						orderDetails.setBooksList(list);
@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
 		 * sending the mailto the user
 		 */
 //		this.sendMail(userdetails, data);
-		mailSender.orderSuccessMail(userdetails,orderDetails);
+		
 		/**
 		 * clearing the cart after added to the orderlist
 		 */
@@ -150,6 +150,7 @@ public class OrderServiceImpl implements OrderService {
 		} catch (Exception e) {
 			throw new UserException(401, env.getProperty("701"));
 		}
+		mailSender.orderSuccessMail(userdetails,orderDetails);
 		return orderDetails;
 
 	}
